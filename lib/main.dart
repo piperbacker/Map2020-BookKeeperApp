@@ -1,4 +1,5 @@
 import 'package:bookkeeperapp/screen/home_screen.dart';
+import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/signin_screen.dart';
 import 'package:bookkeeperapp/screen/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class BookKeeperApp extends StatelessWidget {
           SignInScreen.routeName: (context) => SignInScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           SignUpScreen.routeName: (context) => SignUpScreen(),
+          LibraryScreen.routeName: (context) => LibraryScreen(),
         });
   }
 }
