@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "396456940288",
+    "firebase_url": "https://piper-map2020-bookkeeperapp.firebaseio.com",
+    "project_id": "piper-map2020-bookkeeperapp",
+    "storage_bucket": "piper-map2020-bookkeeperapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396456940288:android:5251387834d848d20299e5",
+        "android_client_info": {
+          "package_name": "edu.uco.tbacker.map2020.bookkeeperapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "396456940288-mju61lkrf7als6p4ajuh4d3pq572hpo5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFjcgHwYOIPPGpUEnjzn_YAbqB8OLqmYI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "396456940288-mju61lkrf7als6p4ajuh4d3pq572hpo5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
