@@ -1,4 +1,5 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/screen/signin_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,19 @@ class _SignUpState extends State<SignUpScreen> {
             children: <Widget>[
               SizedBox(
                 height: 40.0,
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Display Name',
+                  ),
+
+                  ///keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  validator: con.validatorDisplayName,
+                  onSaved: con.onSavedDisplayName,
+                ),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
@@ -88,6 +102,8 @@ class _Controller {
   _Controller(this._state);
   String email;
   String password;
+  String displayName;
+  static final validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
   void signUp() async {
     if (!_state.formKey.currentState.validate()) return;
@@ -95,12 +111,13 @@ class _Controller {
     _state.formKey.currentState.save();
 
     try {
-      await FirebaseController.signUp(email, password);
+      await FirebaseController.signUp(displayName, email, password);
       MyDialog.info(
         context: _state.context,
         title: 'Succesfully Created',
         content: 'Your account is created! Go to Sign In',
       );
+      Navigator.pushNamed(_state.context, SignInScreen.routeName);
     } catch (e) {
       MyDialog.info(
         context: _state.context,
@@ -132,5 +149,17 @@ class _Controller {
 
   void onSavedPassword(String value) {
     this.password = value;
+  }
+
+  String validatorDisplayName(String value) {
+    if (value == null || !validCharacters.hasMatch(value)) {
+      return ('Display name can only contain alpahabet sybmols and spaces');
+    } else {
+      return null;
+    }
+  }
+
+  void onSavedDisplayName(String value) {
+    this.displayName = value;
   }
 }

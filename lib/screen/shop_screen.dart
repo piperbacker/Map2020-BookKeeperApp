@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LibraryScreen extends StatefulWidget {
-  static const routeName = '/libraryScreen';
+class ShopScreen extends StatefulWidget {
+  static const routeName = '/shopScreen';
 
   @override
   State<StatefulWidget> createState() {
-    return _LibraryState();
+    return _ShopState();
   }
 }
 
-class _LibraryState extends State<LibraryScreen> {
+class _ShopState extends State<ShopScreen> {
   User user;
   _Controller con;
 
@@ -29,14 +29,14 @@ class _LibraryState extends State<LibraryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Library'),
+        title: Text('Shop'),
       ),
-      body: Text("Library"),
+      body: Text("Shop"),
     );
   }
 }
 
 class _Controller {
-  _LibraryState _state;
+  _ShopState _state;
   _Controller(this._state);
 }

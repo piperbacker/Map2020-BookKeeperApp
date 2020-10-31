@@ -1,6 +1,8 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/screen/library_screen.dart';
+import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/signin_screen.dart';
+import 'package:bookkeeperapp/screen/views/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -127,14 +129,14 @@ class _Controller {
       _state.currentIndex = index;
     });
     if (_state.currentIndex == 1) {
-      Navigator.pushReplacementNamed(_state.context, LibraryScreen.routeName,
+      Navigator.pushNamed(_state.context, LibraryScreen.routeName,
           arguments: {'user': _state.user});
     } else if (_state.currentIndex == 2) {
-      //Navigator.pushReplacementNamed(_state.context, ShopScreen.routeName,
-      //arguments: {'user': _state.user});
+      Navigator.pushNamed(_state.context, ShopScreen.routeName,
+          arguments: {'user': _state.user});
     } else if (_state.currentIndex == 3) {
-      // Navigator.pushReplacementNamed(_state.context, ProfileScreen.routeName,
-      //arguments: {'user': _state.user});
+      Navigator.pushNamed(_state.context, ProfileScreen.routeName,
+          arguments: {'user': _state.user});
     }
   }
 }
