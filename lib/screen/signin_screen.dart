@@ -131,14 +131,14 @@ class _Controller {
     }
     _state.formKey.currentState.save();
 
-    //MyDialog.circularProgressStart(_state.context);
+    MyDialog.circularProgressStart(_state.context);
 
     User user;
     try {
       user = await FirebaseController.signIn(email, password);
       print('USER: $user');
     } catch (e) {
-      //MyDialog.circularProgressEnd(_state.context);
+      MyDialog.circularProgressEnd(_state.context);
       MyDialog.info(
         context: _state.context,
         title: 'Sign In Error',

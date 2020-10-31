@@ -49,18 +49,15 @@ class _ProfileState extends State<ProfileScreen> {
           children: <Widget>[
             //MyImageView.network.imageURL
             Center(
-              child: CircleAvatar(
-                child: MyImageView.network(
-                    imageURL: user.photoURL, context: context),
-                radius: 60.0,
+              child: Container(
+                height: 150,
+                width: 150,
+                child: ClipOval(
+                  child: MyImageView.network(
+                      imageURL: user.photoURL, context: context),
+                ),
               ),
             ),
-            /*Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/def_profile.png'),
-                radius: 70.0,
-              ),
-            ),*/
             SizedBox(
               height: 40.0,
             ),
@@ -85,5 +82,8 @@ class _Controller {
   void settings() {
     Navigator.pushNamed(_state.context, SettingsScreen.routeName,
         arguments: {'user': _state.user});
+
+    /*_state.user.reload();
+    _state.user = FirebaseAuth.instance.currentUser;*/
   }
 }

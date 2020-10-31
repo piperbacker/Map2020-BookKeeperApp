@@ -152,8 +152,8 @@ class _Controller {
   }
 
   String validatorDisplayName(String value) {
-    if (value == null || !validCharacters.hasMatch(value)) {
-      return ('Display name can only contain alpahabet sybmols and spaces');
+    if (value == null || value.length < 2 || !validCharacters.hasMatch(value)) {
+      return ('Min 2 chars, can only contain alpahabet symbols and spaces');
     } else {
       return null;
     }

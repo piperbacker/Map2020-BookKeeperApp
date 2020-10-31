@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/screen/settings_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,8 +32,7 @@ class _EditProfileState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map arg = ModalRoute.of(context).settings.arguments;
-    user ??= arg['user'];
+    user ??= ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -48,6 +48,7 @@ class _EditProfileState extends State<EditProfileScreen> {
         key: formKey,
         child: SingleChildScrollView(
           child: Column(
+            //crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
                 'Change Profile Picture',
@@ -61,14 +62,20 @@ class _EditProfileState extends State<EditProfileScreen> {
               Stack(
                 children: <Widget>[
                   con.imageFile == null
-                      ? CircleAvatar(
-                          child: MyImageView.network(
-                              imageURL: user.photoURL, context: context),
-                          radius: 60.0,
+                      ? Container(
+                          height: 150,
+                          width: 150,
+                          child: ClipOval(
+                            child: MyImageView.network(
+                                imageURL: user.photoURL, context: context),
+                          ),
                         )
-                      : CircleAvatar(
-                          child: Image.file(con.imageFile),
-                          radius: 60.0,
+                      : Container(
+                          height: 150,
+                          width: 150,
+                          child: ClipOval(
+                            child: Image.file(con.imageFile),
+                          ),
                         ),
                   Positioned(
                     right: 0.0,
@@ -144,6 +151,7 @@ class _Controller {
   File imageFile;
   String displayName;
   String progressMessage;
+  static final validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
   void save() async {
     if (!_state.formKey.currentState.validate()) return;
@@ -160,6 +168,7 @@ class _Controller {
               progressMessage = 'Uploading ${percentage.toStringAsFixed(1)} %';
             });
           });
+
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.info(
@@ -192,8 +201,8 @@ class _Controller {
   }
 
   String validatorDisplayName(String value) {
-    if (value.length < 2) {
-      return 'min 2 chars';
+    if (value == null || value.length < 2 || !validCharacters.hasMatch(value)) {
+      return ('Min 2 chars, can only contain alpahabet symbols and spaces');
     } else {
       return null;
     }
