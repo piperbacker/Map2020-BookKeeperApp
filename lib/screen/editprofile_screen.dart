@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
-import 'package:bookkeeperapp/screen/settings_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -137,6 +136,28 @@ class _EditProfileState extends State<EditProfileScreen> {
                 validator: con.validatorDisplayName,
                 onSaved: con.onSavedDisplayName,
               ),
+              SizedBox(
+                height: 40.0,
+              ),
+              Text(
+                'Edit Bio',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              TextFormField(
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'A short description...',
+                ),
+                autocorrect: true,
+                keyboardType: TextInputType.multiline,
+                maxLines: 3,
+                validator: con.validatorBio,
+                onSaved: con.onSavedBio,
+              ),
             ],
           ),
         ),
@@ -150,6 +171,7 @@ class _Controller {
   _Controller(this._state);
   File imageFile;
   String displayName;
+  String bio;
   String progressMessage;
   static final validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
@@ -162,6 +184,7 @@ class _Controller {
       await FirebaseController.updateProfile(
           image: imageFile,
           displayName: displayName,
+          userBio: bio,
           user: _state.user,
           progressListener: (double percentage) {
             _state.render(() {
@@ -210,5 +233,17 @@ class _Controller {
 
   void onSavedDisplayName(String value) {
     this.displayName = value;
+  }
+
+  String validatorBio(String value) {
+    if (value == null || value.trim().length < 3) {
+      return 'min 3 chars';
+    } else {
+      return null;
+    }
+  }
+
+  void onSavedBio(String value) {
+    bio = value;
   }
 }

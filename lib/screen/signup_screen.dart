@@ -1,4 +1,5 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/signin_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpState extends State<SignUpScreen> {
   _Controller con;
   var formKey = GlobalKey<FormState>();
+  List<BKUser> users;
 
   @override
   void initState() {
@@ -111,12 +113,17 @@ class _Controller {
     _state.formKey.currentState.save();
 
     try {
-      await FirebaseController.signUp(displayName, email, password);
+      var p = BKUser(user: email, userTag: 'reader');
+      p.docId =
+          await FirebaseController.signUp(displayName, email, password, p);
+      //_state.users.insert(0, p);
+
       MyDialog.info(
         context: _state.context,
         title: 'Succesfully Created',
         content: 'Your account is created! Go to Sign In',
       );
+      //print("===================== TEST");
       Navigator.pushNamed(_state.context, SignInScreen.routeName);
     } catch (e) {
       MyDialog.info(
