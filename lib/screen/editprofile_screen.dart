@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/settings_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +20,7 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfileScreen> {
   User user;
+  BKUser bkUser;
   var formKey = GlobalKey<FormState>();
   _Controller con;
 
@@ -31,7 +34,9 @@ class _EditProfileState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    user ??= ModalRoute.of(context).settings.arguments;
+    Map arg = ModalRoute.of(context).settings.arguments;
+    user ??= arg['user'];
+    bkUser ??= arg['bkUser'];
 
     return Scaffold(
       appBar: AppBar(
@@ -53,6 +58,7 @@ class _EditProfileState extends State<EditProfileScreen> {
                 'Change Profile Picture',
                 style: TextStyle(
                   fontSize: 20.0,
+                  color: Colors.cyan[900],
                 ),
               ),
               SizedBox(
@@ -122,6 +128,7 @@ class _EditProfileState extends State<EditProfileScreen> {
                 'Change Display Name',
                 style: TextStyle(
                   fontSize: 20.0,
+                  color: Colors.cyan[900],
                 ),
               ),
               TextFormField(
@@ -143,6 +150,7 @@ class _EditProfileState extends State<EditProfileScreen> {
                 'Edit Bio',
                 style: TextStyle(
                   fontSize: 20.0,
+                  color: Colors.cyan[900],
                 ),
               ),
               TextFormField(
@@ -152,6 +160,7 @@ class _EditProfileState extends State<EditProfileScreen> {
                 decoration: InputDecoration(
                   hintText: 'A short description...',
                 ),
+                initialValue: bkUser.userBio,
                 autocorrect: true,
                 keyboardType: TextInputType.multiline,
                 maxLines: 3,
@@ -171,7 +180,7 @@ class _Controller {
   _Controller(this._state);
   File imageFile;
   String displayName;
-  String bio;
+  //String bio;
   String progressMessage;
   static final validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
@@ -184,14 +193,17 @@ class _Controller {
       await FirebaseController.updateProfile(
           image: imageFile,
           displayName: displayName,
-          userBio: bio,
           user: _state.user,
+          bkUser: _state.bkUser,
           progressListener: (double percentage) {
             _state.render(() {
               progressMessage = 'Uploading ${percentage.toStringAsFixed(1)} %';
             });
           });
-
+      _state.render(() {
+        //_state.user.reload();
+        //_state.user = FirebaseAuth.instance.currentUser;
+      });
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.info(
@@ -244,6 +256,8 @@ class _Controller {
   }
 
   void onSavedBio(String value) {
-    bio = value;
+    print(_state.bkUser);
+    _state.bkUser.userBio = value;
+    print("=========" + _state.bkUser.userBio);
   }
 }

@@ -30,11 +30,25 @@ class FirebaseController {
     return ref.id;
   }
 
+  static Future<List<BKUser>> getBKUser(String email) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .where(BKUser.USER, isEqualTo: email)
+        .get();
+    var result = <BKUser>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        result.add(BKUser.deserialize(doc.data(), doc.id));
+      }
+    }
+    return result;
+  }
+
   static Future<void> updateProfile({
     @required File image, // null no update needed
     @required String displayName,
-    @required String userBio,
     @required User user,
+    @required BKUser bkUser,
     @required Function progressListener,
   }) async {
     if (image != null) {
@@ -54,12 +68,17 @@ class FirebaseController {
       String url = await download.ref.getDownloadURL();
       await FirebaseAuth.instance.currentUser
           .updateProfile(displayName: displayName, photoURL: url);
-      /*await FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection(BKUser.COLLECTION)
-          .update({"userBio": userBio}).where("user" == user.email);*/
+          .doc(bkUser.docId)
+          .update({"userBio": bkUser.userBio});
     } else {
       await FirebaseAuth.instance.currentUser
           .updateProfile(displayName: displayName);
+      await FirebaseFirestore.instance
+          .collection(BKUser.COLLECTION)
+          .doc(bkUser.docId)
+          .update({"userBio": bkUser.userBio});
     }
   }
 }

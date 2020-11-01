@@ -1,4 +1,5 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/editprofile_screen.dart';
 import 'package:bookkeeperapp/screen/signin_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsState extends State<SettingsScreen> {
   User user;
+  BKUser bkUser;
   _Controller con;
 
   @override
@@ -31,6 +33,7 @@ class _SettingsState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     Map arg = ModalRoute.of(context).settings.arguments;
     user ??= arg['user'];
+    bkUser ??= arg['bkUser'];
 
     return Scaffold(
       appBar: AppBar(
@@ -88,12 +91,14 @@ class _Controller {
 
   void editProfile() async {
     await Navigator.pushNamed(_state.context, EditProfileScreen.routeName,
-        arguments: _state.user);
+        arguments: {'user': _state.user, 'bkUser': _state.bkUser});
 
     // to get updated user profile do the following 2 steps
-    _state.user.reload();
-    _state.user = FirebaseAuth.instance.currentUser;
 
+    _state.render(() {
+      _state.user.reload();
+      _state.user = FirebaseAuth.instance.currentUser;
+    });
     Navigator.pop(_state.context);
   }
 

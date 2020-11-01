@@ -1,3 +1,4 @@
+import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/views/profile_screen.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeState extends State<HomeScreen> {
   User user;
+  BKUser bkUser;
   _Controller con;
   var formKey = GlobalKey<FormState>();
   int currentIndex = 0;
@@ -31,6 +33,7 @@ class _HomeState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     Map arg = ModalRoute.of(context).settings.arguments;
     user ??= arg['user'];
+    bkUser ??= arg['bkUser'];
 
     return WillPopScope(
       onWillPop: () => Future.value(false),
@@ -111,13 +114,13 @@ class _Controller {
     });
     if (_state.currentIndex == 1) {
       Navigator.pushNamed(_state.context, LibraryScreen.routeName,
-          arguments: {'user': _state.user});
+          arguments: {'user': _state.user, 'bkUser': _state.bkUser});
     } else if (_state.currentIndex == 2) {
       Navigator.pushNamed(_state.context, ShopScreen.routeName,
-          arguments: {'user': _state.user});
+          arguments: {'user': _state.user, 'bkUser': _state.bkUser});
     } else if (_state.currentIndex == 3) {
       Navigator.pushNamed(_state.context, ProfileScreen.routeName,
-          arguments: {'user': _state.user});
+          arguments: {'user': _state.user, 'bkUser': _state.bkUser});
     }
   }
 }
