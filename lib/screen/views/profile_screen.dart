@@ -48,119 +48,140 @@ class _ProfileState extends State<ProfileScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 50, 30, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              //MyImageView.network.imageURL
-              Center(
-                child: Container(
-                  height: 150,
-                  width: 150,
-                  child: ClipOval(
-                    child: MyImageView.network(
-                        imageURL: user.photoURL, context: context),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
-              Text(
-                user.displayName,
-                style: TextStyle(
-                  fontSize: 30.0,
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              bkUser.userBio == null
-                  ? Container()
-                  : Text(
-                      bkUser.userBio,
-                      style: TextStyle(
-                        fontSize: 18.0,
+      body: Container(
+        padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: 20.0,
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      child: ClipOval(
+                        child: MyImageView.network(
+                            imageURL: user.photoURL, context: context),
                       ),
                     ),
-              Divider(height: 50.0, color: Colors.orangeAccent),
-              bkPosts.length == 0
-                  ? Center(
-                      child: Text(
-                        'No Posts Yet',
+                  ),
+                  SizedBox(
+                    width: 20.0,
+                  ),
+                  Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Text(
+                        user.displayName,
                         style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.cyan[900],
+                          fontSize: 25.0,
                         ),
                       ),
-                    )
-                  : Container(
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      child: ListView.builder(
-                        itemCount: bkPosts.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            Container(
+                      bkUser.userBio == null
+                          ? Container()
+                          : Text(
+                              bkUser.userBio,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
+                      Divider(height: 50.0, color: Colors.orangeAccent),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            bkPosts.length == 0
+                ? Center(
+                    child: Text(
+                      'No Posts Yet',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.cyan[900],
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    //height: 200.0,
+                    child: ListView.builder(
+                      itemCount: bkPosts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
                           color: Colors.orange[50],
                           child: Container(
-                            //margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                            child: ListTile(
-                              leading: null,
-                              //trailing: Icon(Icons.keyboard_arrow_right),
-                              title: Column(
+                            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                            child: Card(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(
                                     height: 10.0,
                                   ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 60,
-                                        width: 60,
-                                        child: ClipOval(
-                                          child: MyImageView.network(
-                                              imageURL: user.photoURL,
-                                              context: context),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        10.0, 10.0, 10.0, 10.0),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          height: 60,
+                                          width: 60,
+                                          child: ClipOval(
+                                            child: MyImageView.network(
+                                                imageURL: user.photoURL,
+                                                context: context),
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      Text(
-                                        bkPosts[index].displayName,
-                                        style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.cyan[900],
+                                        SizedBox(
+                                          width: 10.0,
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          bkPosts[index].displayName,
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.cyan[900],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 10.0,
                                   ),
-                                  Center(
-                                    child: Text(
-                                      bkPosts[index].title,
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  Divider(
-                                      height: 30.0, color: Colors.orangeAccent),
-                                ],
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    bkPosts[index].body,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.black87,
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        10.0, 10.0, 10.0, 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Center(
+                                          child: Text(
+                                            bkPosts[index].title,
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                            height: 30.0,
+                                            color: Colors.orangeAccent),
+                                        Text(
+                                          bkPosts[index].body,
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(
@@ -185,11 +206,11 @@ class _ProfileState extends State<ProfileScreen> {
                               //onLongPress: () => con.onLongPress(index),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
-            ],
-          ),
+                  ),
+          ],
         ),
       ),
     );

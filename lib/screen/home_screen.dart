@@ -85,41 +85,41 @@ class _HomeState extends State<HomeScreen> {
                 margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                 child: ListView.builder(
                   itemCount: bkPosts.length,
-                  itemBuilder: (BuildContext context, int index) => Container(
-                    color: Colors.orange[50],
-                    child: Container(
-                      //margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      child: ListTile(
-                        leading: null,
-                        //trailing: Icon(Icons.keyboard_arrow_right),
-                        title: Column(
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      color: Colors.orange[50],
+                      child: Card(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             SizedBox(
                               height: 10.0,
                             ),
-                            Row(
-                              children: [
-                                Container(
-                                  height: 60,
-                                  width: 60,
-                                  child: ClipOval(
-                                    child: MyImageView.network(
-                                        imageURL: user.photoURL,
-                                        context: context),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 60,
+                                    width: 60,
+                                    child: ClipOval(
+                                      child: MyImageView.network(
+                                          imageURL: user.photoURL,
+                                          context: context),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text(
-                                  bkPosts[index].displayName,
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: Colors.cyan[900],
+                                  SizedBox(
+                                    width: 10.0,
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    bkPosts[index].displayName,
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.cyan[900],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 10.0,
@@ -134,11 +134,6 @@ class _HomeState extends State<HomeScreen> {
                               ),
                             ),
                             Divider(height: 30.0, color: Colors.orangeAccent),
-                          ],
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
                             Text(
                               bkPosts[index].body,
                               style: TextStyle(
@@ -188,8 +183,8 @@ class _HomeState extends State<HomeScreen> {
                         //onTap: () => con.onTap(index),
                         //onLongPress: () => con.onLongPress(index),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
         bottomNavigationBar: BottomNavigationBar(
