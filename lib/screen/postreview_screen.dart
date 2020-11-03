@@ -13,7 +13,7 @@ class PostReviewScreen extends StatefulWidget {
 
 class _PostReviewState extends State<PostReviewScreen> {
   User user;
-  BKUser bKUser;
+  BKUser bkUser;
   _Controller con;
 
   @override
@@ -28,7 +28,7 @@ class _PostReviewState extends State<PostReviewScreen> {
   Widget build(BuildContext context) {
     Map args = ModalRoute.of(context).settings.arguments;
     user ??= args['user'];
-    bKUser ??= args['bKUser'];
+    bkUser ??= args['bkUser'];
 
     return Scaffold(
       appBar: AppBar(

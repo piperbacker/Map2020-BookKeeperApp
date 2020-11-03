@@ -1,8 +1,12 @@
+import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/postreview_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
+import 'package:bookkeeperapp/screen/views/mydialog.dart';
+import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:bookkeeperapp/screen/views/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeState extends State<HomeScreen> {
   User user;
   BKUser bkUser;
+  List<BKPost> bkPosts;
   _Controller con;
   var formKey = GlobalKey<FormState>();
   int currentIndex = 0;
@@ -36,6 +41,7 @@ class _HomeState extends State<HomeScreen> {
     Map arg = ModalRoute.of(context).settings.arguments;
     user ??= arg['user'];
     bkUser ??= arg['bkUser'];
+    bkPosts ??= arg['bkPosts'];
 
     return WillPopScope(
       onWillPop: () => Future.value(false),
@@ -65,7 +71,127 @@ class _HomeState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: Text('Home'),
+        body: bkPosts.length == 0
+            ? Center(
+                child: Text(
+                  'Home Feed is Empty',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.cyan[900],
+                  ),
+                ),
+              )
+            : Container(
+                margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                child: ListView.builder(
+                  itemCount: bkPosts.length,
+                  itemBuilder: (BuildContext context, int index) => Container(
+                    color: Colors.orange[50],
+                    child: Container(
+                      //margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      child: ListTile(
+                        leading: null,
+                        //trailing: Icon(Icons.keyboard_arrow_right),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 60,
+                                  width: 60,
+                                  child: ClipOval(
+                                    child: MyImageView.network(
+                                        imageURL: user.photoURL,
+                                        context: context),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text(
+                                  bkPosts[index].displayName,
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Colors.cyan[900],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Center(
+                              child: Text(
+                                bkPosts[index].title,
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Divider(height: 30.0, color: Colors.orangeAccent),
+                          ],
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              bkPosts[index].body,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            bkPosts[index].postedBy == user.email
+                                ? SizedBox(
+                                    height: 1.0,
+                                  )
+                                : Row(
+                                    children: <Widget>[
+                                      !bkPosts[index]
+                                              .likedBy
+                                              .contains(user.email)
+                                          ? IconButton(
+                                              icon: Icon(Icons.favorite_border),
+                                              onPressed: () => con.like(index),
+                                            )
+                                          : IconButton(
+                                              icon: Icon(Icons.favorite),
+                                              color: Colors.pink,
+                                              onPressed: () =>
+                                                  con.unlike(index),
+                                            ),
+                                      bkPosts[index].likedBy.length == 0
+                                          ? SizedBox(
+                                              height: 1.0,
+                                            )
+                                          : Flexible(
+                                              child: Text(
+                                                'Liked By: ${bkPosts[index].likedBy.toString()}',
+                                                overflow: TextOverflow.visible,
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                ),
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                          ],
+                        ),
+                        //onTap: () => con.onTap(index),
+                        //onLongPress: () => con.onLongPress(index),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
@@ -107,12 +233,56 @@ class _Controller {
     try {
       if (src == 'Post Update') {
         Navigator.pushNamed(_state.context, PostUpdateScreen.routeName,
-            arguments: {'user': _state.user, 'bkUser': _state.bkUser});
+            arguments: {
+              'user': _state.user,
+              'bkUser': _state.bkUser,
+              'bkPosts': _state.bkPosts,
+            });
       } else {
         Navigator.pushNamed(_state.context, PostReviewScreen.routeName,
-            arguments: {'user': _state.user, 'bkUser': _state.bkUser});
+            arguments: {
+              'user': _state.user,
+              'bkUser': _state.bkUser,
+              'bkPosts': _state.bkPosts,
+            });
       }
     } catch (e) {}
+  }
+
+  void like(int index) async {
+    _state.render(() {
+      if (!_state.bkPosts[index].likedBy.contains(_state.user.email)) {
+        _state.bkPosts[index].likedBy.add(_state.user.email);
+      }
+    });
+
+    try {
+      await FirebaseController.updateLikedBy(_state.bkPosts[index]);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Like photo memo error in saving',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void unlike(int index) async {
+    _state.render(() {
+      if (_state.bkPosts[index].likedBy.contains(_state.user.email)) {
+        _state.bkPosts[index].likedBy.remove(_state.user.email);
+      }
+    });
+
+    try {
+      await FirebaseController.updateLikedBy(_state.bkPosts[index]);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Unlike photo memo error in saving',
+        content: e.message ?? e.toString(),
+      );
+    }
   }
 
   void onItemTapped(int index) {

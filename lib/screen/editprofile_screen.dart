@@ -54,6 +54,9 @@ class _EditProfileState extends State<EditProfileScreen> {
           child: Column(
             //crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              SizedBox(
+                height: 20.0,
+              ),
               Text(
                 'Change Profile Picture',
                 style: TextStyle(
@@ -131,17 +134,20 @@ class _EditProfileState extends State<EditProfileScreen> {
                   color: Colors.cyan[900],
                 ),
               ),
-              TextFormField(
-                style: TextStyle(
-                  fontSize: 20.0,
+              Container(
+                margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                child: TextFormField(
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Display Name',
+                  ),
+                  autocorrect: false,
+                  initialValue: user.displayName ?? 'N/A',
+                  validator: con.validatorDisplayName,
+                  onSaved: con.onSavedDisplayName,
                 ),
-                decoration: InputDecoration(
-                  hintText: 'Display Name',
-                ),
-                autocorrect: false,
-                initialValue: user.displayName ?? 'N/A',
-                validator: con.validatorDisplayName,
-                onSaved: con.onSavedDisplayName,
               ),
               SizedBox(
                 height: 40.0,
@@ -153,19 +159,22 @@ class _EditProfileState extends State<EditProfileScreen> {
                   color: Colors.cyan[900],
                 ),
               ),
-              TextFormField(
-                style: TextStyle(
-                  fontSize: 20.0,
+              Container(
+                margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                child: TextFormField(
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'A short description...',
+                  ),
+                  initialValue: bkUser.userBio,
+                  autocorrect: true,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 3,
+                  validator: con.validatorBio,
+                  onSaved: con.onSavedBio,
                 ),
-                decoration: InputDecoration(
-                  hintText: 'A short description...',
-                ),
-                initialValue: bkUser.userBio,
-                autocorrect: true,
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                validator: con.validatorBio,
-                onSaved: con.onSavedBio,
               ),
             ],
           ),

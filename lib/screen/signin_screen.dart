@@ -1,4 +1,5 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/signup_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
@@ -148,11 +149,19 @@ class _Controller {
       return;
     }
 
+    // get user's info
     List<BKUser> bkUserList = await FirebaseController.getBKUser(user.email);
     BKUser bkUser = bkUserList[0];
 
+    // get list of user's posts
+    List<BKPost> bkPosts = await FirebaseController.getBKPosts(user.email);
+
     Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
-        arguments: {'user': user, 'bkUser': bkUser});
+        arguments: {
+          'user': user,
+          'bkUser': bkUser,
+          'bkPosts': bkPosts,
+        });
   }
 
   String validatorEmail(String value) {

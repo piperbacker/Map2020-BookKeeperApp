@@ -1,3 +1,4 @@
+import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -80,5 +81,34 @@ class FirebaseController {
           .doc(bkUser.docId)
           .update({"userBio": bkUser.userBio});
     }
+  }
+
+  static Future<List<BKPost>> getBKPosts(String email) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKPost.COLLECTION)
+        .where(BKPost.POSTED_BY, isEqualTo: email)
+        .get();
+    var result = <BKPost>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        result.add(BKPost.deserialize(doc.data(), doc.id));
+      }
+    }
+    return result;
+  }
+
+  static Future<String> addPost(BKPost bKPost) async {
+    bKPost.updatedAt = DateTime.now();
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(BKPost.COLLECTION)
+        .add(bKPost.serialize());
+    return ref.id;
+  }
+
+  static Future<void> updateLikedBy(BKPost bkPost) async {
+    await FirebaseFirestore.instance
+        .collection(BKPost.COLLECTION)
+        .doc(bkPost.docId)
+        .update({"likedBy": bkPost.likedBy});
   }
 }
