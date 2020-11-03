@@ -232,12 +232,13 @@ class _Controller {
   void newPost(String src) async {
     try {
       if (src == 'Post Update') {
-        Navigator.pushNamed(_state.context, PostUpdateScreen.routeName,
+        await Navigator.pushNamed(_state.context, PostUpdateScreen.routeName,
             arguments: {
               'user': _state.user,
               'bkUser': _state.bkUser,
               'bkPosts': _state.bkPosts,
             });
+        _state.render(() {});
       } else {
         Navigator.pushNamed(_state.context, PostReviewScreen.routeName,
             arguments: {
@@ -296,8 +297,11 @@ class _Controller {
       Navigator.pushNamed(_state.context, ShopScreen.routeName,
           arguments: {'user': _state.user, 'bkUser': _state.bkUser});
     } else if (_state.currentIndex == 3) {
-      Navigator.pushNamed(_state.context, ProfileScreen.routeName,
-          arguments: {'user': _state.user, 'bkUser': _state.bkUser});
+      Navigator.pushNamed(_state.context, ProfileScreen.routeName, arguments: {
+        'user': _state.user,
+        'bkUser': _state.bkUser,
+        'bkPosts': _state.bkPosts,
+      });
     }
   }
 }

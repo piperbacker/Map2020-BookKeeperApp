@@ -87,6 +87,7 @@ class FirebaseController {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(BKPost.COLLECTION)
         .where(BKPost.POSTED_BY, isEqualTo: email)
+        .orderBy(BKPost.UPDATED_AT, descending: true)
         .get();
     var result = <BKPost>[];
     if (querySnapshot != null && querySnapshot.docs.length != 0) {

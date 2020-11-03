@@ -93,9 +93,6 @@ class _Controller {
     await Navigator.pushNamed(_state.context, EditProfileScreen.routeName,
         arguments: {'user': _state.user, 'bkUser': _state.bkUser});
 
-    await _state.user.reload();
-    _state.user = FirebaseAuth.instance.currentUser;
-
     Navigator.pop(_state.context);
   }
 
