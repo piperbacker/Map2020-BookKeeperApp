@@ -34,9 +34,9 @@ class _EditProfileState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map arg = ModalRoute.of(context).settings.arguments;
-    user ??= arg['user'];
-    bkUser ??= arg['bkUser'];
+    Map args = ModalRoute.of(context).settings.arguments;
+    user ??= args['user'];
+    bkUser ??= args['bkUser'];
 
     return Scaffold(
       appBar: AppBar(
@@ -180,7 +180,6 @@ class _Controller {
   _Controller(this._state);
   File imageFile;
   String displayName;
-  //String bio;
   String progressMessage;
   static final validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
@@ -200,10 +199,6 @@ class _Controller {
               progressMessage = 'Uploading ${percentage.toStringAsFixed(1)} %';
             });
           });
-      _state.render(() {
-        //_state.user.reload();
-        //_state.user = FirebaseAuth.instance.currentUser;
-      });
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.info(
@@ -256,8 +251,6 @@ class _Controller {
   }
 
   void onSavedBio(String value) {
-    print(_state.bkUser);
     _state.bkUser.userBio = value;
-    print("=========" + _state.bkUser.userBio);
   }
 }

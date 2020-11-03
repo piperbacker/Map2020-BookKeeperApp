@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  static const routeName = '/profileScreen';
+  static const routeName = 'home/profileScreen';
 
   @override
   State<StatefulWidget> createState() {
@@ -96,11 +96,7 @@ class _Controller {
   _Controller(this._state);
 
   void settings() {
-    //print(_state.bkUser);
     Navigator.pushNamed(_state.context, SettingsScreen.routeName,
         arguments: {'user': _state.user, 'bkUser': _state.bkUser});
-
-    /*_state.user.reload();
-    _state.user = FirebaseAuth.instance.currentUser;*/
   }
 }

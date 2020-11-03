@@ -31,9 +31,9 @@ class _SettingsState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map arg = ModalRoute.of(context).settings.arguments;
-    user ??= arg['user'];
-    bkUser ??= arg['bkUser'];
+    Map args = ModalRoute.of(context).settings.arguments;
+    user ??= args['user'];
+    bkUser ??= args['bkUser'];
 
     return Scaffold(
       appBar: AppBar(
@@ -93,12 +93,9 @@ class _Controller {
     await Navigator.pushNamed(_state.context, EditProfileScreen.routeName,
         arguments: {'user': _state.user, 'bkUser': _state.bkUser});
 
-    // to get updated user profile do the following 2 steps
+    await _state.user.reload();
+    _state.user = FirebaseAuth.instance.currentUser;
 
-    _state.render(() {
-      _state.user.reload();
-      _state.user = FirebaseAuth.instance.currentUser;
-    });
     Navigator.pop(_state.context);
   }
 

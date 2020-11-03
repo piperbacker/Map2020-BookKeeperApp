@@ -1,5 +1,7 @@
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/library_screen.dart';
+import 'package:bookkeeperapp/screen/postreview_screen.dart';
+import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/views/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -104,7 +106,12 @@ class _Controller {
   void newPost(String src) async {
     try {
       if (src == 'Post Update') {
-      } else {}
+        Navigator.pushNamed(_state.context, PostUpdateScreen.routeName,
+            arguments: {'user': _state.user, 'bkUser': _state.bkUser});
+      } else {
+        Navigator.pushNamed(_state.context, PostReviewScreen.routeName,
+            arguments: {'user': _state.user, 'bkUser': _state.bkUser});
+      }
     } catch (e) {}
   }
 

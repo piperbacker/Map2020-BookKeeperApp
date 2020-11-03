@@ -149,9 +149,7 @@ class _Controller {
     }
 
     List<BKUser> bkUserList = await FirebaseController.getBKUser(user.email);
-    //print(bkUserList);
     BKUser bkUser = bkUserList[0];
-    //print(bkUser);
 
     Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
         arguments: {'user': user, 'bkUser': bkUser});

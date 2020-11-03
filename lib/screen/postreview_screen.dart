@@ -1,17 +1,19 @@
+import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LibraryScreen extends StatefulWidget {
-  static const routeName = 'home/libraryScreen';
+class PostReviewScreen extends StatefulWidget {
+  static const routeName = 'home/postReviewScreen';
 
   @override
   State<StatefulWidget> createState() {
-    return _LibraryState();
+    return _PostReviewState();
   }
 }
 
-class _LibraryState extends State<LibraryScreen> {
+class _PostReviewState extends State<PostReviewScreen> {
   User user;
+  BKUser bKUser;
   _Controller con;
 
   @override
@@ -24,19 +26,20 @@ class _LibraryState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map arg = ModalRoute.of(context).settings.arguments;
-    user ??= arg['user'];
+    Map args = ModalRoute.of(context).settings.arguments;
+    user ??= args['user'];
+    bKUser ??= args['bKUser'];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Library'),
+        title: Text('Post Review'),
       ),
-      body: Text("Library"),
+      body: Text("Post Review"),
     );
   }
 }
 
 class _Controller {
-  _LibraryState _state;
+  _PostReviewState _state;
   _Controller(this._state);
 }

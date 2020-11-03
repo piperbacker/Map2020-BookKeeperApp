@@ -116,7 +116,7 @@ class _Controller {
       var p = BKUser(user: email, userTag: 'reader');
       p.docId =
           await FirebaseController.signUp(displayName, email, password, p);
-      //_state.users.insert(0, p);
+      _state.users.insert(0, p);
 
       MyDialog.info(
         context: _state.context,
