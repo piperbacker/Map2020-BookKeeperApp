@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PostUpdateScreen extends StatefulWidget {
   static const routeName = 'home/postUpdateScreen';
@@ -17,6 +20,7 @@ class PostUpdateScreen extends StatefulWidget {
 class _PostUpdateState extends State<PostUpdateScreen> {
   User user;
   BKUser bkUser;
+  File image;
   List<BKPost> bkPosts;
   var formKey = GlobalKey<FormState>();
   _Controller con;
@@ -93,6 +97,69 @@ class _PostUpdateState extends State<PostUpdateScreen> {
                   SizedBox(
                     height: 40.0,
                   ),
+                  Text(
+                    "Add Photo",
+                    style: TextStyle(fontSize: 24.0, color: Colors.cyan[900]),
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FlatButton(
+                        padding: EdgeInsets.all(10.0),
+                        onPressed: () => con.getPicture('Camera'),
+                        child: Container(
+                          width: 130.0,
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.photo_camera),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text("Camera",
+                                  style: TextStyle(
+                                    fontSize: 22.0,
+                                  )),
+                            ],
+                          ),
+                        ),
+                        color: Colors.teal[400],
+                      ),
+                      SizedBox(
+                        width: 20.0,
+                      ),
+                      FlatButton(
+                        padding: EdgeInsets.all(10.0),
+                        onPressed: () => con.getPicture('Gallery'),
+                        child: Container(
+                          width: 130.0,
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.photo_album),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text("Gallery",
+                                  style: TextStyle(
+                                    fontSize: 22.0,
+                                  )),
+                            ],
+                          ),
+                        ),
+                        color: Colors.orangeAccent,
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: image == null
+                        ? SizedBox(height: 1)
+                        : Container(
+                            margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                            child: Image.file(image, fit: BoxFit.fill)),
+                  ),
                 ],
               ),
             ],
@@ -108,6 +175,22 @@ class _Controller {
   _Controller(this._state);
   String title;
   String body;
+  String uploadProgressMessage;
+
+  void getPicture(String src) async {
+    try {
+      PickedFile _imageFile;
+      if (src == 'Camera') {
+        _imageFile = await ImagePicker().getImage(source: ImageSource.camera);
+      } else {
+        _imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
+      }
+
+      _state.render(() {
+        _state.image = File(_imageFile.path);
+      });
+    } catch (e) {}
+  }
 
   void save() async {
     if (!_state.formKey.currentState.validate()) {
@@ -119,7 +202,20 @@ class _Controller {
     try {
       MyDialog.circularProgressStart(_state.context);
 
+      Map<String, String> photoInfo = await FirebaseController.uploadStorage(
+        image: _state.image,
+        uid: _state.user.uid,
+        listener: (double progressPercentage) {
+          _state.render(() {
+            uploadProgressMessage =
+                'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
+          });
+        },
+      );
+
       var p = BKPost(
+        photoPath: photoInfo['path'],
+        photoURL: photoInfo['url'],
         title: title,
         body: body,
         postedBy: _state.user.email,

@@ -144,6 +144,18 @@ class _HomeState extends State<HomeScreen> {
                             SizedBox(
                               height: 10.0,
                             ),
+                            bkPosts[index].photoURL == null
+                                ? SizedBox(height: 1)
+                                : Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        10.0, 5.0, 10.0, 5.0),
+                                    child: MyImageView.network(
+                                        imageURL: bkPosts[index].photoURL,
+                                        context: context),
+                                  ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
                             bkPosts[index].postedBy == user.email
                                 ? SizedBox(
                                     height: 1.0,
@@ -180,8 +192,6 @@ class _HomeState extends State<HomeScreen> {
                                   ),
                           ],
                         ),
-                        //onTap: () => con.onTap(index),
-                        //onLongPress: () => con.onLongPress(index),
                       ),
                     );
                   },

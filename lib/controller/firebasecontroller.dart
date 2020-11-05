@@ -112,4 +112,26 @@ class FirebaseController {
         .doc(bkPost.docId)
         .update({"likedBy": bkPost.likedBy});
   }
+
+  static Future<Map<String, String>> uploadStorage({
+    @required File image,
+    String filePath,
+    @required String uid,
+    @required Function listener,
+  }) async {
+    filePath ??= '${BKPost.POSTS_FOLDER}/$uid/${DateTime.now()}';
+
+    StorageUploadTask task =
+        FirebaseStorage.instance.ref().child(filePath).putFile(image);
+
+    task.events.listen((event) {
+      double percentage = (event.snapshot.bytesTransferred.toDouble() /
+              event.snapshot.totalByteCount.toDouble()) *
+          100;
+      listener(percentage);
+    });
+    var download = await task.onComplete;
+    String url = await download.ref.getDownloadURL();
+    return {'url': url, 'path': filePath};
+  }
 }
