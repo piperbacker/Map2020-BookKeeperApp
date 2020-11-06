@@ -134,4 +134,21 @@ class FirebaseController {
     String url = await download.ref.getDownloadURL();
     return {'url': url, 'path': filePath};
   }
+
+  static Future<List<BKUser>> searchUsers({
+    @required String displayName,
+  }) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .where(BKUser.DISPLAY_NAME, isEqualTo: displayName.toLowerCase())
+        .get();
+
+    var result = <BKUser>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        result.add(BKUser.deserialize(doc.data(), doc.id));
+      }
+    }
+    return result;
+  }
 }

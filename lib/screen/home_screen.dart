@@ -5,6 +5,7 @@ import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/postreview_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
+import 'package:bookkeeperapp/screen/usersearch_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:bookkeeperapp/screen/views/profile_screen.dart';
@@ -38,10 +39,10 @@ class _HomeState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map arg = ModalRoute.of(context).settings.arguments;
-    user ??= arg['user'];
-    bkUser ??= arg['bkUser'];
-    bkPosts ??= arg['bkPosts'];
+    Map args = ModalRoute.of(context).settings.arguments;
+    user ??= args['user'];
+    bkUser ??= args['bkUser'];
+    bkPosts ??= args['bkPosts'];
 
     return WillPopScope(
       onWillPop: () => Future.value(false),
@@ -49,6 +50,26 @@ class _HomeState extends State<HomeScreen> {
         appBar: AppBar(
           title: Text('Home'),
           actions: <Widget>[
+            Container(
+              margin: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
+              width: 160.0,
+              child: Form(
+                key: formKey,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Search Users',
+                    fillColor: Colors.white,
+                    filled: true,
+                  ),
+                  autocorrect: false,
+                  onSaved: con.onSavedSearchKey,
+                ),
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: con.search,
+            ),
             PopupMenuButton<String>(
               onSelected: con.newPost,
               itemBuilder: (context) => <PopupMenuEntry<String>>[
@@ -233,6 +254,29 @@ class _HomeState extends State<HomeScreen> {
 class _Controller {
   _HomeState _state;
   _Controller(this._state);
+  String searchKey;
+
+  void onSavedSearchKey(String value) {
+    searchKey = value;
+  }
+
+  void search() async {
+    _state.formKey.currentState.save();
+
+    var results;
+    if (searchKey == null || searchKey.trim().isEmpty) {
+      return;
+    } else {
+      results = await FirebaseController.searchUsers(displayName: searchKey);
+
+      Navigator.pushNamed(_state.context, UserSearchScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkUsers': results,
+          });
+    }
+  }
 
   void newPost(String src) async {
     try {

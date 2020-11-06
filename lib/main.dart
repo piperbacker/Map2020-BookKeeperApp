@@ -8,6 +8,7 @@ import 'package:bookkeeperapp/screen/settings_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/signin_screen.dart';
 import 'package:bookkeeperapp/screen/signup_screen.dart';
+import 'package:bookkeeperapp/screen/usersearch_screen.dart';
 import 'package:bookkeeperapp/screen/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -42,6 +43,7 @@ class BookKeeperApp extends StatelessWidget {
           ChangePasswordScreen.routeName: (context) => ChangePasswordScreen(),
           PostUpdateScreen.routeName: (context) => PostUpdateScreen(),
           PostReviewScreen.routeName: (context) => PostReviewScreen(),
+          UserSearchScreen.routeName: (context) => UserSearchScreen(),
         });
   }
 }
