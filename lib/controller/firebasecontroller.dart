@@ -140,7 +140,8 @@ class FirebaseController {
   }) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
-        .where(BKUser.DISPLAY_NAME, isEqualTo: displayName.toLowerCase())
+        .where(BKUser.DISPLAY_NAME.toLowerCase(),
+            isEqualTo: displayName.toLowerCase())
         .get();
 
     var result = <BKUser>[];

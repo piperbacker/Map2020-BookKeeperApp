@@ -2,6 +2,7 @@ import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/home_screen.dart';
+import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,6 @@ class _UserSearchState extends State<UserSearchScreen> {
   User user;
   _Controller con;
   BKUser bkUser;
-  List<BKPost> bkPosts;
   List<BKUser> bkUsers;
   var formKey = GlobalKey<FormState>();
 
@@ -63,7 +63,79 @@ class _UserSearchState extends State<UserSearchScreen> {
           ),
         ],
       ),
-      body: Text("Search"),
+      body: bkUsers.length == 0
+          ? Center(
+              child: Text(
+                'There are no users with that Display Name',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.cyan[900],
+                ),
+              ),
+            )
+          : Container(
+              margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+              child: ListView.builder(
+                itemCount: bkUsers.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    color: Colors.orange[50],
+                    child: Card(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 60,
+                                  width: 60,
+                                  child: ClipOval(
+                                    child: MyImageView.network(
+                                        imageURL: user.photoURL,
+                                        context: context),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text(
+                                  bkUsers[index].displayName,
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Colors.cyan[900],
+                                  ),
+                                ),
+                                ButtonTheme(
+                                  minWidth: 150.0,
+                                  height: 50.0,
+                                  child: RaisedButton(
+                                    child: Text(
+                                      'Follow',
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    color: Colors.teal[400],
+                                    onPressed:
+                                        null, // add user to following list
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
 }
@@ -71,7 +143,6 @@ class _UserSearchState extends State<UserSearchScreen> {
 class _Controller {
   _UserSearchState _state;
   _Controller(this._state);
-
   String searchKey;
 
   void onSavedSearchKey(String value) {
@@ -83,14 +154,14 @@ class _Controller {
 
     var results;
     if (searchKey == null || searchKey.trim().isEmpty) {
-      Navigator.pushNamed(_state.context, HomeScreen.routeName,
-          arguments: {'user': _state.user, 'bkUser': _state.bkUser});
+      /*Navigator.pushNamed(_state.context, HomeScreen.routeName,
+          arguments: {'user': _state.user, 'bkUser': _state.bkUser});*/
     } else {
       results = await FirebaseController.searchUsers(displayName: searchKey);
-    }
 
-    _state.render(() => _state.bkUsers = results);
-    print(_state.bkUsers);
+      _state.render(() => _state.bkUsers = results);
+      print(_state.bkUsers);
+    }
 
     /*Navigator.pushNamed(_state.context, PostReviewScreen.routeName, arguments: {
       'user': _state.user,

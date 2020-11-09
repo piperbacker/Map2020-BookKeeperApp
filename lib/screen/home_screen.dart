@@ -258,6 +258,7 @@ class _Controller {
 
   void onSavedSearchKey(String value) {
     searchKey = value;
+    print(searchKey);
   }
 
   void search() async {
@@ -268,8 +269,9 @@ class _Controller {
       return;
     } else {
       results = await FirebaseController.searchUsers(displayName: searchKey);
+      print(results);
 
-      Navigator.pushNamed(_state.context, UserSearchScreen.routeName,
+      await Navigator.pushNamed(_state.context, UserSearchScreen.routeName,
           arguments: {
             'user': _state.user,
             'bkUser': _state.bkUser,

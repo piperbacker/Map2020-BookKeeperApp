@@ -54,12 +54,12 @@ class _ProfileState extends State<ProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              height: 20.0,
+              height: 10.0,
             ),
             Container(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
                     child: Container(
@@ -72,18 +72,22 @@ class _ProfileState extends State<ProfileScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 20.0,
+                    width: 10.0,
                   ),
                   Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 20.0,
+                        height: 10.0,
                       ),
                       Text(
                         user.displayName,
                         style: TextStyle(
                           fontSize: 25.0,
+                          color: Colors.cyan[900],
                         ),
+                      ),
+                      SizedBox(
+                        height: 10.0,
                       ),
                       bkUser.userBio == null
                           ? Container()
