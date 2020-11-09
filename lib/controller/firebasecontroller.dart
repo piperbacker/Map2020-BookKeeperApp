@@ -72,14 +72,14 @@ class FirebaseController {
       await FirebaseFirestore.instance
           .collection(BKUser.COLLECTION)
           .doc(bkUser.docId)
-          .update({"userBio": bkUser.userBio});
+          .set(bkUser.serialize());
     } else {
       await FirebaseAuth.instance.currentUser
           .updateProfile(displayName: displayName);
       await FirebaseFirestore.instance
           .collection(BKUser.COLLECTION)
           .doc(bkUser.docId)
-          .update({"userBio": bkUser.userBio});
+          .set(bkUser.serialize());
     }
   }
 
@@ -140,8 +140,7 @@ class FirebaseController {
   }) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
-        .where(BKUser.DISPLAY_NAME.toLowerCase(),
-            isEqualTo: displayName.toLowerCase())
+        .where(BKUser.DISPLAY_NAME, isEqualTo: displayName)
         .get();
 
     var result = <BKUser>[];
@@ -151,5 +150,12 @@ class FirebaseController {
       }
     }
     return result;
+  }
+
+  static Future<void> updateFollowing(BKUser bkUser) async {
+    await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .doc(bkUser.docId)
+        .update({"following": bkUser.following});
   }
 }

@@ -247,6 +247,7 @@ class _Controller {
 
   void onSavedDisplayName(String value) {
     this.displayName = value;
+    _state.bkUser.displayName = value;
   }
 
   String validatorBio(String value) {

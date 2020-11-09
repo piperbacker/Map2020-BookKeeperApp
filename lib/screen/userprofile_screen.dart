@@ -4,18 +4,16 @@ import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../settings_screen.dart';
-
-class ProfileScreen extends StatefulWidget {
-  static const routeName = 'home/profileScreen';
+class UserProfileScreen extends StatefulWidget {
+  static const routeName = 'home/userProfileScreen';
 
   @override
   State<StatefulWidget> createState() {
-    return _ProfileState();
+    return _UserProfileState();
   }
 }
 
-class _ProfileState extends State<ProfileScreen> {
+class _UserProfileState extends State<UserProfileScreen> {
   User user;
   BKUser bkUser;
   List<BKPost> bkPosts;
@@ -38,15 +36,7 @@ class _ProfileState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Profile'),
-        // "${user.displayName}'s Profile"
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            iconSize: 30.0,
-            onPressed: con.settings,
-          ),
-        ],
+        title: Text("${bkUser.displayName}'s Profile"),
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -206,8 +196,6 @@ class _ProfileState extends State<ProfileScreen> {
                                         ),
                                 ],
                               ),
-                              //onTap: () => con.onTap(index),
-                              //onLongPress: () => con.onLongPress(index),
                             ),
                           ),
                         );
@@ -222,15 +210,6 @@ class _ProfileState extends State<ProfileScreen> {
 }
 
 class _Controller {
-  _ProfileState _state;
+  _UserProfileState _state;
   _Controller(this._state);
-
-  void settings() async {
-    await Navigator.pushNamed(_state.context, SettingsScreen.routeName,
-        arguments: {'user': _state.user, 'bkUser': _state.bkUser});
-
-    await _state.user.reload();
-    _state.user = FirebaseAuth.instance.currentUser;
-    _state.render(() {});
-  }
 }

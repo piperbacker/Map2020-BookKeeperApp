@@ -8,7 +8,7 @@ import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/usersearch_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
-import 'package:bookkeeperapp/screen/views/profile_screen.dart';
+import 'package:bookkeeperapp/screen/views/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -258,7 +258,7 @@ class _Controller {
 
   void onSavedSearchKey(String value) {
     searchKey = value;
-    print(searchKey);
+    //print(searchKey);
   }
 
   void search() async {
@@ -348,11 +348,12 @@ class _Controller {
       Navigator.pushNamed(_state.context, ShopScreen.routeName,
           arguments: {'user': _state.user, 'bkUser': _state.bkUser});
     } else if (_state.currentIndex == 3) {
-      Navigator.pushNamed(_state.context, ProfileScreen.routeName, arguments: {
-        'user': _state.user,
-        'bkUser': _state.bkUser,
-        'bkPosts': _state.bkPosts,
-      });
+      Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkPosts': _state.bkPosts,
+          });
     }
   }
 }

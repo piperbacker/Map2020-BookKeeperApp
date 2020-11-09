@@ -2,6 +2,7 @@ import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/home_screen.dart';
+import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -103,29 +104,61 @@ class _UserSearchState extends State<UserSearchScreen> {
                                 SizedBox(
                                   width: 10.0,
                                 ),
-                                Text(
-                                  bkUsers[index].displayName,
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: Colors.cyan[900],
-                                  ),
-                                ),
-                                ButtonTheme(
-                                  minWidth: 150.0,
-                                  height: 50.0,
-                                  child: RaisedButton(
-                                    child: Text(
-                                      'Follow',
-                                      style: TextStyle(
-                                        fontSize: 25.0,
-                                        color: Colors.white,
-                                      ),
+                                FlatButton(
+                                  onPressed:  () => con.goToProfile(index),
+                                  child: Text(
+                                    bkUsers[index].displayName,
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.cyan[900],
                                     ),
-                                    color: Colors.teal[400],
-                                    onPressed:
-                                        null, // add user to following list
                                   ),
                                 ),
+                                SizedBox(
+                                  width: 30.0,
+                                ),
+                                bkUsers[index].user == user.email
+                                    ? SizedBox(
+                                        height: 1.0,
+                                      )
+                                    : Row(
+                                        children: <Widget>[
+                                          !bkUser.following
+                                                  .contains(bkUsers[index].user)
+                                              ? ButtonTheme(
+                                                  minWidth: 120.0,
+                                                  height: 40.0,
+                                                  child: RaisedButton(
+                                                      color: Colors.teal[400],
+                                                      child: Text(
+                                                        'Follow',
+                                                        style: TextStyle(
+                                                          fontSize: 20.0,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      onPressed: () => con.follow(
+                                                          index) 
+                                                      ),
+                                                )
+                                              : ButtonTheme(
+                                                  minWidth: 120.0,
+                                                  height: 40.0,
+                                                  child: RaisedButton(
+                                                      color:
+                                                          Colors.orangeAccent,
+                                                      child: Text(
+                                                        'Unfollow',
+                                                        style: TextStyle(
+                                                          fontSize: 20.0,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      onPressed: () =>
+                                                          con.unfollow(index)),
+                                                ),
+                                        ],
+                                      ),
                               ],
                             ),
                           ),
@@ -169,4 +202,41 @@ class _Controller {
       'bkUsers': results,
     });*/
   }
+
+  void follow(int index) async {
+    _state.render(() {
+      if (!_state.bkUser.following.contains(_state.bkUsers[index].user)) {
+        _state.bkUser.following.add(_state.bkUsers[index].user);
+      }
+    });
+
+    try {
+      await FirebaseController.updateFollowing(_state.bkUser);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Error occured, could not follow user',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void unfollow(int index) async {
+    _state.render(() {
+      if (_state.bkUser.following.contains(_state.bkUsers[index].user)) {
+        _state.bkUser.following.remove(_state.bkUsers[index].user);
+      }
+    });
+    try {
+      await FirebaseController.updateFollowing(_state.bkUser);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Error occured, could not unfollow user',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void goToProfile(int index) {}
 }
