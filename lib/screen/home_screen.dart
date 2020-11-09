@@ -8,7 +8,7 @@ import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/usersearch_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
-import 'package:bookkeeperapp/screen/views/myprofile_screen.dart';
+import 'package:bookkeeperapp/screen/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

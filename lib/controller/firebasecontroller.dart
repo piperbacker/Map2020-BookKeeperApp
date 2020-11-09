@@ -18,13 +18,16 @@ class FirebaseController {
   }
 
   static Future<String> signUp(
-      String displayName, String email, String password, BKUser user) async {
+    String displayName,
+    String email,
+    String password,
+    BKUser user,
+  ) async {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
     await FirebaseAuth.instance.currentUser.updateProfile(
-        displayName: displayName,
-        photoURL:
-            'https://firebasestorage.googleapis.com/v0/b/piper-map2020-bookkeeperapp.appspot.com/o/DefaultProfilePicture%2Fdef_profile.png?alt=media&token=0fdeb013-fdcb-413a-9946-e6653cbc241f');
+      displayName: displayName,
+    );
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
         .add(user.serialize());
@@ -45,13 +48,15 @@ class FirebaseController {
     return result;
   }
 
-  static Future<void> updateProfile({
+  static Future<Map<String, String>> updateProfile({
     @required File image, // null no update needed
+    String filePath,
     @required String displayName,
     @required User user,
     @required BKUser bkUser,
     @required Function progressListener,
   }) async {
+    String url;
     if (image != null) {
       // 1. upload the picture
       String filePath = '${BKUser.PROFILE_FOLDER}/${user.uid}/${user.uid}';
@@ -66,7 +71,9 @@ class FirebaseController {
       });
 
       var download = await uploadTask.onComplete;
-      String url = await download.ref.getDownloadURL();
+      url = await download.ref.getDownloadURL();
+      bkUser.photoPath = filePath;
+      bkUser.photoURL = url;
       await FirebaseAuth.instance.currentUser
           .updateProfile(displayName: displayName, photoURL: url);
       await FirebaseFirestore.instance
@@ -81,6 +88,7 @@ class FirebaseController {
           .doc(bkUser.docId)
           .set(bkUser.serialize());
     }
+    return {'url': url, 'path': filePath};
   }
 
   static Future<List<BKPost>> getBKPosts(String email) async {

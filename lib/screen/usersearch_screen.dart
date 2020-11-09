@@ -2,6 +2,8 @@ import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/home_screen.dart';
+import 'package:bookkeeperapp/screen/myprofile_screen.dart';
+import 'package:bookkeeperapp/screen/userprofile_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -97,7 +99,7 @@ class _UserSearchState extends State<UserSearchScreen> {
                                   width: 60,
                                   child: ClipOval(
                                     child: MyImageView.network(
-                                        imageURL: user.photoURL,
+                                        imageURL: bkUsers[index].photoURL,
                                         context: context),
                                   ),
                                 ),
@@ -105,7 +107,7 @@ class _UserSearchState extends State<UserSearchScreen> {
                                   width: 10.0,
                                 ),
                                 FlatButton(
-                                  onPressed:  () => con.goToProfile(index),
+                                  onPressed: () => con.goToProfile(index),
                                   child: Text(
                                     bkUsers[index].displayName,
                                     style: TextStyle(
@@ -137,9 +139,8 @@ class _UserSearchState extends State<UserSearchScreen> {
                                                           color: Colors.white,
                                                         ),
                                                       ),
-                                                      onPressed: () => con.follow(
-                                                          index) 
-                                                      ),
+                                                      onPressed: () =>
+                                                          con.follow(index)),
                                                 )
                                               : ButtonTheme(
                                                   minWidth: 120.0,
@@ -238,5 +239,31 @@ class _Controller {
     }
   }
 
-  void goToProfile(int index) {}
+  void goToProfile(int index) async {
+    // get user's info
+    List<BKUser> bkUserList =
+        await FirebaseController.getBKUser(_state.bkUsers[index].user);
+    BKUser userProfile = bkUserList[0];
+
+    // get list of user's posts
+    List<BKPost> bkPosts =
+        await FirebaseController.getBKPosts(_state.bkUsers[index].user);
+
+    if (_state.bkUsers[index].user == _state.bkUser.user) {
+      Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkPosts': bkPosts,
+          });
+    } else {
+      Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkPosts': bkPosts,
+            'userProfile': userProfile,
+          });
+    }
+  }
 }

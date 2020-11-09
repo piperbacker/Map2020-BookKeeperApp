@@ -1,5 +1,7 @@
+import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileState extends State<UserProfileScreen> {
   User user;
   BKUser bkUser;
+  BKUser userProfile;
   List<BKPost> bkPosts;
   _Controller con;
 
@@ -32,11 +35,12 @@ class _UserProfileState extends State<UserProfileScreen> {
     Map args = ModalRoute.of(context).settings.arguments;
     user ??= args['user'];
     bkUser ??= args['bkUser'];
+    userProfile ??= args['userProfile'];
     bkPosts ??= args['bkPosts'];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${bkUser.displayName}'s Profile"),
+        title: Text("${userProfile.displayName}'s Profile"),
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -57,7 +61,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                       width: 100,
                       child: ClipOval(
                         child: MyImageView.network(
-                            imageURL: user.photoURL, context: context),
+                            imageURL: userProfile.photoURL, context: context),
                       ),
                     ),
                   ),
@@ -70,7 +74,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                         height: 10.0,
                       ),
                       Text(
-                        user.displayName,
+                        userProfile.displayName,
                         style: TextStyle(
                           fontSize: 25.0,
                           color: Colors.cyan[900],
@@ -79,10 +83,10 @@ class _UserProfileState extends State<UserProfileScreen> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      bkUser.userBio == null
+                      userProfile.userBio == null
                           ? Container()
                           : Text(
-                              bkUser.userBio,
+                              userProfile.userBio,
                               style: TextStyle(
                                 fontSize: 18.0,
                               ),
@@ -129,7 +133,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                                           width: 60,
                                           child: ClipOval(
                                             child: MyImageView.network(
-                                                imageURL: user.photoURL,
+                                                imageURL: userProfile.photoURL,
                                                 context: context),
                                           ),
                                         ),
@@ -181,6 +185,28 @@ class _UserProfileState extends State<UserProfileScreen> {
                                   SizedBox(
                                     height: 10.0,
                                   ),
+                                  bkPosts[index].photoURL == null
+                                      ? SizedBox(height: 1)
+                                      : Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              10.0, 5.0, 10.0, 5.0),
+                                          child: MyImageView.network(
+                                              imageURL: bkPosts[index].photoURL,
+                                              context: context),
+                                        ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  !bkPosts[index].likedBy.contains(user.email)
+                                      ? IconButton(
+                                          icon: Icon(Icons.favorite_border),
+                                          onPressed: () => con.like(index),
+                                        )
+                                      : IconButton(
+                                          icon: Icon(Icons.favorite),
+                                          color: Colors.pink,
+                                          onPressed: () => con.unlike(index),
+                                        ),
                                   bkPosts[index].likedBy.length == 0
                                       ? SizedBox(
                                           height: 1.0,
@@ -212,4 +238,40 @@ class _UserProfileState extends State<UserProfileScreen> {
 class _Controller {
   _UserProfileState _state;
   _Controller(this._state);
+
+  void like(int index) async {
+    _state.render(() {
+      if (!_state.bkPosts[index].likedBy.contains(_state.user.email)) {
+        _state.bkPosts[index].likedBy.add(_state.user.email);
+      }
+    });
+
+    try {
+      await FirebaseController.updateLikedBy(_state.bkPosts[index]);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Like photo memo error in saving',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void unlike(int index) async {
+    _state.render(() {
+      if (_state.bkPosts[index].likedBy.contains(_state.user.email)) {
+        _state.bkPosts[index].likedBy.remove(_state.user.email);
+      }
+    });
+
+    try {
+      await FirebaseController.updateLikedBy(_state.bkPosts[index]);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Unlike photo memo error in saving',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
 }

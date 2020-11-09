@@ -4,7 +4,7 @@ import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../settings_screen.dart';
+import 'settings_screen.dart';
 
 class MyProfileScreen extends StatefulWidget {
   static const routeName = 'home/myProfileScreen';
@@ -188,6 +188,18 @@ class _MyProfileState extends State<MyProfileScreen> {
                                       ],
                                     ),
                                   ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  bkPosts[index].photoURL == null
+                                      ? SizedBox(height: 1)
+                                      : Container(
+                                          margin: EdgeInsets.fromLTRB(
+                                              10.0, 5.0, 10.0, 5.0),
+                                          child: MyImageView.network(
+                                              imageURL: bkPosts[index].photoURL,
+                                              context: context),
+                                        ),
                                   SizedBox(
                                     height: 10.0,
                                   ),

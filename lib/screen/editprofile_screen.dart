@@ -196,16 +196,21 @@ class _Controller {
     _state.formKey.currentState.save();
 
     try {
-      await FirebaseController.updateProfile(
-          image: imageFile,
-          displayName: displayName,
-          user: _state.user,
-          bkUser: _state.bkUser,
-          progressListener: (double percentage) {
-            _state.render(() {
-              progressMessage = 'Uploading ${percentage.toStringAsFixed(1)} %';
+      if (imageFile != null) {
+        Map<String, String> photoInfo = await FirebaseController.updateProfile(
+            image: imageFile,
+            displayName: displayName,
+            user: _state.user,
+            bkUser: _state.bkUser,
+            progressListener: (double percentage) {
+              _state.render(() {
+                progressMessage =
+                    'Uploading ${percentage.toStringAsFixed(1)} %';
+              });
             });
-          });
+        _state.bkUser.photoPath = photoInfo['path'];
+        _state.bkUser.photoURL = photoInfo['url'];
+      }
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.info(

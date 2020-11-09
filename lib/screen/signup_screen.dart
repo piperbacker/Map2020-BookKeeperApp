@@ -23,6 +23,8 @@ class _SignUpState extends State<SignUpScreen> {
     con = _Controller(this);
   }
 
+  void render(fn) => setState(fn);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,6 +107,7 @@ class _Controller {
   String email;
   String password;
   String displayName;
+
   static final validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
   void signUp() async {
@@ -113,10 +116,17 @@ class _Controller {
     _state.formKey.currentState.save();
 
     try {
-      var p = BKUser(user: email, displayName: displayName, userTag: 'reader');
-      p.docId =
-          await FirebaseController.signUp(displayName, email, password, p);
-      //_state.users.insert(0, p);
+      var p = BKUser(
+        user: email,
+        displayName: displayName,
+        userTag: 'reader',
+      );
+      p.docId = await FirebaseController.signUp(
+        displayName,
+        email,
+        password,
+        p,
+      );
 
       MyDialog.info(
         context: _state.context,
