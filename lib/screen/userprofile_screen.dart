@@ -19,7 +19,7 @@ class _UserProfileState extends State<UserProfileScreen> {
   User user;
   BKUser bkUser;
   BKUser userProfile;
-  List<BKPost> bkPosts;
+  List<BKPost> userPosts;
   _Controller con;
 
   @override
@@ -36,7 +36,7 @@ class _UserProfileState extends State<UserProfileScreen> {
     user ??= args['user'];
     bkUser ??= args['bkUser'];
     userProfile ??= args['userProfile'];
-    bkPosts ??= args['bkPosts'];
+    userPosts ??= args['userPosts'];
 
     return Scaffold(
       appBar: AppBar(
@@ -97,7 +97,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                 ],
               ),
             ),
-            bkPosts.length == 0
+            userPosts.length == 0
                 ? Center(
                     child: Text(
                       'No Posts Yet',
@@ -108,9 +108,8 @@ class _UserProfileState extends State<UserProfileScreen> {
                     ),
                   )
                 : Expanded(
-                    //height: 200.0,
                     child: ListView.builder(
-                      itemCount: bkPosts.length,
+                      itemCount: userPosts.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
                           color: Colors.orange[50],
@@ -141,7 +140,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                                           width: 10.0,
                                         ),
                                         Text(
-                                          bkPosts[index].displayName,
+                                          userPosts[index].displayName,
                                           style: TextStyle(
                                             fontSize: 18.0,
                                             color: Colors.cyan[900],
@@ -162,7 +161,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                                       children: <Widget>[
                                         Center(
                                           child: Text(
-                                            bkPosts[index].title,
+                                            userPosts[index].title,
                                             style: TextStyle(
                                               fontSize: 20.0,
                                               color: Colors.black,
@@ -173,7 +172,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                                             height: 30.0,
                                             color: Colors.orangeAccent),
                                         Text(
-                                          bkPosts[index].body,
+                                          userPosts[index].body,
                                           style: TextStyle(
                                             fontSize: 18.0,
                                             color: Colors.black87,
@@ -185,41 +184,47 @@ class _UserProfileState extends State<UserProfileScreen> {
                                   SizedBox(
                                     height: 10.0,
                                   ),
-                                  bkPosts[index].photoURL == null
+                                  userPosts[index].photoURL == null
                                       ? SizedBox(height: 1)
                                       : Container(
                                           margin: EdgeInsets.fromLTRB(
                                               10.0, 5.0, 10.0, 5.0),
                                           child: MyImageView.network(
-                                              imageURL: bkPosts[index].photoURL,
+                                              imageURL:
+                                                  userPosts[index].photoURL,
                                               context: context),
                                         ),
                                   SizedBox(
                                     height: 10.0,
                                   ),
-                                  !bkPosts[index].likedBy.contains(user.email)
-                                      ? IconButton(
-                                          icon: Icon(Icons.favorite_border),
-                                          onPressed: () => con.like(index),
-                                        )
-                                      : IconButton(
-                                          icon: Icon(Icons.favorite),
-                                          color: Colors.pink,
-                                          onPressed: () => con.unlike(index),
-                                        ),
-                                  bkPosts[index].likedBy.length == 0
-                                      ? SizedBox(
-                                          height: 1.0,
-                                        )
-                                      : Flexible(
-                                          child: Text(
-                                            '${bkPosts[index].likedBy.length} likes',
-                                            //overflow: TextOverflow.visible,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
+                                  Row(
+                                    children: <Widget>[
+                                      !userPosts[index]
+                                              .likedBy
+                                              .contains(bkUser.email)
+                                          ? IconButton(
+                                              icon: Icon(Icons.favorite_border),
+                                              onPressed: () => con.like(index),
+                                            )
+                                          : IconButton(
+                                              icon: Icon(Icons.favorite),
+                                              color: Colors.pink,
+                                              onPressed: () =>
+                                                  con.unlike(index),
                                             ),
-                                          ),
-                                        ),
+                                      userPosts[index].likedBy.length == 0
+                                          ? SizedBox(
+                                              height: 1.0,
+                                            )
+                                          : Text(
+                                              '${userPosts[index].likedBy.length} likes',
+                                              //overflow: TextOverflow.visible,
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
@@ -241,13 +246,13 @@ class _Controller {
 
   void like(int index) async {
     _state.render(() {
-      if (!_state.bkPosts[index].likedBy.contains(_state.user.email)) {
-        _state.bkPosts[index].likedBy.add(_state.user.email);
+      if (!_state.userPosts[index].likedBy.contains(_state.bkUser.email)) {
+        _state.userPosts[index].likedBy.add(_state.bkUser.email);
       }
     });
 
     try {
-      await FirebaseController.updateLikedBy(_state.bkPosts[index]);
+      await FirebaseController.updateLikedBy(_state.userPosts[index]);
     } catch (e) {
       MyDialog.info(
         context: _state.context,
@@ -259,13 +264,13 @@ class _Controller {
 
   void unlike(int index) async {
     _state.render(() {
-      if (_state.bkPosts[index].likedBy.contains(_state.user.email)) {
-        _state.bkPosts[index].likedBy.remove(_state.user.email);
+      if (_state.userPosts[index].likedBy.contains(_state.bkUser.email)) {
+        _state.userPosts[index].likedBy.remove(_state.bkUser.email);
       }
     });
 
     try {
-      await FirebaseController.updateLikedBy(_state.bkPosts[index]);
+      await FirebaseController.updateLikedBy(_state.userPosts[index]);
     } catch (e) {
       MyDialog.info(
         context: _state.context,

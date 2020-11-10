@@ -24,6 +24,7 @@ class _HomeState extends State<HomeScreen> {
   User user;
   BKUser bkUser;
   List<BKPost> bkPosts;
+  List<BKPost> homeFeed;
   _Controller con;
   var formKey = GlobalKey<FormState>();
   int currentIndex = 0;
@@ -42,6 +43,7 @@ class _HomeState extends State<HomeScreen> {
     user ??= args['user'];
     bkUser ??= args['bkUser'];
     bkPosts ??= args['bkPosts'];
+    homeFeed ??= args['homeFeed'];
 
     return WillPopScope(
       onWillPop: () => Future.value(false),
@@ -91,7 +93,7 @@ class _HomeState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: bkPosts.length == 0
+        body: homeFeed.length == 0
             ? Center(
                 child: Text(
                   'Home Feed is Empty',
@@ -104,7 +106,7 @@ class _HomeState extends State<HomeScreen> {
             : Container(
                 margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                 child: ListView.builder(
-                  itemCount: bkPosts.length,
+                  itemCount: homeFeed.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       color: Colors.orange[50],
@@ -119,20 +121,20 @@ class _HomeState extends State<HomeScreen> {
                               margin: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                               child: Row(
                                 children: [
-                                  Container(
+                                  /*Container(
                                     height: 60,
                                     width: 60,
                                     child: ClipOval(
                                       child: MyImageView.network(
-                                          imageURL: bkUser.photoURL,
+                                          imageURL: homeFeed[index].postedBy,
                                           context: context),
                                     ),
-                                  ),
+                                  ),*/
                                   SizedBox(
                                     width: 10.0,
                                   ),
                                   Text(
-                                    bkPosts[index].displayName,
+                                    homeFeed[index].displayName,
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       color: Colors.cyan[900],
@@ -146,7 +148,7 @@ class _HomeState extends State<HomeScreen> {
                             ),
                             Center(
                               child: Text(
-                                bkPosts[index].title,
+                                homeFeed[index].title,
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.black,
@@ -155,7 +157,7 @@ class _HomeState extends State<HomeScreen> {
                             ),
                             Divider(height: 30.0, color: Colors.orangeAccent),
                             Text(
-                              bkPosts[index].body,
+                              homeFeed[index].body,
                               style: TextStyle(
                                 fontSize: 18.0,
                                 color: Colors.black87,
@@ -164,27 +166,27 @@ class _HomeState extends State<HomeScreen> {
                             SizedBox(
                               height: 10.0,
                             ),
-                            bkPosts[index].photoURL == null
+                            homeFeed[index].photoURL == null
                                 ? SizedBox(height: 1)
                                 : Container(
                                     margin: EdgeInsets.fromLTRB(
                                         10.0, 5.0, 10.0, 5.0),
                                     child: MyImageView.network(
-                                        imageURL: bkPosts[index].photoURL,
+                                        imageURL: homeFeed[index].photoURL,
                                         context: context),
                                   ),
                             SizedBox(
                               height: 10.0,
                             ),
-                            bkPosts[index].postedBy == user.email
+                            homeFeed[index].postedBy == bkUser.email
                                 ? SizedBox(
                                     height: 1.0,
                                   )
                                 : Row(
                                     children: <Widget>[
-                                      !bkPosts[index]
+                                      !homeFeed[index]
                                               .likedBy
-                                              .contains(user.email)
+                                              .contains(bkUser.email)
                                           ? IconButton(
                                               icon: Icon(Icons.favorite_border),
                                               onPressed: () => con.like(index),
@@ -195,13 +197,13 @@ class _HomeState extends State<HomeScreen> {
                                               onPressed: () =>
                                                   con.unlike(index),
                                             ),
-                                      bkPosts[index].likedBy.length == 0
+                                      homeFeed[index].likedBy.length == 0
                                           ? SizedBox(
                                               height: 1.0,
                                             )
                                           : Flexible(
                                               child: Text(
-                                                '${bkPosts[index].likedBy.length} likes',
+                                                '${homeFeed[index].likedBy.length} likes',
                                                 //overflow: TextOverflow.visible,
                                                 style: TextStyle(
                                                   fontSize: 16.0,

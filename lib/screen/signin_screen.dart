@@ -153,14 +153,24 @@ class _Controller {
     List<BKUser> bkUserList = await FirebaseController.getBKUser(user.email);
     BKUser bkUser = bkUserList[0];
 
-    // get list of user's posts
+    // get user's posts
     List<BKPost> bkPosts = await FirebaseController.getBKPosts(bkUser.email);
+
+    List<dynamic> following = bkUser.following;
+    // to ensure own user's posts are shown on home feed
+    following.add(bkUser.email);
+
+    // get user's home feed
+    List<BKPost> homeFeed = await FirebaseController.getHomeFeed(following);
+
+    print(homeFeed);
 
     Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
         arguments: {
           'user': user,
           'bkUser': bkUser,
           'bkPosts': bkPosts,
+          'homeFeed': homeFeed,
         });
   }
 

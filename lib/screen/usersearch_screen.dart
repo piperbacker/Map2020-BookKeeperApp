@@ -19,7 +19,7 @@ class UserSearchScreen extends StatefulWidget {
 }
 
 class _UserSearchState extends State<UserSearchScreen> {
-  //User user;
+  User user;
   _Controller con;
   BKUser bkUser;
   List<BKUser> results;
@@ -36,7 +36,7 @@ class _UserSearchState extends State<UserSearchScreen> {
   @override
   Widget build(BuildContext context) {
     Map args = ModalRoute.of(context).settings.arguments;
-    //user ??= args['user'];
+    user ??= args['user'];
     bkUser ??= args['bkUser'];
     results ??= args['results'];
 
@@ -198,16 +198,16 @@ class _Controller {
     if (_state.results[index].email == _state.bkUser.email) {
       Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
-            //'user': _state.user,
+            'user': _state.user,
             'bkUser': _state.bkUser,
             'bkPosts': userPosts,
           });
     } else {
       Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
           arguments: {
-            //'user': _state.user,
+            'user': _state.user,
             'bkUser': _state.bkUser,
-            'bkPosts': userPosts,
+            'userPosts': userPosts,
             'userProfile': userProfile,
           });
     }

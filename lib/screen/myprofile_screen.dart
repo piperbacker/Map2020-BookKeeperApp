@@ -205,13 +205,11 @@ class _MyProfileState extends State<MyProfileScreen> {
                                       ? SizedBox(
                                           height: 1.0,
                                         )
-                                      : Flexible(
-                                          child: Text(
-                                            '${bkPosts[index].likedBy.length} likes',
-                                            //overflow: TextOverflow.visible,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                            ),
+                                      : Text(
+                                          '${bkPosts[index].likedBy.length} likes',
+                                          //overflow: TextOverflow.visible,
+                                          style: TextStyle(
+                                            fontSize: 16.0,
                                           ),
                                         ),
                                 ],
