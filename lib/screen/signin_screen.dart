@@ -158,7 +158,7 @@ class _Controller {
 
     Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
         arguments: {
-          //'user': user,
+          'user': user,
           'bkUser': bkUser,
           'bkPosts': bkPosts,
         });

@@ -8,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'myprofile_screen.dart';
+
 class EditProfileScreen extends StatefulWidget {
   static const routeName = '/settingsScreen/editProfileScreen';
 
@@ -190,6 +192,27 @@ class _Controller {
   String progressMessage;
   static final validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
+  void getPicture(String src) async {
+    try {
+      PickedFile _imageFile;
+      if (src == 'Camera') {
+        _imageFile = await ImagePicker().getImage(source: ImageSource.camera);
+      } else {
+        _imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
+      }
+
+      _state.render(() {
+        imageFile = File(_imageFile.path);
+      });
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Image capture error',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
   void save() async {
     if (!_state.formKey.currentState.validate()) return;
 
@@ -212,33 +235,18 @@ class _Controller {
         _state.bkUser.photoPath = photoInfo['path'];
         _state.bkUser.photoURL = photoInfo['url'];
       }
+
+      _state.render(() => progressMessage = 'Firestore doc updating ...');
       await FirebaseController.updateProfile(bkUser: _state.bkUser);
+
+      MyDialog.circularProgressEnd(_state.context);
+
       Navigator.pop(_state.context);
     } catch (e) {
+      MyDialog.circularProgressEnd(_state.context);
       MyDialog.info(
         context: _state.context,
         title: 'Profile update error',
-        content: e.message ?? e.toString(),
-      );
-    }
-  }
-
-  void getPicture(String src) async {
-    try {
-      PickedFile _imageFile;
-      if (src == 'Camera') {
-        _imageFile = await ImagePicker().getImage(source: ImageSource.camera);
-      } else {
-        _imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
-      }
-
-      _state.render(() {
-        imageFile = File(_imageFile.path);
-      });
-    } catch (e) {
-      MyDialog.info(
-        context: _state.context,
-        title: 'Image capture error',
         content: e.message ?? e.toString(),
       );
     }

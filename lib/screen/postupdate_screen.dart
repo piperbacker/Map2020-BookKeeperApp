@@ -20,7 +20,6 @@ class PostUpdateScreen extends StatefulWidget {
 class _PostUpdateState extends State<PostUpdateScreen> {
   User user;
   BKUser bkUser;
-  File image;
   List<BKPost> bkPosts;
   var formKey = GlobalKey<FormState>();
   _Controller con;
@@ -154,11 +153,11 @@ class _PostUpdateState extends State<PostUpdateScreen> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    child: image == null
+                    child: con.imageFile == null
                         ? SizedBox(height: 1)
                         : Container(
                             margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
-                            child: Image.file(image, fit: BoxFit.fill)),
+                            child: Image.file(con.imageFile, fit: BoxFit.fill)),
                   ),
                 ],
               ),
@@ -173,6 +172,7 @@ class _PostUpdateState extends State<PostUpdateScreen> {
 class _Controller {
   _PostUpdateState _state;
   _Controller(this._state);
+  File imageFile;
   String title;
   String body;
   String uploadProgressMessage;
@@ -187,7 +187,7 @@ class _Controller {
       }
 
       _state.render(() {
-        _state.image = File(_imageFile.path);
+        imageFile = File(_imageFile.path);
       });
     } catch (e) {}
   }
@@ -200,28 +200,42 @@ class _Controller {
     _state.formKey.currentState.save();
 
     try {
+      var p;
       MyDialog.circularProgressStart(_state.context);
 
-      Map<String, String> photoInfo = await FirebaseController.uploadStorage(
-        image: _state.image,
-        uid: _state.user.uid,
-        listener: (double progressPercentage) {
-          _state.render(() {
-            uploadProgressMessage =
-                'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
-          });
-        },
-      );
+      if (imageFile != null) {
+        // if there is an image attached in update
 
-      var p = BKPost(
-        photoPath: photoInfo['path'],
-        photoURL: photoInfo['url'],
-        title: title,
-        body: body,
-        postedBy: _state.bkUser.email,
-        displayName: _state.bkUser.displayName,
-        updatedAt: DateTime.now(),
-      );
+        Map<String, String> photoInfo = await FirebaseController.uploadStorage(
+          image: imageFile,
+          uid: _state.user.uid,
+          listener: (double progressPercentage) {
+            _state.render(() {
+              uploadProgressMessage =
+                  'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
+            });
+          },
+        );
+
+        p = BKPost(
+          photoPath: photoInfo['path'],
+          photoURL: photoInfo['url'],
+          title: title,
+          body: body,
+          postedBy: _state.bkUser.email,
+          displayName: _state.bkUser.displayName,
+          updatedAt: DateTime.now(),
+        );
+      } else {
+        // if there is no image attached in update
+        p = BKPost(
+          title: title,
+          body: body,
+          postedBy: _state.bkUser.email,
+          displayName: _state.bkUser.displayName,
+          updatedAt: DateTime.now(),
+        );
+      }
 
       p.docId = await FirebaseController.addPost(p);
       _state.bkPosts.insert(0, p);

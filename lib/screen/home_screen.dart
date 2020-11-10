@@ -124,7 +124,7 @@ class _HomeState extends State<HomeScreen> {
                                     width: 60,
                                     child: ClipOval(
                                       child: MyImageView.network(
-                                          imageURL: user.photoURL,
+                                          imageURL: bkUser.photoURL,
                                           context: context),
                                     ),
                                   ),
@@ -268,7 +268,7 @@ class _Controller {
       return;
     } else {
       results = await FirebaseController.searchUsers(displayName: searchKey);
-      print(results);
+      //print(results);
 
       await Navigator.pushNamed(_state.context, UserSearchScreen.routeName,
           arguments: {

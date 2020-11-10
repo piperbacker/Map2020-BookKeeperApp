@@ -92,8 +92,7 @@ class _Controller {
   void editProfile() async {
     await Navigator.pushNamed(_state.context, EditProfileScreen.routeName,
         arguments: {'user': _state.user, 'bkUser': _state.bkUser});
-
-    Navigator.pop(_state.context);
+    _state.render(() {});
   }
 
   void changePassword() async {
