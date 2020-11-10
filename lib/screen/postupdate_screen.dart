@@ -218,8 +218,8 @@ class _Controller {
         photoURL: photoInfo['url'],
         title: title,
         body: body,
-        postedBy: _state.user.email,
-        displayName: _state.user.displayName,
+        postedBy: _state.bkUser.email,
+        displayName: _state.bkUser.displayName,
         updatedAt: DateTime.now(),
       );
 

@@ -18,16 +18,16 @@ class FirebaseController {
   }
 
   static Future<String> signUp(
-    String displayName,
+    //String displayName,
     String email,
     String password,
     BKUser user,
   ) async {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
-    await FirebaseAuth.instance.currentUser.updateProfile(
+    /*await FirebaseAuth.instance.currentUser.updateProfile(
       displayName: displayName,
-    );
+    );*/
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
         .add(user.serialize());
@@ -37,7 +37,7 @@ class FirebaseController {
   static Future<List<BKUser>> getBKUser(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
-        .where(BKUser.USER, isEqualTo: email)
+        .where(BKUser.EMAIL, isEqualTo: email)
         .get();
     var result = <BKUser>[];
     if (querySnapshot != null && querySnapshot.docs.length != 0) {
@@ -48,47 +48,35 @@ class FirebaseController {
     return result;
   }
 
-  static Future<Map<String, String>> updateProfile({
-    @required File image, // null no update needed
+  static Future<Map<String, String>> uploadProfilePic({
+    @required File image,
     String filePath,
-    @required String displayName,
-    @required User user,
-    @required BKUser bkUser,
-    @required Function progressListener,
+    @required String uid,
+    @required Function listener,
   }) async {
-    String url;
-    if (image != null) {
-      // 1. upload the picture
-      String filePath = '${BKUser.PROFILE_FOLDER}/${user.uid}/${user.uid}';
-      StorageUploadTask uploadTask =
-          FirebaseStorage.instance.ref().child(filePath).putFile(image);
+    filePath ??= '${BKUser.PROFILE_FOLDER}/$uid/${DateTime.now()}';
 
-      uploadTask.events.listen((event) {
-        double percentage = (event.snapshot.bytesTransferred.toDouble() /
-                event.snapshot.totalByteCount.toDouble()) *
-            100;
-        progressListener(percentage);
-      });
+    StorageUploadTask task =
+        FirebaseStorage.instance.ref().child(filePath).putFile(image);
 
-      var download = await uploadTask.onComplete;
-      url = await download.ref.getDownloadURL();
-      bkUser.photoPath = filePath;
-      bkUser.photoURL = url;
-      await FirebaseAuth.instance.currentUser
-          .updateProfile(displayName: displayName, photoURL: url);
-      await FirebaseFirestore.instance
-          .collection(BKUser.COLLECTION)
-          .doc(bkUser.docId)
-          .set(bkUser.serialize());
-    } else {
-      await FirebaseAuth.instance.currentUser
-          .updateProfile(displayName: displayName);
-      await FirebaseFirestore.instance
-          .collection(BKUser.COLLECTION)
-          .doc(bkUser.docId)
-          .set(bkUser.serialize());
-    }
+    task.events.listen((event) {
+      double percentage = (event.snapshot.bytesTransferred.toDouble() /
+              event.snapshot.totalByteCount.toDouble()) *
+          100;
+      listener(percentage);
+    });
+    var download = await task.onComplete;
+    String url = await download.ref.getDownloadURL();
     return {'url': url, 'path': filePath};
+  }
+
+  static Future<void> updateProfile({
+    @required BKUser bkUser,
+  }) async {
+    await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .doc(bkUser.docId)
+        .set(bkUser.serialize());
   }
 
   static Future<List<BKPost>> getBKPosts(String email) async {

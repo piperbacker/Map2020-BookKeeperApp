@@ -6,7 +6,6 @@ import 'package:bookkeeperapp/screen/postreview_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/usersearch_screen.dart';
-import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -202,8 +201,8 @@ class _HomeState extends State<HomeScreen> {
                                             )
                                           : Flexible(
                                               child: Text(
-                                                'Liked By: ${bkPosts[index].likedBy.toString()}',
-                                                overflow: TextOverflow.visible,
+                                                '${bkPosts[index].likedBy.length} likes',
+                                                //overflow: TextOverflow.visible,
                                                 style: TextStyle(
                                                   fontSize: 16.0,
                                                 ),
@@ -275,7 +274,7 @@ class _Controller {
           arguments: {
             'user': _state.user,
             'bkUser': _state.bkUser,
-            'bkUsers': results,
+            'results': results,
           });
     }
   }
@@ -310,13 +309,7 @@ class _Controller {
 
     try {
       await FirebaseController.updateLikedBy(_state.bkPosts[index]);
-    } catch (e) {
-      MyDialog.info(
-        context: _state.context,
-        title: 'Like photo memo error in saving',
-        content: e.message ?? e.toString(),
-      );
-    }
+    } catch (e) {}
   }
 
   void unlike(int index) async {
@@ -328,13 +321,7 @@ class _Controller {
 
     try {
       await FirebaseController.updateLikedBy(_state.bkPosts[index]);
-    } catch (e) {
-      MyDialog.info(
-        context: _state.context,
-        title: 'Unlike photo memo error in saving',
-        content: e.message ?? e.toString(),
-      );
-    }
+    } catch (e) {}
   }
 
   void onItemTapped(int index) {
@@ -343,10 +330,10 @@ class _Controller {
     });
     if (_state.currentIndex == 1) {
       Navigator.pushNamed(_state.context, LibraryScreen.routeName,
-          arguments: {'user': _state.user, 'bkUser': _state.bkUser});
+          arguments: {'bkUser': _state.bkUser});
     } else if (_state.currentIndex == 2) {
       Navigator.pushNamed(_state.context, ShopScreen.routeName,
-          arguments: {'user': _state.user, 'bkUser': _state.bkUser});
+          arguments: {'bkUser': _state.bkUser});
     } else if (_state.currentIndex == 3) {
       Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {

@@ -19,10 +19,10 @@ class UserSearchScreen extends StatefulWidget {
 }
 
 class _UserSearchState extends State<UserSearchScreen> {
-  User user;
+  //User user;
   _Controller con;
   BKUser bkUser;
-  List<BKUser> bkUsers;
+  List<BKUser> results;
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -36,37 +36,15 @@ class _UserSearchState extends State<UserSearchScreen> {
   @override
   Widget build(BuildContext context) {
     Map args = ModalRoute.of(context).settings.arguments;
-    user ??= args['user'];
+    //user ??= args['user'];
     bkUser ??= args['bkUser'];
-    bkUsers ??= args['bkUsers'];
+    results ??= args['results'];
 
     return Scaffold(
       appBar: AppBar(
         title: Text('User Search'),
-        actions: <Widget>[
-          Container(
-            margin: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
-            width: 160.0,
-            child: Form(
-              key: formKey,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Search Users',
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                autocorrect: false,
-                onSaved: con.onSavedSearchKey,
-              ),
-            ),
-          ),
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: con.search,
-          ),
-        ],
       ),
-      body: bkUsers.length == 0
+      body: results.length == 0
           ? Center(
               child: Text(
                 'There are no users with that Display Name',
@@ -79,7 +57,7 @@ class _UserSearchState extends State<UserSearchScreen> {
           : Container(
               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               child: ListView.builder(
-                itemCount: bkUsers.length,
+                itemCount: results.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     color: Colors.orange[50],
@@ -87,9 +65,6 @@ class _UserSearchState extends State<UserSearchScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SizedBox(
-                            height: 10.0,
-                          ),
                           Container(
                             margin: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                             child: Row(
@@ -99,34 +74,31 @@ class _UserSearchState extends State<UserSearchScreen> {
                                   width: 60,
                                   child: ClipOval(
                                     child: MyImageView.network(
-                                        imageURL: bkUsers[index].photoURL,
+                                        imageURL: results[index].photoURL,
                                         context: context),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                FlatButton(
-                                  onPressed: () => con.goToProfile(index),
-                                  child: Text(
-                                    bkUsers[index].displayName,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.cyan[900],
+                                Container(
+                                  child: FlatButton(
+                                    onPressed: () => con.goToProfile(index),
+                                    child: Text(
+                                      results[index].displayName,
+                                      overflow: TextOverflow.clip,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.cyan[900],
+                                      ),
                                     ),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 30.0,
-                                ),
-                                bkUsers[index].user == user.email
+                                results[index].email == bkUser.email
                                     ? SizedBox(
                                         height: 1.0,
                                       )
                                     : Row(
                                         children: <Widget>[
-                                          !bkUser.following
-                                                  .contains(bkUsers[index].user)
+                                          !bkUser.following.contains(
+                                                  results[index].email)
                                               ? ButtonTheme(
                                                   minWidth: 120.0,
                                                   height: 40.0,
@@ -177,37 +149,11 @@ class _UserSearchState extends State<UserSearchScreen> {
 class _Controller {
   _UserSearchState _state;
   _Controller(this._state);
-  String searchKey;
-
-  void onSavedSearchKey(String value) {
-    searchKey = value;
-  }
-
-  void search() async {
-    _state.formKey.currentState.save();
-
-    var results;
-    if (searchKey == null || searchKey.trim().isEmpty) {
-      /*Navigator.pushNamed(_state.context, HomeScreen.routeName,
-          arguments: {'user': _state.user, 'bkUser': _state.bkUser});*/
-    } else {
-      results = await FirebaseController.searchUsers(displayName: searchKey);
-
-      _state.render(() => _state.bkUsers = results);
-      print(_state.bkUsers);
-    }
-
-    /*Navigator.pushNamed(_state.context, PostReviewScreen.routeName, arguments: {
-      'user': _state.user,
-      'bkUser': _state.bkUser,
-      'bkUsers': results,
-    });*/
-  }
 
   void follow(int index) async {
     _state.render(() {
-      if (!_state.bkUser.following.contains(_state.bkUsers[index].user)) {
-        _state.bkUser.following.add(_state.bkUsers[index].user);
+      if (!_state.bkUser.following.contains(_state.results[index].email)) {
+        _state.bkUser.following.add(_state.results[index].email);
       }
     });
 
@@ -224,8 +170,8 @@ class _Controller {
 
   void unfollow(int index) async {
     _state.render(() {
-      if (_state.bkUser.following.contains(_state.bkUsers[index].user)) {
-        _state.bkUser.following.remove(_state.bkUsers[index].user);
+      if (_state.bkUser.following.contains(_state.results[index].email)) {
+        _state.bkUser.following.remove(_state.results[index].email);
       }
     });
     try {
@@ -242,26 +188,26 @@ class _Controller {
   void goToProfile(int index) async {
     // get user's info
     List<BKUser> bkUserList =
-        await FirebaseController.getBKUser(_state.bkUsers[index].user);
+        await FirebaseController.getBKUser(_state.results[index].email);
     BKUser userProfile = bkUserList[0];
 
     // get list of user's posts
-    List<BKPost> bkPosts =
-        await FirebaseController.getBKPosts(_state.bkUsers[index].user);
+    List<BKPost> userPosts =
+        await FirebaseController.getBKPosts(_state.results[index].email);
 
-    if (_state.bkUsers[index].user == _state.bkUser.user) {
+    if (_state.results[index].email == _state.bkUser.email) {
       Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
-            'user': _state.user,
+            //'user': _state.user,
             'bkUser': _state.bkUser,
-            'bkPosts': bkPosts,
+            'bkPosts': userPosts,
           });
     } else {
       Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
           arguments: {
-            'user': _state.user,
+            //'user': _state.user,
             'bkUser': _state.bkUser,
-            'bkPosts': bkPosts,
+            'bkPosts': userPosts,
             'userProfile': userProfile,
           });
     }

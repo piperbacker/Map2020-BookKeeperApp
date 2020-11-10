@@ -43,18 +43,6 @@ class _ChangePasswordState extends State<ChangePasswordScreen> {
             SizedBox(
               height: 40.0,
             ),
-            /*TextFormField(
-              style: TextStyle(
-                fontSize: 20.0,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Enter Old Password',
-              ),
-              obscureText: true,
-              autocorrect: false,
-              initialValue: null,
-              validator: con.validatorOldPassword,
-            ),*/
             Container(
               margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
               child: TextFormField(
@@ -82,7 +70,6 @@ class _Controller {
   _ChangePasswordState _state;
   _Controller(this._state);
   String password;
-  //String oldPassword;
 
   void save() {
     if (!_state.formKey.currentState.validate()) return;
@@ -103,14 +90,6 @@ class _Controller {
     }
   }
 
-  /*String validatorOldPassword(String value) {
-    if (value == null || value.length < 6) {
-      return ('Password min 6 chars');
-    } else {
-      return null;
-    }
-  }*/
-
   String validatorPassword(String value) {
     if (value == null || value.length < 6) {
       return ('Password min 6 chars');
@@ -121,6 +100,5 @@ class _Controller {
 
   void onSavedPassword(String value) {
     this.password = value;
-    //print("====== new password:" + this.password);
   }
 }

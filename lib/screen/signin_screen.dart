@@ -138,7 +138,7 @@ class _Controller {
     User user;
     try {
       user = await FirebaseController.signIn(email, password);
-      print('USER: $user');
+      //print('USER: $user');
     } catch (e) {
       MyDialog.circularProgressEnd(_state.context);
       MyDialog.info(
@@ -154,11 +154,11 @@ class _Controller {
     BKUser bkUser = bkUserList[0];
 
     // get list of user's posts
-    List<BKPost> bkPosts = await FirebaseController.getBKPosts(user.email);
+    List<BKPost> bkPosts = await FirebaseController.getBKPosts(bkUser.email);
 
     Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
         arguments: {
-          'user': user,
+          //'user': user,
           'bkUser': bkUser,
           'bkPosts': bkPosts,
         });

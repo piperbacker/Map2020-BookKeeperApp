@@ -39,7 +39,6 @@ class _MyProfileState extends State<MyProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Profile'),
-        // "${user.displayName}'s Profile"
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
@@ -59,7 +58,6 @@ class _MyProfileState extends State<MyProfileScreen> {
             Container(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
                     child: Container(
@@ -67,7 +65,7 @@ class _MyProfileState extends State<MyProfileScreen> {
                       width: 100,
                       child: ClipOval(
                         child: MyImageView.network(
-                            imageURL: user.photoURL, context: context),
+                            imageURL: bkUser.photoURL, context: context),
                       ),
                     ),
                   ),
@@ -80,7 +78,7 @@ class _MyProfileState extends State<MyProfileScreen> {
                         height: 10.0,
                       ),
                       Text(
-                        user.displayName,
+                        bkUser.displayName,
                         style: TextStyle(
                           fontSize: 25.0,
                           color: Colors.cyan[900],
@@ -139,7 +137,7 @@ class _MyProfileState extends State<MyProfileScreen> {
                                           width: 60,
                                           child: ClipOval(
                                             child: MyImageView.network(
-                                                imageURL: user.photoURL,
+                                                imageURL: bkUser.photoURL,
                                                 context: context),
                                           ),
                                         ),
@@ -209,8 +207,8 @@ class _MyProfileState extends State<MyProfileScreen> {
                                         )
                                       : Flexible(
                                           child: Text(
-                                            'Liked By: ${bkPosts[index].likedBy.toString()}',
-                                            overflow: TextOverflow.visible,
+                                            '${bkPosts[index].likedBy.length} likes',
+                                            //overflow: TextOverflow.visible,
                                             style: TextStyle(
                                               fontSize: 16.0,
                                             ),
@@ -218,8 +216,6 @@ class _MyProfileState extends State<MyProfileScreen> {
                                         ),
                                 ],
                               ),
-                              //onTap: () => con.onTap(index),
-                              //onLongPress: () => con.onLongPress(index),
                             ),
                           ),
                         );

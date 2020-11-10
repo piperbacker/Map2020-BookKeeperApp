@@ -117,12 +117,12 @@ class _Controller {
 
     try {
       var p = BKUser(
-        user: email,
+        email: email,
         displayName: displayName,
         userTag: 'reader',
       );
       p.docId = await FirebaseController.signUp(
-        displayName,
+        //displayName,
         email,
         password,
         p,
@@ -133,7 +133,7 @@ class _Controller {
         title: 'Succesfully Created',
         content: 'Your account is created! Go to Sign In',
       );
-      //print("===================== TEST");
+
       Navigator.pushNamed(_state.context, SignInScreen.routeName);
     } catch (e) {
       MyDialog.info(

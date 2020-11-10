@@ -73,7 +73,7 @@ class _EditProfileState extends State<EditProfileScreen> {
                           width: 150,
                           child: ClipOval(
                             child: MyImageView.network(
-                                imageURL: user.photoURL, context: context),
+                                imageURL: bkUser.photoURL, context: context),
                           ),
                         )
                       : Container(
@@ -142,7 +142,7 @@ class _EditProfileState extends State<EditProfileScreen> {
                     hintText: 'Display Name',
                   ),
                   autocorrect: false,
-                  initialValue: user.displayName ?? 'N/A',
+                  initialValue: bkUser.displayName ?? 'N/A',
                   validator: con.validatorDisplayName,
                   onSaved: con.onSavedDisplayName,
                 ),
@@ -194,23 +194,25 @@ class _Controller {
     if (!_state.formKey.currentState.validate()) return;
 
     _state.formKey.currentState.save();
-
     try {
       if (imageFile != null) {
-        Map<String, String> photoInfo = await FirebaseController.updateProfile(
-            image: imageFile,
-            displayName: displayName,
-            user: _state.user,
-            bkUser: _state.bkUser,
-            progressListener: (double percentage) {
-              _state.render(() {
-                progressMessage =
-                    'Uploading ${percentage.toStringAsFixed(1)} %';
-              });
+        MyDialog.circularProgressStart(_state.context);
+
+        Map<String, String> photoInfo =
+            await FirebaseController.uploadProfilePic(
+          image: imageFile,
+          uid: _state.user.uid,
+          listener: (double progressPercentage) {
+            _state.render(() {
+              progressMessage =
+                  'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
             });
+          },
+        );
         _state.bkUser.photoPath = photoInfo['path'];
         _state.bkUser.photoURL = photoInfo['url'];
       }
+      await FirebaseController.updateProfile(bkUser: _state.bkUser);
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.info(

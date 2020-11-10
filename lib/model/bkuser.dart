@@ -4,7 +4,7 @@ class BKUser {
   static const PHOTO_URL = 'photoURL';
   static const PHOTO_PATH = 'photoPath';
   static const DISPLAY_NAME = 'displayName';
-  static const USER = 'user';
+  static const EMAIL = 'email';
   static const USER_BIO = 'userBio';
   static const USER_TAG = 'userTag';
   static const FOLLOWING = 'following';
@@ -14,7 +14,7 @@ class BKUser {
   String photoPath; // Firebase storage; image file name
   String photoURL; // Firebase storage; image url for internet access
   String displayName;
-  String user;
+  String email;
   String userBio;
   String userTag;
   List<dynamic> following;
@@ -24,7 +24,7 @@ class BKUser {
     this.docId,
     this.photoPath,
     this.photoURL,
-    this.user,
+    this.email,
     this.displayName,
     this.userBio,
     this.userTag,
@@ -40,7 +40,7 @@ class BKUser {
     return <String, dynamic>{
       PHOTO_PATH: photoPath,
       PHOTO_URL: photoURL,
-      USER: user,
+      EMAIL: email,
       DISPLAY_NAME: displayName,
       USER_BIO: userBio,
       USER_TAG: userTag,
@@ -55,7 +55,7 @@ class BKUser {
       docId: docId,
       photoPath: data[BKUser.PHOTO_PATH],
       photoURL: data[BKUser.PHOTO_URL],
-      user: data[BKUser.USER],
+      email: data[BKUser.EMAIL],
       displayName: data[BKUser.DISPLAY_NAME],
       userBio: data[BKUser.USER_BIO],
       userTag: data[BKUser.USER_TAG],
@@ -66,6 +66,6 @@ class BKUser {
 
   @override
   String toString() {
-    return '$docId $photoURL $user $displayName $userBio $userTag';
+    return '$docId $photoURL $email $displayName $userBio $userTag';
   }
 }

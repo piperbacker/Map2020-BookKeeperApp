@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:flutter/material.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -11,7 +11,7 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryState extends State<LibraryScreen> {
-  User user;
+  BKUser bkUser;
   _Controller con;
 
   @override
@@ -25,7 +25,7 @@ class _LibraryState extends State<LibraryScreen> {
   @override
   Widget build(BuildContext context) {
     Map arg = ModalRoute.of(context).settings.arguments;
-    user ??= arg['user'];
+    bkUser ??= arg['bkUser'];
 
     return Scaffold(
       appBar: AppBar(

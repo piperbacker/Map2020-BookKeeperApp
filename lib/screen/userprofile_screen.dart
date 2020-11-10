@@ -213,8 +213,8 @@ class _UserProfileState extends State<UserProfileScreen> {
                                         )
                                       : Flexible(
                                           child: Text(
-                                            'Liked By: ${bkPosts[index].likedBy.toString()}',
-                                            overflow: TextOverflow.visible,
+                                            '${bkPosts[index].likedBy.length} likes',
+                                            //overflow: TextOverflow.visible,
                                             style: TextStyle(
                                               fontSize: 16.0,
                                             ),
