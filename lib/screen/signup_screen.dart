@@ -130,11 +130,11 @@ class _Controller {
 
       MyDialog.info(
         context: _state.context,
-        title: 'Succesfully Created',
-        content: 'Your account is created! Go to Sign In',
+        title: 'Successfully Created',
+        content: 'Account has been created, go to sign in',
       );
 
-      Navigator.pushNamed(_state.context, SignInScreen.routeName);
+      //Navigator.pushNamed(_state.context, SignInScreen.routeName);
     } catch (e) {
       MyDialog.info(
         context: _state.context,

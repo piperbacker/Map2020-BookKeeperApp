@@ -28,88 +28,92 @@ class _SignInState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sign In'),
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 40.0,
-              ),
-              Image.asset(
-                'assets/images/app_icon.png',
-                height: 130.0,
-              ),
-              Text(
-                'Book Keeper',
-                style: TextStyle(
-                  fontSize: 25.0,
-                  //fontFamily: 'Audiowide'
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text('Sign In'),
+        ),
+        body: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 40.0,
                 ),
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Email',
+                Image.asset(
+                  'assets/images/app_icon.png',
+                  height: 130.0,
+                ),
+                Text(
+                  'Book Keeper',
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    //fontFamily: 'Audiowide'
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  validator: con.validatorEmail,
-                  onSaved: con.onSavedEmail,
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Password',
+                SizedBox(
+                  height: 40.0,
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    validator: con.validatorEmail,
+                    onSaved: con.onSavedEmail,
                   ),
-                  obscureText: true,
-                  autocorrect: false,
-                  validator: con.validatorPassword,
-                  onSaved: con.onSavedPassword,
                 ),
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
-              ButtonTheme(
-                minWidth: 150.0,
-                height: 50.0,
-                child: RaisedButton(
+                Container(
+                  margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                    ),
+                    obscureText: true,
+                    autocorrect: false,
+                    validator: con.validatorPassword,
+                    onSaved: con.onSavedPassword,
+                  ),
+                ),
+                SizedBox(
+                  height: 40.0,
+                ),
+                ButtonTheme(
+                  minWidth: 150.0,
+                  height: 50.0,
+                  child: RaisedButton(
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    color: Colors.teal[400],
+                    onPressed: con.signIn,
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                FlatButton(
+                  onPressed: con.signUp,
                   child: Text(
-                    'Sign In',
+                    'Create an Account',
                     style: TextStyle(
-                      fontSize: 25.0,
-                      color: Colors.white,
+                      fontSize: 15.0,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
-                  color: Colors.teal[400],
-                  onPressed: con.signIn,
                 ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              FlatButton(
-                onPressed: con.signUp,
-                child: Text(
-                  'Create an Account',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -124,7 +128,7 @@ class _Controller {
   String password;
 
   void signUp() async {
-    Navigator.pushReplacementNamed(_state.context, SignUpScreen.routeName);
+    Navigator.pushNamed(_state.context, SignUpScreen.routeName);
   }
 
   void signIn() async {
