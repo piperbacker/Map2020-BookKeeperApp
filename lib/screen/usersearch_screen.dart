@@ -210,13 +210,14 @@ class _Controller {
             'bkPosts': userPosts,
           });
     } else {
-      Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
+      await Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
           arguments: {
             'user': _state.user,
             'bkUser': _state.bkUser,
             'userPosts': userPosts,
             'userProfile': userProfile,
           });
+      _state.render(() {});
     }
   }
 }

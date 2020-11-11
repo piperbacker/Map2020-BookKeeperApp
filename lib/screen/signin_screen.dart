@@ -164,7 +164,7 @@ class _Controller {
     List<BKPost> homeFeed = await FirebaseController.getHomeFeed(following);
     following.remove(bkUser.email);
 
-    print(bkUser.following);
+    //print(bkUser.following);
 
     Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
         arguments: {

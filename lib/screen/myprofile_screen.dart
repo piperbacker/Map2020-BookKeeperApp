@@ -303,8 +303,8 @@ class _Controller {
     List<BKUser> following =
         await FirebaseController.getFollowing(_state.bkUser.email);
 
-    print('FOLLOWING LIST ========');
-    print(following);
+    //print('FOLLOWING LIST ========');
+    //print(following);
 
     await Navigator.pushNamed(_state.context, FollowingScreen.routeName,
         arguments: {
@@ -319,14 +319,14 @@ class _Controller {
     List<BKUser> followers =
         await FirebaseController.getFollowers(_state.bkUser.email);
 
-    print('FOLLOWERS LIST ========');
-    print(followers);
+    //print('FOLLOWERS LIST ========');
+    //print(followers);
 
     await Navigator.pushNamed(_state.context, FollowersScreen.routeName,
         arguments: {
           'user': _state.user,
           'bkUser': _state.bkUser,
-          'followers': followers
+          'followers': followers,
         });
     _state.render(() {});
   }

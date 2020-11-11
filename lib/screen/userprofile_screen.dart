@@ -354,7 +354,7 @@ class _Controller {
     try {
       await FirebaseController.updateFollowing(
           _state.bkUser, _state.userProfile);
-      print(_state.userProfile.following);
+      //print(_state.userProfile.following);
     } catch (e) {
       MyDialog.info(
         context: _state.context,

@@ -93,35 +93,38 @@ class _HomeState extends State<HomeScreen> {
             ),
           ],
         ),
-        body: homeFeed.length == 0
-            ? Center(
-                child: Text(
-                  'Home Feed is Empty',
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.cyan[900],
+        body: RefreshIndicator(
+          onRefresh: con.refreshHome,
+          child: homeFeed.length == 0
+              ? Center(
+                  child: Text(
+                    'Home Feed is Empty',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.cyan[900],
+                    ),
                   ),
-                ),
-              )
-            : Container(
-                margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                child: ListView.builder(
-                  itemCount: homeFeed.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      color: Colors.orange[50],
-                      child: Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                              child: Row(
-                                children: [
-                                  /*Container(
+                )
+              : Container(
+                  margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                  child: ListView.builder(
+                    itemCount: homeFeed.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        color: Colors.orange[50],
+                        child: Card(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Container(
+                                margin:
+                                    EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                                child: Row(
+                                  children: [
+                                    /*Container(
                                     height: 60,
                                     width: 60,
                                     child: ClipOval(
@@ -130,95 +133,101 @@ class _HomeState extends State<HomeScreen> {
                                           context: context),
                                     ),
                                   ),*/
-                                  SizedBox(
-                                    width: 10.0,
-                                  ),
-                                  Text(
-                                    homeFeed[index].displayName,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.cyan[900],
+                                    SizedBox(
+                                      width: 10.0,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            Center(
-                              child: Text(
-                                homeFeed[index].title,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black,
+                                    Text(
+                                      homeFeed[index].displayName,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.cyan[900],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Divider(height: 30.0, color: Colors.orangeAccent),
-                            Text(
-                              homeFeed[index].body,
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.black87,
+                              SizedBox(
+                                height: 10.0,
                               ),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            homeFeed[index].photoURL == null
-                                ? SizedBox(height: 1)
-                                : Container(
-                                    margin: EdgeInsets.fromLTRB(
-                                        10.0, 5.0, 10.0, 5.0),
-                                    child: MyImageView.network(
-                                        imageURL: homeFeed[index].photoURL,
-                                        context: context),
+                              Center(
+                                child: Text(
+                                  homeFeed[index].title,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.black,
                                   ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            homeFeed[index].postedBy == bkUser.email
-                                ? SizedBox(
-                                    height: 1.0,
-                                  )
-                                : Row(
-                                    children: <Widget>[
-                                      !homeFeed[index]
-                                              .likedBy
-                                              .contains(bkUser.email)
-                                          ? IconButton(
-                                              icon: Icon(Icons.favorite_border),
-                                              onPressed: () => con.like(index),
-                                            )
-                                          : IconButton(
-                                              icon: Icon(Icons.favorite),
-                                              color: Colors.pink,
-                                              onPressed: () =>
-                                                  con.unlike(index),
+                                ),
+                              ),
+                              Divider(height: 30.0, color: Colors.orangeAccent),
+                              Text(
+                                homeFeed[index].body,
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              homeFeed[index].photoURL == null
+                                  ? SizedBox(height: 1)
+                                  : Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          10.0, 5.0, 10.0, 5.0),
+                                      child: MyImageView.network(
+                                          imageURL: homeFeed[index].photoURL,
+                                          context: context),
+                                    ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Row(
+                                children: [
+                                  homeFeed[index].postedBy == bkUser.email
+                                      ? SizedBox(
+                                          height: 1.0,
+                                        )
+                                      : Row(
+                                          children: <Widget>[
+                                            !homeFeed[index]
+                                                    .likedBy
+                                                    .contains(bkUser.email)
+                                                ? IconButton(
+                                                    icon: Icon(
+                                                        Icons.favorite_border),
+                                                    onPressed: () =>
+                                                        con.like(index),
+                                                  )
+                                                : IconButton(
+                                                    icon: Icon(Icons.favorite),
+                                                    color: Colors.pink,
+                                                    onPressed: () =>
+                                                        con.unlike(index),
+                                                  ),
+                                          ],
+                                        ),
+                                  homeFeed[index].likedBy.length == 0
+                                      ? SizedBox(
+                                          height: 1.0,
+                                        )
+                                      : Flexible(
+                                          child: Text(
+                                            '${homeFeed[index].likedBy.length} likes',
+                                            style: TextStyle(
+                                              fontSize: 16.0,
                                             ),
-                                      homeFeed[index].likedBy.length == 0
-                                          ? SizedBox(
-                                              height: 1.0,
-                                            )
-                                          : Flexible(
-                                              child: Text(
-                                                '${homeFeed[index].likedBy.length} likes',
-                                                //overflow: TextOverflow.visible,
-                                                style: TextStyle(
-                                                  fontSize: 16.0,
-                                                ),
-                                              ),
-                                            ),
-                                    ],
-                                  ),
-                          ],
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
@@ -256,10 +265,24 @@ class _Controller {
   _HomeState _state;
   _Controller(this._state);
   String searchKey;
+  //List<BKPost> homeFeed;
+
+  Future<void> refreshHome() async {
+    Future.delayed(Duration(seconds: 3));
+
+    List<dynamic> following = _state.bkUser.following;
+    // to ensure own user's posts are shown on home feed
+    following.add(_state.bkUser.email);
+
+    // get user's home feed
+    _state.homeFeed = await FirebaseController.getHomeFeed(following);
+    following.remove(_state.bkUser.email);
+
+    _state.render(() {});
+  }
 
   void onSavedSearchKey(String value) {
     searchKey = value;
-    //print(searchKey);
   }
 
   void search() async {
@@ -278,6 +301,7 @@ class _Controller {
             'bkUser': _state.bkUser,
             'results': results,
           });
+      _state.render(() {});
     }
   }
 
@@ -328,7 +352,7 @@ class _Controller {
     } catch (e) {}
   }
 
-  void onItemTapped(int index) {
+  void onItemTapped(int index) async {
     _state.render(() {
       _state.currentIndex = index;
     });
@@ -345,12 +369,13 @@ class _Controller {
         'bkPosts': _state.bkPosts,
       });
     } else if (_state.currentIndex == 3) {
-      Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
+      await Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
             'user': _state.user,
             'bkUser': _state.bkUser,
             'bkPosts': _state.bkPosts,
           });
+      _state.render(() {});
     }
   }
 }

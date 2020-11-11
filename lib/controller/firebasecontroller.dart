@@ -167,15 +167,17 @@ class FirebaseController {
   }
 
   static Future<void> updateFollowing(BKUser bkUser, BKUser userProfile) async {
-    await FirebaseFirestore.instance
-        .collection(BKUser.COLLECTION)
-        .doc(bkUser.docId)
-        .update({"following": bkUser.following});
+    if (bkUser.email != userProfile.email) {
+      await FirebaseFirestore.instance
+          .collection(BKUser.COLLECTION)
+          .doc(bkUser.docId)
+          .update({"following": bkUser.following});
 
-    await FirebaseFirestore.instance
-        .collection(BKUser.COLLECTION)
-        .doc(userProfile.docId)
-        .update({"followers": userProfile.followers});
+      await FirebaseFirestore.instance
+          .collection(BKUser.COLLECTION)
+          .doc(userProfile.docId)
+          .update({"followers": userProfile.followers});
+    }
   }
 
   static Future<List<BKUser>> getFollowers(String email) async {
