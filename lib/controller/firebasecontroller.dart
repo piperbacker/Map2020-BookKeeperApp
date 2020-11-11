@@ -181,7 +181,7 @@ class FirebaseController {
   static Future<List<BKUser>> getFollowers(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
-        .where(BKUser.EMAIL, arrayContains: email)
+        .where(BKUser.FOLLOWING, arrayContains: email)
         .get();
 
     var results = <BKUser>[];
