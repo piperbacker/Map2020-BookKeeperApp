@@ -150,6 +150,7 @@ class _Controller {
   _Controller(this._state);
 
   void follow(int index) async {
+    print(_state.bkUser.following);
     _state.render(() {
       if (!_state.bkUser.following.contains(_state.results[index].email)) {
         _state.bkUser.following.add(_state.results[index].email);
@@ -157,9 +158,12 @@ class _Controller {
       }
     });
 
+    print(_state.bkUser.following);
+
     try {
       await FirebaseController.updateFollowing(
           _state.bkUser, _state.results[index]);
+      print(_state.bkUser.following);
     } catch (e) {
       MyDialog.info(
         context: _state.context,

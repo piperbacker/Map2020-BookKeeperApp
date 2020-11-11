@@ -3,10 +3,14 @@ import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/followers_screen.dart';
 import 'package:bookkeeperapp/screen/following_screen.dart';
+import 'package:bookkeeperapp/screen/library_screen.dart';
+import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'myprofile_screen.dart';
 
 class UserProfileScreen extends StatefulWidget {
   static const routeName = 'home/userProfileScreen';
@@ -23,6 +27,7 @@ class _UserProfileState extends State<UserProfileScreen> {
   BKUser userProfile;
   List<BKPost> userPosts;
   _Controller con;
+  int currentIndex = 0;
 
   @override
   void initState() {

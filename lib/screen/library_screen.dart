@@ -1,5 +1,11 @@
+import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/myprofile_screen.dart';
+import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'home_screen.dart';
 
 class LibraryScreen extends StatefulWidget {
   static const routeName = 'home/libraryScreen';
@@ -11,7 +17,9 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryState extends State<LibraryScreen> {
+  User user;
   BKUser bkUser;
+  List<BKPost> bkPosts;
   _Controller con;
 
   @override
@@ -24,8 +32,10 @@ class _LibraryState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Map arg = ModalRoute.of(context).settings.arguments;
-    bkUser ??= arg['bkUser'];
+    Map args = ModalRoute.of(context).settings.arguments;
+    user ??= args['user'];
+    bkUser ??= args['bkUser'];
+    bkPosts ??= args['bkPosts'];
 
     return Scaffold(
       appBar: AppBar(

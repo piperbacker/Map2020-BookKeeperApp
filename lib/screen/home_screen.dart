@@ -331,12 +331,23 @@ class _Controller {
       _state.currentIndex = index;
     });
     if (_state.currentIndex == 1) {
-      Navigator.pushNamed(_state.context, LibraryScreen.routeName,
-          arguments: {'bkUser': _state.bkUser});
+      Navigator.pushNamed(_state.context, LibraryScreen.routeName, arguments: {
+        'user': _state.user,
+        'bkUser': _state.bkUser,
+        'bkPosts': _state.bkPosts,
+      });
     } else if (_state.currentIndex == 2) {
-      Navigator.pushNamed(_state.context, ShopScreen.routeName,
-          arguments: {'bkUser': _state.bkUser});
+      Navigator.pushNamed(_state.context, ShopScreen.routeName, arguments: {
+        'user': _state.user,
+        'bkUser': _state.bkUser,
+        'bkPosts': _state.bkPosts,
+      });
     } else if (_state.currentIndex == 3) {
+      print(_state.bkUser);
+      print('FOLLOWED BY ==========');
+      print(_state.bkUser.followedBy);
+      print('FOLLOWING ==========');
+      print(_state.bkUser.following);
       Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
             'user': _state.user,
