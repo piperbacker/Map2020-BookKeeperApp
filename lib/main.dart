@@ -1,7 +1,7 @@
 import 'package:bookkeeperapp/screen/changepassword_screen.dart';
 import 'package:bookkeeperapp/screen/editprofile_screen.dart';
-import 'package:bookkeeperapp/screen/followers_screen.dart';
-import 'package:bookkeeperapp/screen/following_screen.dart';
+import 'package:bookkeeperapp/screen/myfollowers_screen.dart';
+import 'package:bookkeeperapp/screen/myfollowing_screen.dart';
 import 'package:bookkeeperapp/screen/home_screen.dart';
 import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/postreview_screen.dart';
@@ -10,6 +10,8 @@ import 'package:bookkeeperapp/screen/settings_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/signin_screen.dart';
 import 'package:bookkeeperapp/screen/signup_screen.dart';
+import 'package:bookkeeperapp/screen/userfollowers_screen.dart';
+import 'package:bookkeeperapp/screen/userfollowing_screen.dart';
 import 'package:bookkeeperapp/screen/userprofile_screen.dart';
 import 'package:bookkeeperapp/screen/usersearch_screen.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
@@ -48,8 +50,10 @@ class BookKeeperApp extends StatelessWidget {
           PostReviewScreen.routeName: (context) => PostReviewScreen(),
           UserSearchScreen.routeName: (context) => UserSearchScreen(),
           UserProfileScreen.routeName: (context) => UserProfileScreen(),
-          FollowingScreen.routeName: (context) => FollowingScreen(),
-          FollowersScreen.routeName: (context) => FollowersScreen(),
+          MyFollowingScreen.routeName: (context) => MyFollowingScreen(),
+          MyFollowersScreen.routeName: (context) => MyFollowersScreen(),
+          UserFollowingScreen.routeName: (context) => UserFollowingScreen(),
+          UserFollowersScreen.routeName: (context) => UserFollowersScreen(),
         });
   }
 }

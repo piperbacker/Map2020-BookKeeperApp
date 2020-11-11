@@ -1,10 +1,12 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
-import 'package:bookkeeperapp/screen/followers_screen.dart';
-import 'package:bookkeeperapp/screen/following_screen.dart';
+import 'package:bookkeeperapp/screen/myfollowers_screen.dart';
+import 'package:bookkeeperapp/screen/myfollowing_screen.dart';
 import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
+import 'package:bookkeeperapp/screen/userfollowers_screen.dart';
+import 'package:bookkeeperapp/screen/userfollowing_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -387,10 +389,11 @@ class _Controller {
     List<BKUser> following =
         await FirebaseController.getFollowing(_state.userProfile.email);
 
-    await Navigator.pushNamed(_state.context, FollowingScreen.routeName,
+    await Navigator.pushNamed(_state.context, UserFollowingScreen.routeName,
         arguments: {
           'user': _state.user,
-          'bkUser': _state.userProfile,
+          'bkUser': _state.bkUser,
+          'userProfile': _state.userProfile,
           'following': following
         });
     _state.render(() {});
@@ -400,10 +403,11 @@ class _Controller {
     List<BKUser> followers =
         await FirebaseController.getFollowers(_state.userProfile.email);
 
-    await Navigator.pushNamed(_state.context, FollowersScreen.routeName,
+    await Navigator.pushNamed(_state.context, UserFollowersScreen.routeName,
         arguments: {
           'user': _state.user,
-          'bkUser': _state.userProfile,
+          'bkUser': _state.bkUser,
+          'userProfile': _state.userProfile,
           'followers': followers
         });
     _state.render(() {});

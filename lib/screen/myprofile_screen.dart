@@ -1,9 +1,8 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
-import 'package:bookkeeperapp/screen/followers_screen.dart';
-import 'package:bookkeeperapp/screen/following_screen.dart';
-import 'package:bookkeeperapp/screen/shop_screen.dart';
+import 'package:bookkeeperapp/screen/myfollowers_screen.dart';
+import 'package:bookkeeperapp/screen/myfollowing_screen.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -306,7 +305,7 @@ class _Controller {
     //print('FOLLOWING LIST ========');
     //print(following);
 
-    await Navigator.pushNamed(_state.context, FollowingScreen.routeName,
+    await Navigator.pushNamed(_state.context, MyFollowingScreen.routeName,
         arguments: {
           'user': _state.user,
           'bkUser': _state.bkUser,
@@ -322,7 +321,7 @@ class _Controller {
     //print('FOLLOWERS LIST ========');
     //print(followers);
 
-    await Navigator.pushNamed(_state.context, FollowersScreen.routeName,
+    await Navigator.pushNamed(_state.context, MyFollowersScreen.routeName,
         arguments: {
           'user': _state.user,
           'bkUser': _state.bkUser,

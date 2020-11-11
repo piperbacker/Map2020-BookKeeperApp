@@ -8,16 +8,16 @@ import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class FollowingScreen extends StatefulWidget {
-  static const routeName = '/followingScreen';
+class MyFollowingScreen extends StatefulWidget {
+  static const routeName = '/myProfileScreen/myFollowingScreen';
 
   @override
   State<StatefulWidget> createState() {
-    return _FollowingState();
+    return _MyFollowingState();
   }
 }
 
-class _FollowingState extends State<FollowingScreen> {
+class _MyFollowingState extends State<MyFollowingScreen> {
   User user;
   _Controller con;
   BKUser bkUser;
@@ -145,7 +145,7 @@ class _FollowingState extends State<FollowingScreen> {
 }
 
 class _Controller {
-  _FollowingState _state;
+  _MyFollowingState _state;
   _Controller(this._state);
 
   void follow(int index) async {

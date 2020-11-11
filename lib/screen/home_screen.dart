@@ -5,6 +5,7 @@ import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/postreview_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
+import 'package:bookkeeperapp/screen/userprofile_screen.dart';
 import 'package:bookkeeperapp/screen/usersearch_screen.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
@@ -136,11 +137,14 @@ class _HomeState extends State<HomeScreen> {
                                     SizedBox(
                                       width: 10.0,
                                     ),
-                                    Text(
-                                      homeFeed[index].displayName,
-                                      style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: Colors.cyan[900],
+                                    FlatButton(
+                                      onPressed: () => con.goToProfile(index),
+                                      child: Text(
+                                        homeFeed[index].displayName,
+                                        style: TextStyle(
+                                          fontSize: 18.0,
+                                          color: Colors.cyan[900],
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -326,6 +330,34 @@ class _Controller {
             });
       }
     } catch (e) {}
+  }
+
+  void goToProfile(int index) async {
+    // get user's info
+    List<BKUser> bkUserList =
+        await FirebaseController.getBKUser(_state.homeFeed[index].postedBy);
+    BKUser userProfile = bkUserList[0];
+
+    // get list of user's posts
+    List<BKPost> userPosts =
+        await FirebaseController.getBKPosts(_state.homeFeed[index].postedBy);
+
+    if (_state.homeFeed[index].postedBy == _state.bkUser.email) {
+      Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkPosts': userPosts,
+          });
+    } else {
+      Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'userPosts': userPosts,
+            'userProfile': userProfile,
+          });
+    }
   }
 
   void like(int index) async {
