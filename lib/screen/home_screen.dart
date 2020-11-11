@@ -304,25 +304,25 @@ class _Controller {
 
   void like(int index) async {
     _state.render(() {
-      if (!_state.bkPosts[index].likedBy.contains(_state.user.email)) {
-        _state.bkPosts[index].likedBy.add(_state.user.email);
+      if (!_state.homeFeed[index].likedBy.contains(_state.user.email)) {
+        _state.homeFeed[index].likedBy.add(_state.user.email);
       }
     });
 
     try {
-      await FirebaseController.updateLikedBy(_state.bkPosts[index]);
+      await FirebaseController.updateLikedBy(_state.homeFeed[index]);
     } catch (e) {}
   }
 
   void unlike(int index) async {
     _state.render(() {
-      if (_state.bkPosts[index].likedBy.contains(_state.user.email)) {
-        _state.bkPosts[index].likedBy.remove(_state.user.email);
+      if (_state.homeFeed[index].likedBy.contains(_state.user.email)) {
+        _state.homeFeed[index].likedBy.remove(_state.user.email);
       }
     });
 
     try {
-      await FirebaseController.updateLikedBy(_state.bkPosts[index]);
+      await FirebaseController.updateLikedBy(_state.homeFeed[index]);
     } catch (e) {}
   }
 

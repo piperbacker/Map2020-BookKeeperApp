@@ -2,6 +2,7 @@ import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/followers_screen.dart';
+import 'package:bookkeeperapp/screen/following_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -301,11 +302,22 @@ class _Controller {
   _UserProfileState _state;
   _Controller(this._state);
 
-  void following() async {}
+  void following() async {
+    List<BKUser> following =
+        await FirebaseController.getFollowing(_state.userProfile.email);
+
+    await Navigator.pushNamed(_state.context, FollowingScreen.routeName,
+        arguments: {
+          'user': _state.user,
+          'bkUser': _state.userProfile,
+          'following': following
+        });
+    _state.render(() {});
+  }
 
   void followers() async {
     List<BKUser> followers =
-        await FirebaseController.getFollowers(_state.bkUser.email);
+        await FirebaseController.getFollowers(_state.userProfile.email);
 
     await Navigator.pushNamed(_state.context, FollowersScreen.routeName,
         arguments: {

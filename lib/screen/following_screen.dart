@@ -152,7 +152,7 @@ class _Controller {
     _state.render(() {
       if (!_state.bkUser.following.contains(_state.following[index].email)) {
         _state.bkUser.following.add(_state.following[index].email);
-        _state.following[index].followedBy.add(_state.bkUser);
+        _state.following[index].followedBy.add(_state.bkUser.email);
       }
     });
 
@@ -172,7 +172,7 @@ class _Controller {
     _state.render(() {
       if (_state.bkUser.following.contains(_state.following[index].email)) {
         _state.bkUser.following.remove(_state.following[index].email);
-        _state.following[index].followedBy.remove(_state.bkUser);
+        _state.following[index].followedBy.remove(_state.bkUser.email);
       }
     });
     try {
