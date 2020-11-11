@@ -1,5 +1,7 @@
+import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/followers_screen.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +75,7 @@ class _MyProfileState extends State<MyProfileScreen> {
                     width: 10.0,
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       SizedBox(
                         height: 10.0,
@@ -95,7 +98,64 @@ class _MyProfileState extends State<MyProfileScreen> {
                                 fontSize: 18.0,
                               ),
                             ),
-                      Divider(height: 50.0, color: Colors.orangeAccent),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FlatButton(
+                              onPressed: con.following,
+                              child: Text(
+                                '${bkUser.following.length}',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.cyan[900],
+                                ),
+                              ),
+                            ),
+                            FlatButton(
+                              onPressed: con.followers,
+                              child: Text(
+                                '${bkUser.followedBy.length}',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.cyan[900],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Following",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                //color: Colors.cyan[900],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Text(
+                              "Followers",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                //color: Colors.cyan[900],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(height: 40.0, color: Colors.orangeAccent),
                     ],
                   ),
                 ],
@@ -112,7 +172,6 @@ class _MyProfileState extends State<MyProfileScreen> {
                     ),
                   )
                 : Expanded(
-                    //height: 200.0,
                     child: ListView.builder(
                       itemCount: bkPosts.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -235,6 +294,21 @@ class _Controller {
     await Navigator.pushNamed(_state.context, SettingsScreen.routeName,
         arguments: {'user': _state.user, 'bkUser': _state.bkUser});
 
+    _state.render(() {});
+  }
+
+  void following() async {}
+
+  void followers() async {
+    List<BKUser> followers =
+        await FirebaseController.getFollowers(_state.bkUser.email);
+
+    await Navigator.pushNamed(_state.context, FollowersScreen.routeName,
+        arguments: {
+          'user': _state.user,
+          'bkUser': _state.bkUser,
+          'followers': followers
+        });
     _state.render(() {});
   }
 }

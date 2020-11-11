@@ -163,8 +163,6 @@ class _Controller {
     // get user's home feed
     List<BKPost> homeFeed = await FirebaseController.getHomeFeed(following);
 
-    print(homeFeed);
-
     Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
         arguments: {
           'user': user,

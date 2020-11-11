@@ -1,6 +1,7 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/followers_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,7 +54,6 @@ class _UserProfileState extends State<UserProfileScreen> {
             Container(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
                     child: Container(
@@ -91,6 +91,63 @@ class _UserProfileState extends State<UserProfileScreen> {
                                 fontSize: 18.0,
                               ),
                             ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FlatButton(
+                              onPressed: con.following,
+                              child: Text(
+                                '${bkUser.following.length}',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.cyan[900],
+                                ),
+                              ),
+                            ),
+                            FlatButton(
+                              onPressed: con.followers,
+                              child: Text(
+                                '${bkUser.followedBy.length}',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.cyan[900],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Following",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                //color: Colors.cyan[900],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8.0,
+                            ),
+                            Text(
+                              "Followers",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                //color: Colors.cyan[900],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Divider(height: 50.0, color: Colors.orangeAccent),
                     ],
                   ),
@@ -243,6 +300,21 @@ class _UserProfileState extends State<UserProfileScreen> {
 class _Controller {
   _UserProfileState _state;
   _Controller(this._state);
+
+  void following() async {}
+
+  void followers() async {
+    List<BKUser> followers =
+        await FirebaseController.getFollowers(_state.bkUser.email);
+
+    await Navigator.pushNamed(_state.context, FollowersScreen.routeName,
+        arguments: {
+          'user': _state.user,
+          'bkUser': _state.userProfile,
+          'followers': followers
+        });
+    _state.render(() {});
+  }
 
   void like(int index) async {
     _state.render(() {

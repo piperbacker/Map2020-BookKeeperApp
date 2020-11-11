@@ -99,7 +99,7 @@ class _Controller {
     await Navigator.pushNamed(_state.context, ChangePasswordScreen.routeName,
         arguments: _state.user);
 
-    Navigator.pushReplacementNamed(_state.context, SignInScreen.routeName);
+    signOut();
   }
 
   void signOut() async {

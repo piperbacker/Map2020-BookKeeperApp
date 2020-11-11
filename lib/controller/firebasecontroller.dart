@@ -96,20 +96,19 @@ class FirebaseController {
 
   static Future<List<BKPost>> getHomeFeed(List<dynamic> following) async {
     QuerySnapshot querySnapshot;
-
+    var result = <BKPost>[];
     for (var follower in following) {
       querySnapshot = await FirebaseFirestore.instance
           .collection(BKPost.COLLECTION)
           .where(BKPost.POSTED_BY, isEqualTo: follower)
-          .orderBy(BKPost.UPDATED_AT, descending: true)
           .get();
-    }
-    var result = <BKPost>[];
-    if (querySnapshot != null && querySnapshot.docs.length != 0) {
-      for (var doc in querySnapshot.docs) {
-        result.add(BKPost.deserialize(doc.data(), doc.id));
+      if (querySnapshot != null && querySnapshot.docs.length != 0) {
+        for (var doc in querySnapshot.docs) {
+          result.add(BKPost.deserialize(doc.data(), doc.id));
+        }
       }
     }
+    result.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return result;
   }
 
@@ -167,10 +166,45 @@ class FirebaseController {
     return result;
   }
 
-  static Future<void> updateFollowing(BKUser bkUser) async {
+  static Future<void> updateFollowing(BKUser bkUser, BKUser userProfile) async {
     await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
         .doc(bkUser.docId)
         .update({"following": bkUser.following});
+
+    await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .doc(userProfile.docId)
+        .update({"followedBy": userProfile.followedBy});
+  }
+
+  static Future<List<BKUser>> getFollowers(String email) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .where(BKUser.FOLLOWING, arrayContains: email)
+        .get();
+
+    var results = <BKUser>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        results.add(BKUser.deserialize(doc.data(), doc.id));
+      }
+    }
+    return results;
+  }
+
+  static Future<List<BKUser>> getFollowing(String email) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .where(BKUser.FOLLOWED_BY, arrayContains: email)
+        .get();
+
+    var results = <BKUser>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        results.add(BKUser.deserialize(doc.data(), doc.id));
+      }
+    }
+    return results;
   }
 }

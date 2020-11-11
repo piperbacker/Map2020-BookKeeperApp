@@ -1,5 +1,6 @@
 import 'package:bookkeeperapp/screen/changepassword_screen.dart';
 import 'package:bookkeeperapp/screen/editprofile_screen.dart';
+import 'package:bookkeeperapp/screen/followers_screen.dart';
 import 'package:bookkeeperapp/screen/home_screen.dart';
 import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/postreview_screen.dart';
@@ -46,6 +47,8 @@ class BookKeeperApp extends StatelessWidget {
           PostReviewScreen.routeName: (context) => PostReviewScreen(),
           UserSearchScreen.routeName: (context) => UserSearchScreen(),
           UserProfileScreen.routeName: (context) => UserProfileScreen(),
+          //FollowingScreen.routeName: (context) => FollowingScreen(),
+          FollowersScreen.routeName: (context) => FollowersScreen(),
         });
   }
 }

@@ -9,20 +9,20 @@ import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UserSearchScreen extends StatefulWidget {
-  static const routeName = 'home/userSearchScreen';
+class FollowersScreen extends StatefulWidget {
+  static const routeName = '/followersScreen';
 
   @override
   State<StatefulWidget> createState() {
-    return _UserSearchState();
+    return _FollowersState();
   }
 }
 
-class _UserSearchState extends State<UserSearchScreen> {
+class _FollowersState extends State<FollowersScreen> {
   User user;
   _Controller con;
   BKUser bkUser;
-  List<BKUser> results;
+  List<BKUser> followers;
 
   @override
   void initState() {
@@ -37,16 +37,16 @@ class _UserSearchState extends State<UserSearchScreen> {
     Map args = ModalRoute.of(context).settings.arguments;
     user ??= args['user'];
     bkUser ??= args['bkUser'];
-    results ??= args['results'];
+    followers ??= args['followers'];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Search'),
+        title: Text("${bkUser.displayName}'s Followers"),
       ),
-      body: results.length == 0
+      body: bkUser.followedBy.length == 0
           ? Center(
               child: Text(
-                'There are no users with that Display Name',
+                '${bkUser.displayName} has no followers',
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.cyan[900],
@@ -56,7 +56,7 @@ class _UserSearchState extends State<UserSearchScreen> {
           : Container(
               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               child: ListView.builder(
-                itemCount: results.length,
+                itemCount: bkUser.followedBy.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     color: Colors.orange[50],
@@ -73,7 +73,7 @@ class _UserSearchState extends State<UserSearchScreen> {
                                   width: 60,
                                   child: ClipOval(
                                     child: MyImageView.network(
-                                        imageURL: results[index].photoURL,
+                                        imageURL: followers[index].photoURL,
                                         context: context),
                                   ),
                                 ),
@@ -81,7 +81,7 @@ class _UserSearchState extends State<UserSearchScreen> {
                                   child: FlatButton(
                                     onPressed: () => con.goToProfile(index),
                                     child: Text(
-                                      results[index].displayName,
+                                      followers[index].displayName,
                                       overflow: TextOverflow.clip,
                                       style: TextStyle(
                                         fontSize: 18.0,
@@ -90,14 +90,14 @@ class _UserSearchState extends State<UserSearchScreen> {
                                     ),
                                   ),
                                 ),
-                                results[index].email == bkUser.email
+                                followers[index].email == bkUser.email
                                     ? SizedBox(
                                         height: 1.0,
                                       )
                                     : Row(
                                         children: <Widget>[
                                           !bkUser.following.contains(
-                                                  results[index].email)
+                                                  followers[index].email)
                                               ? ButtonTheme(
                                                   minWidth: 120.0,
                                                   height: 40.0,
@@ -146,20 +146,20 @@ class _UserSearchState extends State<UserSearchScreen> {
 }
 
 class _Controller {
-  _UserSearchState _state;
+  _FollowersState _state;
   _Controller(this._state);
 
   void follow(int index) async {
     _state.render(() {
-      if (!_state.bkUser.following.contains(_state.results[index].email)) {
-        _state.bkUser.following.add(_state.results[index].email);
-        _state.results[index].followedBy.add(_state.bkUser);
+      if (!_state.bkUser.following.contains(_state.followers[index].email)) {
+        _state.bkUser.following.add(_state.followers[index].email);
+        _state.followers[index].followedBy.add(_state.bkUser);
       }
     });
 
     try {
       await FirebaseController.updateFollowing(
-          _state.bkUser, _state.results[index]);
+          _state.bkUser, _state.followers[index]);
     } catch (e) {
       MyDialog.info(
         context: _state.context,
@@ -171,14 +171,14 @@ class _Controller {
 
   void unfollow(int index) async {
     _state.render(() {
-      if (_state.bkUser.following.contains(_state.results[index].email)) {
-        _state.bkUser.following.remove(_state.results[index].email);
-        _state.results[index].followedBy.remove(_state.bkUser);
+      if (_state.bkUser.following.contains(_state.followers[index].email)) {
+        _state.bkUser.following.remove(_state.followers[index].email);
+        _state.followers[index].followedBy.remove(_state.bkUser);
       }
     });
     try {
       await FirebaseController.updateFollowing(
-          _state.bkUser, _state.results[index]);
+          _state.bkUser, _state.followers[index]);
     } catch (e) {
       MyDialog.info(
         context: _state.context,
@@ -191,14 +191,14 @@ class _Controller {
   void goToProfile(int index) async {
     // get user's info
     List<BKUser> bkUserList =
-        await FirebaseController.getBKUser(_state.results[index].email);
+        await FirebaseController.getBKUser(_state.followers[index].email);
     BKUser userProfile = bkUserList[0];
 
     // get list of user's posts
     List<BKPost> userPosts =
-        await FirebaseController.getBKPosts(_state.results[index].email);
+        await FirebaseController.getBKPosts(_state.followers[index].email);
 
-    if (_state.results[index].email == _state.bkUser.email) {
+    if (_state.followers[index].email == _state.bkUser.email) {
       Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
             'user': _state.user,
