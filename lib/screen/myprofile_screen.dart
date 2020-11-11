@@ -120,7 +120,7 @@ class _MyProfileState extends State<MyProfileScreen> {
                             FlatButton(
                               onPressed: con.followers,
                               child: Text(
-                                '${bkUser.followedBy.length}',
+                                '${bkUser.followers.length}',
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.cyan[900],
@@ -303,6 +303,9 @@ class _Controller {
     List<BKUser> following =
         await FirebaseController.getFollowing(_state.bkUser.email);
 
+    print('FOLLOWING LIST ========');
+    print(following);
+
     await Navigator.pushNamed(_state.context, FollowingScreen.routeName,
         arguments: {
           'user': _state.user,
@@ -315,6 +318,9 @@ class _Controller {
   void followers() async {
     List<BKUser> followers =
         await FirebaseController.getFollowers(_state.bkUser.email);
+
+    print('FOLLOWERS LIST ========');
+    print(followers);
 
     await Navigator.pushNamed(_state.context, FollowersScreen.routeName,
         arguments: {

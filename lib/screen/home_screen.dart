@@ -289,6 +289,7 @@ class _Controller {
               'user': _state.user,
               'bkUser': _state.bkUser,
               'bkPosts': _state.bkPosts,
+              'homeFeed': _state.homeFeed,
             });
         _state.render(() {});
       } else {
@@ -297,6 +298,7 @@ class _Controller {
               'user': _state.user,
               'bkUser': _state.bkUser,
               'bkPosts': _state.bkPosts,
+              'homeFeed': _state.homeFeed,
             });
       }
     } catch (e) {}
@@ -343,11 +345,6 @@ class _Controller {
         'bkPosts': _state.bkPosts,
       });
     } else if (_state.currentIndex == 3) {
-      print(_state.bkUser);
-      print('FOLLOWED BY ==========');
-      print(_state.bkUser.followedBy);
-      print('FOLLOWING ==========');
-      print(_state.bkUser.following);
       Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
             'user': _state.user,

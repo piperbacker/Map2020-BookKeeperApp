@@ -21,6 +21,7 @@ class _PostUpdateState extends State<PostUpdateScreen> {
   User user;
   BKUser bkUser;
   List<BKPost> bkPosts;
+  List<BKPost> homeFeed;
   var formKey = GlobalKey<FormState>();
   _Controller con;
 
@@ -38,6 +39,7 @@ class _PostUpdateState extends State<PostUpdateScreen> {
     user ??= args['user'];
     bkUser ??= args['bkUser'];
     bkPosts ??= args['bkPosts'];
+    homeFeed ??= args['homeFeed'];
 
     return Scaffold(
       appBar: AppBar(
@@ -205,7 +207,6 @@ class _Controller {
 
       if (imageFile != null) {
         // if there is an image attached in update
-
         Map<String, String> photoInfo = await FirebaseController.uploadStorage(
           image: imageFile,
           uid: _state.user.uid,
@@ -239,6 +240,7 @@ class _Controller {
 
       p.docId = await FirebaseController.addPost(p);
       _state.bkPosts.insert(0, p);
+      _state.homeFeed.insert(0, p);
 
       MyDialog.circularProgressEnd(_state.context);
 

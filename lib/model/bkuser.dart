@@ -8,7 +8,7 @@ class BKUser {
   static const USER_BIO = 'userBio';
   static const USER_TAG = 'userTag';
   static const FOLLOWING = 'following';
-  static const FOLLOWED_BY = 'followedBy';
+  static const FOLLOWERS = 'followers';
 
   String docId; //Firestore doc ID
   String photoPath; // Firebase storage; image file name
@@ -18,7 +18,7 @@ class BKUser {
   String userBio;
   String userTag;
   List<dynamic> following;
-  List<dynamic> followedBy;
+  List<dynamic> followers;
 
   BKUser({
     this.docId,
@@ -29,10 +29,10 @@ class BKUser {
     this.userBio,
     this.userTag,
     this.following,
-    this.followedBy,
+    this.followers,
   }) {
     this.following ??= [];
-    this.followedBy ??= [];
+    this.followers ??= [];
   }
 
   // convert Dart object to Firestore document
@@ -45,7 +45,7 @@ class BKUser {
       USER_BIO: userBio,
       USER_TAG: userTag,
       FOLLOWING: following,
-      FOLLOWED_BY: followedBy,
+      FOLLOWERS: followers,
     };
   }
 
@@ -60,7 +60,7 @@ class BKUser {
       userBio: data[BKUser.USER_BIO],
       userTag: data[BKUser.USER_TAG],
       following: data[BKUser.FOLLOWING],
-      followedBy: data[BKUser.FOLLOWED_BY],
+      followers: data[BKUser.FOLLOWERS],
     );
   }
 

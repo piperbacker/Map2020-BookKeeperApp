@@ -43,7 +43,7 @@ class _FollowersState extends State<FollowersScreen> {
       appBar: AppBar(
         title: Text("${bkUser.displayName}'s Followers"),
       ),
-      body: bkUser.followedBy.length == 0
+      body: bkUser.followers.length == 0
           ? Center(
               child: Text(
                 '${bkUser.displayName} has no followers',
@@ -56,7 +56,7 @@ class _FollowersState extends State<FollowersScreen> {
           : Container(
               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
               child: ListView.builder(
-                itemCount: bkUser.followedBy.length,
+                itemCount: bkUser.followers.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     color: Colors.orange[50],
@@ -153,7 +153,7 @@ class _Controller {
     _state.render(() {
       if (!_state.bkUser.following.contains(_state.followers[index].email)) {
         _state.bkUser.following.add(_state.followers[index].email);
-        _state.followers[index].followedBy.add(_state.bkUser.email);
+        _state.followers[index].followers.add(_state.bkUser.email);
       }
     });
 
@@ -173,7 +173,7 @@ class _Controller {
     _state.render(() {
       if (_state.bkUser.following.contains(_state.followers[index].email)) {
         _state.bkUser.following.remove(_state.followers[index].email);
-        _state.followers[index].followedBy.remove(_state.bkUser.email);
+        _state.followers[index].followers.remove(_state.bkUser.email);
       }
     });
     try {

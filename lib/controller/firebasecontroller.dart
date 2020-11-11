@@ -175,7 +175,7 @@ class FirebaseController {
     await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
         .doc(userProfile.docId)
-        .update({"followedBy": userProfile.followedBy});
+        .update({"followers": userProfile.followers});
   }
 
   static Future<List<BKUser>> getFollowers(String email) async {
@@ -196,7 +196,7 @@ class FirebaseController {
   static Future<List<BKUser>> getFollowing(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
-        .where(BKUser.FOLLOWED_BY, arrayContains: email)
+        .where(BKUser.FOLLOWERS, arrayContains: email)
         .get();
 
     var results = <BKUser>[];

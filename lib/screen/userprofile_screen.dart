@@ -55,7 +55,7 @@ class _UserProfileState extends State<UserProfileScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              height: 10.0,
+              height: 5.0,
             ),
             Container(
               padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -72,12 +72,12 @@ class _UserProfileState extends State<UserProfileScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 10.0,
+                    width: 5.0,
                   ),
                   Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 10.0,
+                        height: 5.0,
                       ),
                       Text(
                         userProfile.displayName,
@@ -87,7 +87,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 10.0,
+                        height: 5.0,
                       ),
                       userProfile.userBio == null
                           ? Container()
@@ -98,7 +98,43 @@ class _UserProfileState extends State<UserProfileScreen> {
                               ),
                             ),
                       SizedBox(
-                        height: 5.0,
+                        height: 3.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          !bkUser.following.contains(userProfile.email)
+                              ? ButtonTheme(
+                                  minWidth: 120.0,
+                                  height: 40.0,
+                                  child: RaisedButton(
+                                    color: Colors.teal[400],
+                                    child: Text(
+                                      'Follow',
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onPressed: con.follow,
+                                  ),
+                                )
+                              : ButtonTheme(
+                                  minWidth: 120.0,
+                                  height: 40.0,
+                                  child: RaisedButton(
+                                    color: Colors.orangeAccent,
+                                    child: Text(
+                                      'Unfollow',
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onPressed: con.unfollow,
+                                  ),
+                                ),
+                        ],
                       ),
                       Container(
                         child: Row(
@@ -107,7 +143,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                             FlatButton(
                               onPressed: con.following,
                               child: Text(
-                                '${bkUser.following.length}',
+                                '${userProfile.following.length}',
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.cyan[900],
@@ -117,7 +153,7 @@ class _UserProfileState extends State<UserProfileScreen> {
                             FlatButton(
                               onPressed: con.followers,
                               child: Text(
-                                '${bkUser.followedBy.length}',
+                                '${userProfile.followers.length}',
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.cyan[900],
@@ -306,6 +342,46 @@ class _UserProfileState extends State<UserProfileScreen> {
 class _Controller {
   _UserProfileState _state;
   _Controller(this._state);
+
+  void follow() async {
+    _state.render(() {
+      if (!_state.bkUser.following.contains(_state.userProfile.email)) {
+        _state.bkUser.following.add(_state.userProfile.email);
+        _state.userProfile.followers.add(_state.bkUser.email);
+      }
+    });
+
+    try {
+      await FirebaseController.updateFollowing(
+          _state.bkUser, _state.userProfile);
+      print(_state.userProfile.following);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Error occured, could not follow user',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void unfollow() async {
+    _state.render(() {
+      if (_state.bkUser.following.contains(_state.userProfile.email)) {
+        _state.bkUser.following.remove(_state.userProfile.email);
+        _state.userProfile.followers.remove(_state.bkUser.email);
+      }
+    });
+    try {
+      await FirebaseController.updateFollowing(
+          _state.bkUser, _state.userProfile);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Error occured, could not unfollow user',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
 
   void following() async {
     List<BKUser> following =
