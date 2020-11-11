@@ -51,10 +51,12 @@ class _HomeState extends State<HomeScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Home'),
+          automaticallyImplyLeading: false,
           actions: <Widget>[
+            Container(),
             Container(
               margin: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
-              width: 160.0,
+              width: 170.0,
               child: Form(
                 key: formKey,
                 child: TextFormField(
@@ -305,7 +307,9 @@ class _Controller {
             'bkUser': _state.bkUser,
             'results': results,
           });
-      _state.render(() {});
+      _state.render(() {
+        FocusScope.of(_state.context).requestFocus(FocusNode());
+      });
     }
   }
 

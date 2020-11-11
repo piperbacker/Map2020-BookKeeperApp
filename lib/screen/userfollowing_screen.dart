@@ -212,7 +212,7 @@ class _Controller {
             'user': _state.user,
             'bkUser': _state.bkUser,
             'userPosts': userPosts,
-            'bkUserProfile': bkUserProfile,
+            'userProfile': bkUserProfile,
           });
     }
   }

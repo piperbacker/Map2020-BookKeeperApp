@@ -124,7 +124,7 @@ class _Controller {
   String password;
 
   void signUp() async {
-    Navigator.pushNamed(_state.context, SignUpScreen.routeName);
+    Navigator.pushReplacementNamed(_state.context, SignUpScreen.routeName);
   }
 
   void signIn() async {
