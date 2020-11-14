@@ -1,4 +1,6 @@
+import 'package:bookkeeperapp/screen/adminhome_screen.dart';
 import 'package:bookkeeperapp/screen/changepassword_screen.dart';
+import 'package:bookkeeperapp/screen/createnewaccount_screen.dart';
 import 'package:bookkeeperapp/screen/editprofile_screen.dart';
 import 'package:bookkeeperapp/screen/myfollowers_screen.dart';
 import 'package:bookkeeperapp/screen/myfollowing_screen.dart';
@@ -54,6 +56,9 @@ class BookKeeperApp extends StatelessWidget {
           MyFollowersScreen.routeName: (context) => MyFollowersScreen(),
           UserFollowingScreen.routeName: (context) => UserFollowingScreen(),
           UserFollowersScreen.routeName: (context) => UserFollowersScreen(),
+          AdminHomeScreen.routeName: (context) => AdminHomeScreen(),
+          CreateNewAccountScreen.routeName: (context) =>
+              CreateNewAccountScreen(),
         });
   }
 }

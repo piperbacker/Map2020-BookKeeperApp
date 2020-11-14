@@ -1,6 +1,7 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/adminhome_screen.dart';
 import 'package:bookkeeperapp/screen/signup_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -169,14 +170,33 @@ class _Controller {
     following.remove(bkUser.email);
 
     //print(bkUser.following);
+    if (bkUser.userTag == 'reader') {
+      Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
+          arguments: {
+            'user': user,
+            'bkUser': bkUser,
+            'bkPosts': bkPosts,
+            'homeFeed': homeFeed,
+          });
+    }
 
-    Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
-        arguments: {
-          'user': user,
-          'bkUser': bkUser,
-          'bkPosts': bkPosts,
-          'homeFeed': homeFeed,
-        });
+    if (bkUser.userTag == 'admin') {
+      Navigator.pushReplacementNamed(_state.context, AdminHomeScreen.routeName,
+          arguments: {
+            'user': user,
+            'bkUser': bkUser,
+          });
+    }
+
+    if (bkUser.userTag == 'author') {
+      /*Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
+          arguments: {
+            'user': user,
+            'bkUser': bkUser,
+            'bkPosts': bkPosts,
+            'homeFeed': homeFeed,
+          });*/
+    }
   }
 
   String validatorEmail(String value) {

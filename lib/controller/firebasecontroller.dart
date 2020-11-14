@@ -34,6 +34,19 @@ class FirebaseController {
     return ref.id;
   }
 
+  static Future<String> createNewUserAccount(
+    String email,
+    String password,
+    BKUser user,
+  ) async {
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .add(user.serialize());
+    return ref.id;
+  }
+
   static Future<List<BKUser>> getBKUser(String email) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
