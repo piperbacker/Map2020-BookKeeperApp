@@ -10,6 +10,7 @@ class BKBook {
   static const AUTHOR = 'author';
   static const DESC = 'description';
   static const PUB_DATE = 'pubDate';
+  static const DOWNLOADED = 'downloaded';
   static const DOWNLOADS = 'downloads';
   //static const REVIEWS = 'reviews';
 
@@ -22,6 +23,7 @@ class BKBook {
   String author;
   String description;
   DateTime pubDate;
+  bool downloaded;
   int downloads;
   //List<dynamic> reviews;
 
@@ -35,9 +37,11 @@ class BKBook {
     this.author,
     this.description,
     this.pubDate,
+    this.downloaded,
     this.downloads,
     //this.reviews,
   }) {
+    this.downloaded = false;
     //this.reviews ??= [];
   }
 
@@ -52,6 +56,7 @@ class BKBook {
       AUTHOR: author,
       DESC: description,
       PUB_DATE: pubDate,
+      DOWNLOADED: downloaded,
       DOWNLOADS: downloads,
       //REVIEWS: reviews,
     };
@@ -68,7 +73,11 @@ class BKBook {
       title: data[BKBook.TITLE],
       author: data[BKBook.AUTHOR],
       description: data[BKBook.DESC],
-      pubDate: data[BKBook.PUB_DATE],
+      pubDate: data[BKBook.PUB_DATE] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              data[BKBook.PUB_DATE].millisecondsSinceEpoch)
+          : null,
+      downloaded: data[BKBook.DOWNLOADED],
       downloads: data[BKBook.DOWNLOADS],
       //reviews: data[BKBook.REVIEWS],
     );
@@ -76,6 +85,6 @@ class BKBook {
 
   @override
   String toString() {
-    return '$docId $photoURL $fileURL $title $author $description $downloads';
+    return '$docId $photoURL $fileURL $title $author $description';
   }
 }

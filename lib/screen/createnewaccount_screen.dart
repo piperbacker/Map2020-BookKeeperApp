@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
@@ -173,11 +173,14 @@ class _Controller {
         p,
       );
 
-      MyDialog.info(
-        context: _state.context,
-        title: 'Successfully Created',
-        content: 'Email has been sent to user with login credentials',
-      );
+      FirebaseAuth.instance
+          .sendPasswordResetEmail(email: email)
+          .then((value) => MyDialog.info(
+                context: _state.context,
+                title: 'Account Successfully Created',
+                content:
+                    'Email has been sent to user to set password and access account',
+              ));
     } catch (e) {
       MyDialog.info(
         context: _state.context,

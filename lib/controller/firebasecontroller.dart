@@ -262,4 +262,16 @@ class FirebaseController {
         .add(book.serialize());
     return ref.id;
   }
+
+  static Future<List<BKBook>> getBKBooks() async {
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection(BKBook.COLLECTION).get();
+    var result = <BKBook>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        result.add(BKBook.deserialize(doc.data(), doc.id));
+      }
+    }
+    return result;
+  }
 }

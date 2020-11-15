@@ -1,8 +1,8 @@
-import 'package:bookkeeperapp/model/bkpost.dart';
+import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ShopScreen extends StatefulWidget {
   static const routeName = '/shopScreen';
@@ -16,7 +16,7 @@ class ShopScreen extends StatefulWidget {
 class _ShopState extends State<ShopScreen> {
   User user;
   BKUser bkUser;
-  List<BKPost> bkPosts;
+  List<BKBook> bkBooks;
   _Controller con;
 
   @override
@@ -32,13 +32,80 @@ class _ShopState extends State<ShopScreen> {
     Map args = ModalRoute.of(context).settings.arguments;
     user ??= args['user'];
     bkUser ??= args['bkUser'];
-    bkPosts ??= args['bkPosts'];
+    bkBooks ??= args['bkBooks'];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Shop'),
+        title: Text('Book Store'),
       ),
-      body: Text("Shop"),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.orange[50],
+            ),
+          ),
+          GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: (1 / 1.85),
+              ),
+              itemCount: bkBooks.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  margin: EdgeInsets.all(10.0),
+                  color: Colors.white,
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          width: 150.0,
+                          height: 225.0,
+                          child: MyImageView.network(
+                              imageURL: bkBooks[index].photoURL,
+                              context: context),
+                        ),
+                        FlatButton(
+                          onPressed: () => con.bookDetails(index),
+                          child: Text(
+                            bkBooks[index].title,
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          bkBooks[index].author,
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.cyan[900],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        ButtonTheme(
+                          height: 40.0,
+                          child: RaisedButton(
+                            color: Colors.orangeAccent,
+                            child: Text(
+                              'Download',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: con.download,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        ],
+      ),
     );
   }
 }
@@ -46,4 +113,10 @@ class _ShopState extends State<ShopScreen> {
 class _Controller {
   _ShopState _state;
   _Controller(this._state);
+
+  void download() {}
+
+  void bookDetails(int index) {
+    print('details');
+  }
 }

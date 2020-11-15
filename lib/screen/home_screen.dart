@@ -1,7 +1,8 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
-import 'package:bookkeeperapp/screen/library_screen.dart';
+import 'package:bookkeeperapp/screen/librar_screen.dart';
 import 'package:bookkeeperapp/screen/postreview_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
@@ -392,17 +393,20 @@ class _Controller {
     _state.render(() {
       _state.currentIndex = index;
     });
+
     if (_state.currentIndex == 1) {
       Navigator.pushNamed(_state.context, LibraryScreen.routeName, arguments: {
         'user': _state.user,
         'bkUser': _state.bkUser,
-        'bkPosts': _state.bkPosts,
+        //'bkBooks': bkBooks,
       });
     } else if (_state.currentIndex == 2) {
+      // get bkBooks
+      List<BKBook> bkBooks = await FirebaseController.getBKBooks();
       Navigator.pushNamed(_state.context, ShopScreen.routeName, arguments: {
         'user': _state.user,
         'bkUser': _state.bkUser,
-        'bkPosts': _state.bkPosts,
+        'bkBooks': bkBooks,
       });
     } else if (_state.currentIndex == 3) {
       await Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
