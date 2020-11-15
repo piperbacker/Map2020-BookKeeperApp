@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
-import 'package:bookkeeperapp/screen/signin_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +19,8 @@ class _CreateNewAccountState extends State<CreateNewAccountScreen> {
   _Controller con;
   var formKey = GlobalKey<FormState>();
   // List<BKUser> users;
-  UserTag userTag = UserTag.author;
+  UserTag setUserTag = UserTag.author;
+  String userTag = 'author';
 
   @override
   void initState() {
@@ -82,30 +82,32 @@ class _CreateNewAccountState extends State<CreateNewAccountScreen> {
               Column(
                 children: <Widget>[
                   RadioListTile<UserTag>(
-                    activeColor: Colors.orange[300],
+                    activeColor: Colors.deepOrange[400],
                     title: const Text(
                       'Author User',
                       style: TextStyle(fontSize: 18.0),
                     ),
                     value: UserTag.author,
-                    groupValue: userTag,
+                    groupValue: setUserTag,
                     onChanged: (UserTag value) {
                       render(() {
-                        userTag = value;
+                        setUserTag = value;
+                        userTag = 'author';
                       });
                     },
                   ),
                   RadioListTile<UserTag>(
-                    activeColor: Colors.orange[300],
+                    activeColor: Colors.deepOrange[400],
                     title: const Text(
                       'Admin User',
                       style: TextStyle(fontSize: 18.0),
                     ),
                     value: UserTag.admin,
-                    groupValue: userTag,
+                    groupValue: setUserTag,
                     onChanged: (UserTag value) {
                       render(() {
-                        userTag = value;
+                        setUserTag = value;
+                        userTag = 'admin';
                       });
                     },
                   ),
@@ -148,21 +150,24 @@ class _Controller {
 
     _state.formKey.currentState.save();
 
+    var rnd = new Random();
+    var next = rnd.nextDouble() * 1000000;
+    while (next < 100000) {
+      next *= 10;
+    }
+
+    String password = next.toInt().toString();
+    //print("========= PASSWORD: ");
+    //print(password);
+
     try {
-      Random random = new Random();
-      var password;
-      for (var i = 0; i < 9; i++) {
-        password += random.nextInt(100);
-        password = password.toString();
-        print(password);
-      }
       var p = BKUser(
         email: email,
         displayName: displayName,
-        userTag: _state.userTag.toString(),
+        userTag: _state.userTag,
       );
 
-      p.docId = await FirebaseController.createNewUserAccount(
+      p.docId = await FirebaseController.signUp(
         email,
         password,
         p,
@@ -173,8 +178,6 @@ class _Controller {
         title: 'Successfully Created',
         content: 'Email has been sent to user with login credentials',
       );
-
-      //Navigator.pushNamed(_state.context, SignInScreen.routeName);
     } catch (e) {
       MyDialog.info(
         context: _state.context,

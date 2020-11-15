@@ -1,3 +1,4 @@
+import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,19 +29,6 @@ class FirebaseController {
     /*await FirebaseAuth.instance.currentUser.updateProfile(
       displayName: displayName,
     );*/
-    DocumentReference ref = await FirebaseFirestore.instance
-        .collection(BKUser.COLLECTION)
-        .add(user.serialize());
-    return ref.id;
-  }
-
-  static Future<String> createNewUserAccount(
-    String email,
-    String password,
-    BKUser user,
-  ) async {
-    await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
         .add(user.serialize());
@@ -221,5 +209,35 @@ class FirebaseController {
       }
     }
     return results;
+  }
+
+  static Future<Map<String, String>> uploadBookCover({
+    @required File image,
+    String filePath,
+    @required String author,
+    @required Function listener,
+  }) async {
+    filePath ??= '${BKBook.COVER_FOLDER}/$author/${DateTime.now()}';
+
+    StorageUploadTask task =
+        FirebaseStorage.instance.ref().child(filePath).putFile(image);
+
+    task.events.listen((event) {
+      double percentage = (event.snapshot.bytesTransferred.toDouble() /
+              event.snapshot.totalByteCount.toDouble()) *
+          100;
+      listener(percentage);
+    });
+    var download = await task.onComplete;
+    String url = await download.ref.getDownloadURL();
+    return {'url': url, 'path': filePath};
+  }
+
+  static Future<String> addBook(BKBook book) async {
+    book.pubDate = DateTime.now();
+    DocumentReference ref = await FirebaseFirestore.instance
+        .collection(BKBook.COLLECTION)
+        .add(book.serialize());
+    return ref.id;
   }
 }

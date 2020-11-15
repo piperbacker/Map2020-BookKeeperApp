@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'changepassword_screen.dart';
+import 'managestore_screen.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   static const routeName = '/AdminHomeScreen';
@@ -41,6 +42,17 @@ class _AdminHomeState extends State<AdminHomeScreen> {
       ),
       body: ListView(
         children: <Widget>[
+          ListTile(
+            leading: Icon(Icons.book),
+            title: Text(
+              'Manage Book Store',
+              style: TextStyle(
+                fontSize: 23.0,
+              ),
+            ),
+            onTap: con.manageBookStore,
+          ),
+          Divider(height: 10.0, thickness: 2.0, color: Colors.orange[50]),
           ListTile(
             leading: Icon(Icons.person),
             title: Text(
@@ -88,6 +100,15 @@ class _AdminHomeState extends State<AdminHomeScreen> {
 class _Controller {
   _AdminHomeState _state;
   _Controller(this._state);
+
+  void manageBookStore() {
+    // add firebase to get books
+
+    Navigator.pushNamed(
+      _state.context,
+      ManageStoreScreen.routeName,
+    );
+  }
 
   void createNewUser() {
     Navigator.pushNamed(
