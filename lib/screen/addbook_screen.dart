@@ -20,6 +20,7 @@ class _AddBookState extends State<AddBookScreen> {
   var formKey = GlobalKey<FormState>();
   _Controller con;
   List<BKBook> bkBooks;
+  User user;
 
   @override
   void initState() {
@@ -31,6 +32,8 @@ class _AddBookState extends State<AddBookScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Map args = ModalRoute.of(context).settings.arguments;
+    user ??= args['user'];
     // import bkBooks
 
     return Scaffold(
@@ -204,7 +207,7 @@ class _Controller {
         Map<String, String> photoInfo =
             await FirebaseController.uploadBookCover(
           image: imageFile,
-          author: author,
+          uid: _state.user.uid,
           listener: (double progressPercentage) {
             _state.render(() {
               uploadProgressMessage =
@@ -224,7 +227,7 @@ class _Controller {
       }
 
       p.docId = await FirebaseController.addBook(p);
-      _state.bkBooks.insert(0, p);
+      //_state.bkBooks.insert(0, p);
 
       MyDialog.circularProgressEnd(_state.context);
 

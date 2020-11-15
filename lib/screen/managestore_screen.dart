@@ -13,6 +13,7 @@ class ManageStoreScreen extends StatefulWidget {
 }
 
 class _ManageStoreState extends State<ManageStoreScreen> {
+  User user;
   List<BKBook> bkBooks;
   _Controller con;
 
@@ -27,6 +28,7 @@ class _ManageStoreState extends State<ManageStoreScreen> {
   @override
   Widget build(BuildContext context) {
     Map args = ModalRoute.of(context).settings.arguments;
+    user ??= args['user'];
 
     return Scaffold(
       appBar: AppBar(
@@ -48,9 +50,7 @@ class _Controller {
   _Controller(this._state);
 
   void addBook() {
-    Navigator.pushNamed(
-      _state.context,
-      AddBookScreen.routeName,
-    );
+    Navigator.pushNamed(_state.context, AddBookScreen.routeName,
+        arguments: {'user': _state.user});
   }
 }

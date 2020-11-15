@@ -214,10 +214,10 @@ class FirebaseController {
   static Future<Map<String, String>> uploadBookCover({
     @required File image,
     String filePath,
-    @required String author,
+    @required String uid,
     @required Function listener,
   }) async {
-    filePath ??= '${BKBook.COVER_FOLDER}/$author/${DateTime.now()}';
+    filePath ??= '${BKBook.COVER_FOLDER}/$uid/${DateTime.now()}';
 
     StorageUploadTask task =
         FirebaseStorage.instance.ref().child(filePath).putFile(image);

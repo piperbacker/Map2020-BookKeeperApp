@@ -104,10 +104,8 @@ class _Controller {
   void manageBookStore() {
     // add firebase to get books
 
-    Navigator.pushNamed(
-      _state.context,
-      ManageStoreScreen.routeName,
-    );
+    Navigator.pushNamed(_state.context, ManageStoreScreen.routeName,
+        arguments: {'user': _state.user});
   }
 
   void createNewUser() {
