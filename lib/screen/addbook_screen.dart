@@ -6,6 +6,7 @@ import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 class AddBookScreen extends StatefulWidget {
   static const routeName = '/manageStore/AddBookScreen';
@@ -54,7 +55,7 @@ class _AddBookState extends State<AddBookScreen> {
               Container(
                   margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
                   color: Colors.orange[50],
-                  height: 1000),
+                  height: 1300),
               Column(
                 children: <Widget>[
                   SizedBox(
@@ -89,16 +90,71 @@ class _AddBookState extends State<AddBookScreen> {
                         padding: EdgeInsets.all(10.0),
                         onPressed: con.getPicture,
                         child: Container(
-                          width: 130.0,
+                          width: 150.0,
                           child: Row(
                             children: <Widget>[
                               Icon(Icons.photo_camera),
                               SizedBox(
                                 width: 10.0,
                               ),
-                              Text("Upload",
+                              Text("Upload Photo",
                                   style: TextStyle(
-                                    fontSize: 22.0,
+                                    fontSize: 18.0,
+                                  )),
+                            ],
+                          ),
+                        ),
+                        color: Colors.teal[400],
+                      ),
+                      SizedBox(
+                        width: 20.0,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(20.0, 5.0, 15.0, 5.0),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Upload Book File",
+                      style: TextStyle(fontSize: 20.0, color: Colors.cyan[900]),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  con.fileName == null
+                      ? SizedBox(height: 1)
+                      : Container(
+                          margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                          child: Text(con.fileName,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                              )),
+                        ),
+                  //Image.file(con.imageFile, fit: BoxFit.fill)),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FlatButton(
+                        padding: EdgeInsets.all(10.0),
+                        onPressed: con.getBookFile,
+                        child: Container(
+                          width: 150.0,
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.attach_file),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text("Upload File",
+                                  style: TextStyle(
+                                    fontSize: 18.0,
                                   )),
                             ],
                           ),
@@ -174,6 +230,8 @@ class _Controller {
   _AddBookState _state;
   _Controller(this._state);
   File imageFile;
+  File bookFile;
+  String fileName;
   String title;
   String author;
   String desc;
@@ -191,6 +249,17 @@ class _Controller {
     } catch (e) {}
   }
 
+  void getBookFile() async {
+    try {
+      FilePickerResult result = await FilePicker.platform.pickFiles();
+      File _file = File(result.files.single.path);
+      _state.render(() {
+        bookFile = File(_file.path);
+        fileName = bookFile.path.split('/').last;
+      });
+    } catch (e) {}
+  }
+
   void save() async {
     if (!_state.formKey.currentState.validate()) {
       return;
@@ -201,30 +270,38 @@ class _Controller {
     try {
       var p;
       MyDialog.circularProgressStart(_state.context);
+      Map<String, String> photoInfo = await FirebaseController.uploadBookCover(
+        image: imageFile,
+        uid: _state.user.uid,
+        listener: (double progressPercentage) {
+          _state.render(() {
+            uploadProgressMessage =
+                'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
+          });
+        },
+      );
 
-      if (imageFile != null) {
-        // if there is an image attached in update
-        Map<String, String> photoInfo =
-            await FirebaseController.uploadBookCover(
-          image: imageFile,
-          uid: _state.user.uid,
-          listener: (double progressPercentage) {
-            _state.render(() {
-              uploadProgressMessage =
-                  'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
-            });
-          },
-        );
+      Map<String, String> fileInfo = await FirebaseController.uploadBookFile(
+        bookFile: bookFile,
+        uid: _state.user.uid,
+        listener: (double progressPercentage) {
+          _state.render(() {
+            uploadProgressMessage =
+                'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
+          });
+        },
+      );
 
-        p = BKBook(
-          photoPath: photoInfo['path'],
-          photoURL: photoInfo['url'],
-          title: title,
-          author: author,
-          description: desc,
-          pubDate: DateTime.now(),
-        );
-      }
+      p = BKBook(
+        photoPath: photoInfo['path'],
+        photoURL: photoInfo['url'],
+        filePath: fileInfo['path'],
+        fileURL: fileInfo['url'],
+        title: title,
+        author: author,
+        description: desc,
+        pubDate: DateTime.now(),
+      );
 
       p.docId = await FirebaseController.addBook(p);
       //_state.bkBooks.insert(0, p);
