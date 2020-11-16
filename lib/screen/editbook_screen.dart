@@ -1,27 +1,28 @@
-import 'dart:io';
-
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkbook.dart';
+import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 
-class AddBookScreen extends StatefulWidget {
-  static const routeName = '/manageStore/AddBookScreen';
+class EditBookScreen extends StatefulWidget {
+  static const routeName = '/manageShop/editBookScreen';
 
   @override
   State<StatefulWidget> createState() {
-    return _AddBookState();
+    return _EditBookState();
   }
 }
 
-class _AddBookState extends State<AddBookScreen> {
-  var formKey = GlobalKey<FormState>();
-  _Controller con;
-  List<BKBook> bkBooks;
+class _EditBookState extends State<EditBookScreen> {
   User user;
+  BKUser bkUser;
+  BKBook bkBook;
+  _Controller con;
+  var formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -35,11 +36,12 @@ class _AddBookState extends State<AddBookScreen> {
   Widget build(BuildContext context) {
     Map args = ModalRoute.of(context).settings.arguments;
     user ??= args['user'];
-    bkBooks ??= args['bkBooks'];
+    bkUser ??= args['bkUser'];
+    bkBook ??= args['bkBook'];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Book'),
+        title: Text('Edit Book'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
@@ -74,11 +76,9 @@ class _AddBookState extends State<AddBookScreen> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    child: con.imageFile == null
-                        ? SizedBox(height: 1)
-                        : Container(
-                            margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
-                            child: Image.file(con.imageFile, fit: BoxFit.fill)),
+                    child: Container(
+                        margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                        child: Image.file(con.imageFile, fit: BoxFit.fill)),
                   ),
                   SizedBox(
                     height: 10.0,
@@ -227,14 +227,11 @@ class _AddBookState extends State<AddBookScreen> {
 }
 
 class _Controller {
-  _AddBookState _state;
+  _EditBookState _state;
   _Controller(this._state);
   File imageFile;
   File bookFile;
   String fileName;
-  String title;
-  String author;
-  String desc;
   String uploadProgressMessage;
   static final validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
@@ -268,43 +265,40 @@ class _Controller {
     _state.formKey.currentState.save();
 
     try {
-      var p;
       MyDialog.circularProgressStart(_state.context);
-      Map<String, String> photoInfo = await FirebaseController.uploadBookCover(
-        image: imageFile,
-        uid: _state.user.uid,
-        listener: (double progressPercentage) {
-          _state.render(() {
-            uploadProgressMessage =
-                'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
-          });
-        },
-      );
+      if (imageFile != null) {
+        Map<String, String> photoInfo =
+            await FirebaseController.uploadBookCover(
+          image: imageFile,
+          uid: _state.user.uid,
+          listener: (double progressPercentage) {
+            _state.render(() {
+              uploadProgressMessage =
+                  'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
+            });
+          },
+        );
+        _state.bkBook.photoPath = photoInfo['path'];
+        _state.bkBook.photoURL = photoInfo['url'];
+      }
 
-      Map<String, String> fileInfo = await FirebaseController.uploadBookFile(
-        bookFile: bookFile,
-        uid: _state.user.uid,
-        listener: (double progressPercentage) {
-          _state.render(() {
-            uploadProgressMessage =
-                'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
-          });
-        },
-      );
+      if (bookFile != null) {
+        Map<String, String> fileInfo = await FirebaseController.uploadBookFile(
+          bookFile: bookFile,
+          uid: _state.user.uid,
+          listener: (double progressPercentage) {
+            _state.render(() {
+              uploadProgressMessage =
+                  'Uploading: ${progressPercentage.toStringAsFixed(1)} %';
+            });
+          },
+        );
+        _state.bkBook.filePath = fileInfo['path'];
+        _state.bkBook.fileURL = fileInfo['url'];
+      }
 
-      p = BKBook(
-        photoPath: photoInfo['path'],
-        photoURL: photoInfo['url'],
-        filePath: fileInfo['path'],
-        fileURL: fileInfo['url'],
-        title: title,
-        author: author,
-        description: desc,
-        pubDate: DateTime.now(),
-      );
-
-      p.docId = await FirebaseController.addBook(p);
-      _state.bkBooks.insert(0, p);
+      _state.render(() => uploadProgressMessage = 'Firestore doc updating ...');
+      await FirebaseController.updateBKBook(_state.bkBook);
 
       MyDialog.circularProgressEnd(_state.context);
 
@@ -314,7 +308,7 @@ class _Controller {
 
       MyDialog.info(
         context: _state.context,
-        title: 'Firebase Error',
+        title: 'Edit Book error in saving',
         content: e.message ?? e.toString(),
       );
     }
@@ -329,7 +323,7 @@ class _Controller {
   }
 
   void onSavedTitle(String value) {
-    title = value;
+    _state.bkBook.title = value;
   }
 
   String validatorAuthor(String value) {
@@ -341,7 +335,7 @@ class _Controller {
   }
 
   void onSavedAuthor(String value) {
-    author = value;
+    _state.bkBook.author = value;
   }
 
   String validatorDesc(String value) {
@@ -353,6 +347,6 @@ class _Controller {
   }
 
   void onSavedDesc(String value) {
-    desc = value;
+    _state.bkBook.description = value;
   }
 }

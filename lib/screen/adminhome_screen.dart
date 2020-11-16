@@ -1,4 +1,5 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/createnewaccount_screen.dart';
 import 'package:bookkeeperapp/screen/signin_screen.dart';
@@ -101,11 +102,14 @@ class _Controller {
   _AdminHomeState _state;
   _Controller(this._state);
 
-  void manageBookStore() {
-    // add firebase to get books
+  void manageBookStore() async {
+    List<BKBook> bkBooks = await FirebaseController.getBKBooks();
 
     Navigator.pushNamed(_state.context, ManageStoreScreen.routeName,
-        arguments: {'user': _state.user});
+        arguments: {
+          'user': _state.user,
+          'bkBooks': bkBooks,
+        });
   }
 
   void createNewUser() {

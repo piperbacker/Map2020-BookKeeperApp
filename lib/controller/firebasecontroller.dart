@@ -26,9 +26,6 @@ class FirebaseController {
   ) async {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
-    /*await FirebaseAuth.instance.currentUser.updateProfile(
-      displayName: displayName,
-    );*/
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
         .add(user.serialize());
@@ -273,5 +270,14 @@ class FirebaseController {
       }
     }
     return result;
+  }
+
+  static Future<void> updateBKBook(
+    bkBook,
+  ) async {
+    await FirebaseFirestore.instance
+        .collection(BKBook.COLLECTION)
+        .doc(bkBook.docId)
+        .set(bkBook.serialize());
   }
 }

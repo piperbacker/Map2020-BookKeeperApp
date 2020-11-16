@@ -96,7 +96,7 @@ class _ShopState extends State<ShopScreen> {
                                 color: Colors.white,
                               ),
                             ),
-                            onPressed: con.download,
+                            onPressed: () => con.download(index),
                           ),
                         )
                       ],
@@ -114,7 +114,7 @@ class _Controller {
   _ShopState _state;
   _Controller(this._state);
 
-  void download() {}
+  void download(int index) {}
 
   void bookDetails(int index) {
     print('details');
