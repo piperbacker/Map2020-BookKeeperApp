@@ -6,6 +6,7 @@ import 'package:bookkeeperapp/screen/myfollowing_screen.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import 'settings_screen.dart';
 
@@ -224,6 +225,45 @@ class _MyProfileState extends State<MyProfileScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
+                                        bkPosts[index].photoURL == null
+                                            ? SizedBox(height: 1)
+                                            : Container(
+                                                alignment: Alignment.topCenter,
+                                                margin: EdgeInsets.fromLTRB(
+                                                    10.0, 5.0, 10.0, 5.0),
+                                                child: MyImageView.network(
+                                                    imageURL:
+                                                        bkPosts[index].photoURL,
+                                                    context: context),
+                                              ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        bkPosts[index].bookTitle == null
+                                            ? SizedBox(height: 1)
+                                            : Container(
+                                                alignment: Alignment.topCenter,
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      bkPosts[index].bookTitle,
+                                                      style: TextStyle(
+                                                        fontSize: 20.0,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      bkPosts[index].author,
+                                                      style: TextStyle(
+                                                        fontSize: 18.0,
+                                                        color: Colors.cyan[900],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
                                         Center(
                                           child: Text(
                                             bkPosts[index].title,
@@ -236,6 +276,28 @@ class _MyProfileState extends State<MyProfileScreen> {
                                         Divider(
                                             height: 30.0,
                                             color: Colors.orangeAccent),
+                                        bkPosts[index].stars == null
+                                            ? SizedBox(
+                                                height: 1,
+                                              )
+                                            : Container(
+                                                alignment: Alignment.topCenter,
+                                                child: SmoothStarRating(
+                                                  allowHalfRating: false,
+                                                  starCount: 5,
+                                                  rating: bkPosts[index]
+                                                      .stars
+                                                      .toDouble(),
+                                                  size: 30.0,
+                                                  isReadOnly: true,
+                                                  color: Colors.deepOrange[400],
+                                                  borderColor: Colors.grey,
+                                                  spacing: 0.0,
+                                                ),
+                                              ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
                                         Text(
                                           bkPosts[index].body,
                                           style: TextStyle(
@@ -246,18 +308,6 @@ class _MyProfileState extends State<MyProfileScreen> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  bkPosts[index].photoURL == null
-                                      ? SizedBox(height: 1)
-                                      : Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              10.0, 5.0, 10.0, 5.0),
-                                          child: MyImageView.network(
-                                              imageURL: bkPosts[index].photoURL,
-                                              context: context),
-                                        ),
                                   SizedBox(
                                     height: 10.0,
                                   ),

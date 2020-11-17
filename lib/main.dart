@@ -1,5 +1,6 @@
 import 'package:bookkeeperapp/screen/addbook_screen.dart';
 import 'package:bookkeeperapp/screen/adminhome_screen.dart';
+import 'package:bookkeeperapp/screen/bookdetail_screen.dart';
 import 'package:bookkeeperapp/screen/changepassword_screen.dart';
 import 'package:bookkeeperapp/screen/createnewaccount_screen.dart';
 import 'package:bookkeeperapp/screen/editbook_screen.dart';
@@ -68,6 +69,7 @@ class BookKeeperApp extends StatelessWidget {
               CreateNewAccountScreen(),
           ReviewBookSearchScreen.routeName: (context) =>
               ReviewBookSearchScreen(),
+          BookDetailScreen.routeName: (context) => BookDetailScreen(),
         });
   }
 }

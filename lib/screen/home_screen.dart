@@ -12,6 +12,7 @@ import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/signInScreen/homeScreen';
@@ -155,6 +156,44 @@ class _HomeState extends State<HomeScreen> {
                               SizedBox(
                                 height: 10.0,
                               ),
+                              homeFeed[index].photoURL == null
+                                  ? SizedBox(height: 1)
+                                  : Container(
+                                      alignment: Alignment.topCenter,
+                                      margin: EdgeInsets.fromLTRB(
+                                          10.0, 5.0, 10.0, 5.0),
+                                      child: MyImageView.network(
+                                          imageURL: homeFeed[index].photoURL,
+                                          context: context),
+                                    ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              homeFeed[index].bookTitle == null
+                                  ? SizedBox(height: 1)
+                                  : Container(
+                                      alignment: Alignment.topCenter,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            homeFeed[index].bookTitle,
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
+                                          Text(
+                                            homeFeed[index].author,
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.cyan[900],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
                               Center(
                                 child: Text(
                                   homeFeed[index].title,
@@ -165,6 +204,27 @@ class _HomeState extends State<HomeScreen> {
                                 ),
                               ),
                               Divider(height: 30.0, color: Colors.orangeAccent),
+                              homeFeed[index].stars == null
+                                  ? SizedBox(
+                                      height: 1,
+                                    )
+                                  : Container(
+                                      alignment: Alignment.topCenter,
+                                      child: SmoothStarRating(
+                                        allowHalfRating: false,
+                                        starCount: 5,
+                                        rating:
+                                            homeFeed[index].stars.toDouble(),
+                                        size: 30.0,
+                                        isReadOnly: true,
+                                        color: Colors.deepOrange[400],
+                                        borderColor: Colors.grey,
+                                        spacing: 0.0,
+                                      ),
+                                    ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
                               Text(
                                 homeFeed[index].body,
                                 style: TextStyle(
@@ -172,18 +232,6 @@ class _HomeState extends State<HomeScreen> {
                                   color: Colors.black87,
                                 ),
                               ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              homeFeed[index].photoURL == null
-                                  ? SizedBox(height: 1)
-                                  : Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          10.0, 5.0, 10.0, 5.0),
-                                      child: MyImageView.network(
-                                          imageURL: homeFeed[index].photoURL,
-                                          context: context),
-                                    ),
                               SizedBox(
                                 height: 10.0,
                               ),

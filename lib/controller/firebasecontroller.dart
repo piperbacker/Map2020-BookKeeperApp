@@ -306,4 +306,20 @@ class FirebaseController {
     }
     return result;
   }
+
+  static Future<List<BKPost>> getReviews(String bookTitle) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKPost.COLLECTION)
+        .where(BKPost.BOOK_TITLE, isEqualTo: bookTitle)
+        .orderBy(BKPost.UPDATED_AT, descending: true)
+        .get();
+
+    var result = <BKPost>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        result.add(BKPost.deserialize(doc.data(), doc.id));
+      }
+    }
+    return result;
+  }
 }

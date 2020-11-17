@@ -78,6 +78,7 @@ class _ReviewBookSearchState extends State<ReviewBookSearchScreen> {
               ),
             ],
           ),
+          Divider(height: 50.0, color: Colors.orangeAccent),
           SizedBox(
             height: 20.0,
           ),

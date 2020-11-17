@@ -1,8 +1,12 @@
+import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkbook.dart';
+import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'bookdetail_screen.dart';
 
 class ShopScreen extends StatefulWidget {
   static const routeName = '/shopScreen';
@@ -57,6 +61,7 @@ class _ShopState extends State<ShopScreen> {
                   color: Colors.white,
                   child: Container(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
                           width: 150.0,
@@ -65,13 +70,16 @@ class _ShopState extends State<ShopScreen> {
                               imageURL: bkBooks[index].photoURL,
                               context: context),
                         ),
-                        FlatButton(
-                          onPressed: () => con.bookDetails(index),
-                          child: Text(
-                            bkBooks[index].title,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.black,
+                        Container(
+                          alignment: Alignment.topCenter,
+                          child: FlatButton(
+                            onPressed: () => con.bookDetails(index),
+                            child: Text(
+                              bkBooks[index].title,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.cyan[900],
+                              ),
                             ),
                           ),
                         ),
@@ -79,7 +87,6 @@ class _ShopState extends State<ShopScreen> {
                           bkBooks[index].author,
                           style: TextStyle(
                             fontSize: 18.0,
-                            color: Colors.cyan[900],
                           ),
                         ),
                         SizedBox(
@@ -116,7 +123,16 @@ class _Controller {
 
   void download(int index) {}
 
-  void bookDetails(int index) {
-    print('details');
+  void bookDetails(int index) async {
+    // get book reviews
+    List<BKPost> reviews =
+        await FirebaseController.getReviews(_state.bkBooks[index].title);
+
+    Navigator.pushNamed(_state.context, BookDetailScreen.routeName, arguments: {
+      'user': _state.user,
+      'bkUser': _state.bkUser,
+      'bkBook': _state.bkBooks[index],
+      'reviews': reviews
+    });
   }
 }

@@ -7,6 +7,7 @@ import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class UserProfileScreen extends StatefulWidget {
   static const routeName = 'home/userProfileScreen';
@@ -254,6 +255,46 @@ class _UserProfileState extends State<UserProfileScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
+                                        userPosts[index].photoURL == null
+                                            ? SizedBox(height: 1)
+                                            : Container(
+                                                alignment: Alignment.topCenter,
+                                                margin: EdgeInsets.fromLTRB(
+                                                    10.0, 5.0, 10.0, 5.0),
+                                                child: MyImageView.network(
+                                                    imageURL: userPosts[index]
+                                                        .photoURL,
+                                                    context: context),
+                                              ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        userPosts[index].bookTitle == null
+                                            ? SizedBox(height: 1)
+                                            : Container(
+                                                alignment: Alignment.topCenter,
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      userPosts[index]
+                                                          .bookTitle,
+                                                      style: TextStyle(
+                                                        fontSize: 20.0,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      userPosts[index].author,
+                                                      style: TextStyle(
+                                                        fontSize: 18.0,
+                                                        color: Colors.cyan[900],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
                                         Center(
                                           child: Text(
                                             userPosts[index].title,
@@ -266,6 +307,28 @@ class _UserProfileState extends State<UserProfileScreen> {
                                         Divider(
                                             height: 30.0,
                                             color: Colors.orangeAccent),
+                                        userPosts[index].stars == null
+                                            ? SizedBox(
+                                                height: 1,
+                                              )
+                                            : Container(
+                                                alignment: Alignment.topCenter,
+                                                child: SmoothStarRating(
+                                                  allowHalfRating: false,
+                                                  starCount: 5,
+                                                  rating: userPosts[index]
+                                                      .stars
+                                                      .toDouble(),
+                                                  size: 30.0,
+                                                  isReadOnly: true,
+                                                  color: Colors.deepOrange[400],
+                                                  borderColor: Colors.grey,
+                                                  spacing: 0.0,
+                                                ),
+                                              ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
                                         Text(
                                           userPosts[index].body,
                                           style: TextStyle(
@@ -276,19 +339,6 @@ class _UserProfileState extends State<UserProfileScreen> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  userPosts[index].photoURL == null
-                                      ? SizedBox(height: 1)
-                                      : Container(
-                                          margin: EdgeInsets.fromLTRB(
-                                              10.0, 5.0, 10.0, 5.0),
-                                          child: MyImageView.network(
-                                              imageURL:
-                                                  userPosts[index].photoURL,
-                                              context: context),
-                                        ),
                                   SizedBox(
                                     height: 10.0,
                                   ),
