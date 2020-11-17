@@ -39,6 +39,7 @@ dev_dependencies:
   image_picker: ^0.6.7
   cached_network_image: ^2.2.0+1
   file_picker: ^2.0.13
+  smooth_star_rating: ^1.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

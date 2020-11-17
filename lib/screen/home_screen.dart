@@ -326,7 +326,8 @@ class _Controller {
         _state.render(() {});
       } else {
         List<BKBook> bkBooks = await FirebaseController.getBKBooks();
-        Navigator.pushNamed(_state.context, ReviewBookSearchScreen.routeName,
+        await Navigator.pushNamed(
+            _state.context, ReviewBookSearchScreen.routeName,
             arguments: {
               'user': _state.user,
               'bkUser': _state.bkUser,
@@ -334,6 +335,7 @@ class _Controller {
               'homeFeed': _state.homeFeed,
               'bkBooks': bkBooks,
             });
+        _state.render(() {});
       }
     } catch (e) {}
   }
