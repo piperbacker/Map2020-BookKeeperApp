@@ -1,5 +1,7 @@
+import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/screen/addbook_screen.dart';
+import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -88,19 +90,30 @@ class _ManageStoreState extends State<ManageStoreScreen> {
                         SizedBox(
                           height: 10.0,
                         ),
-                        ButtonTheme(
-                          height: 40.0,
-                          child: RaisedButton(
-                            color: Colors.orangeAccent,
-                            child: Text(
-                              'Update',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.white,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ButtonTheme(
+                              height: 40.0,
+                              child: RaisedButton(
+                                color: Colors.orangeAccent,
+                                child: Text(
+                                  'Update',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () => con.updateBook(index),
                               ),
                             ),
-                            onPressed: () => con.updateBook(index),
-                          ),
+                            IconButton(
+                              onPressed: () => con.delete(index),
+                              color: Colors.black87,
+                              icon: Icon(Icons.delete),
+                              iconSize: 30.0,
+                            ),
+                          ],
                         )
                       ],
                     ),
@@ -129,5 +142,21 @@ class _Controller {
         arguments: {'user': _state.user, 'bkBook': _state.bkBooks[index]});
 
     _state.render(() {});
+  }
+
+  void delete(int index) async {
+    try {
+      BKBook bkBook = _state.bkBooks[index];
+      await FirebaseController.deleteBook(bkBook);
+      _state.render(() {
+        _state.bkBooks.removeAt(index);
+      });
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Delete Book Error',
+        content: e.message ?? e.toString(),
+      );
+    }
   }
 }

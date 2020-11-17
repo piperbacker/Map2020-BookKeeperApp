@@ -37,62 +37,66 @@ class _AdminHomeState extends State<AdminHomeScreen> {
     user ??= args['user'];
     bkUser ??= args['bkUser'];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Admin Home'),
-      ),
-      body: ListView(
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.book),
-            title: Text(
-              'Manage Book Store',
-              style: TextStyle(
-                fontSize: 23.0,
-              ),
-            ),
-            onTap: con.manageBookStore,
-          ),
-          Divider(height: 10.0, thickness: 2.0, color: Colors.orange[50]),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text(
-              'Create New User Account',
-              style: TextStyle(
-                fontSize: 23.0,
-              ),
-            ),
-            onTap: con.createNewUser,
-          ),
-          Divider(height: 10.0, thickness: 2.0, color: Colors.orange[50]),
-          ListTile(
-            leading: Icon(Icons.lock),
-            title: Text(
-              'Change Password',
-              style: TextStyle(
-                fontSize: 23.0,
-              ),
-            ),
-            onTap: con.changePassword,
-          ),
-          Divider(height: 10.0, thickness: 2.0, color: Colors.orange[50]),
-          SizedBox(
-            height: 40.0,
-          ),
-          Center(
-            child: FlatButton(
-              onPressed: con.signOut,
-              child: Text(
-                'Sign Out',
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Admin Home'),
+          automaticallyImplyLeading: false,
+        ),
+        body: ListView(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.book),
+              title: Text(
+                'Manage Book Store',
                 style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.cyan[900],
-                  decoration: TextDecoration.underline,
+                  fontSize: 23.0,
+                ),
+              ),
+              onTap: con.manageBookStore,
+            ),
+            Divider(height: 10.0, thickness: 2.0, color: Colors.orange[50]),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text(
+                'Create New User Account',
+                style: TextStyle(
+                  fontSize: 23.0,
+                ),
+              ),
+              onTap: con.createNewUser,
+            ),
+            Divider(height: 10.0, thickness: 2.0, color: Colors.orange[50]),
+            ListTile(
+              leading: Icon(Icons.lock),
+              title: Text(
+                'Change Password',
+                style: TextStyle(
+                  fontSize: 23.0,
+                ),
+              ),
+              onTap: con.changePassword,
+            ),
+            Divider(height: 10.0, thickness: 2.0, color: Colors.orange[50]),
+            SizedBox(
+              height: 40.0,
+            ),
+            Center(
+              child: FlatButton(
+                onPressed: con.signOut,
+                child: Text(
+                  'Sign Out',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.cyan[900],
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -189,13 +189,13 @@ class _Controller {
     }
 
     if (bkUser.userTag == 'author') {
-      /*Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
+      Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
           arguments: {
             'user': user,
             'bkUser': bkUser,
             'bkPosts': bkPosts,
             'homeFeed': homeFeed,
-          });*/
+          });
     }
   }
 

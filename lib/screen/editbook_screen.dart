@@ -2,6 +2,7 @@ import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
+import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
@@ -67,7 +68,7 @@ class _EditBookState extends State<EditBookScreen> {
                     padding: EdgeInsets.fromLTRB(20.0, 5.0, 15.0, 5.0),
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Upload Book Cover",
+                      "Update Book Cover",
                       style: TextStyle(fontSize: 20.0, color: Colors.cyan[900]),
                     ),
                   ),
@@ -75,10 +76,11 @@ class _EditBookState extends State<EditBookScreen> {
                     height: 10.0,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Container(
-                        margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
-                        child: Image.file(con.imageFile, fit: BoxFit.fill)),
+                    width: 300.0,
+                    child: con.imageFile == null
+                        ? MyImageView.network(
+                            imageURL: bkBook.photoURL, context: context)
+                        : Image.file(con.imageFile, fit: BoxFit.fill),
                   ),
                   SizedBox(
                     height: 10.0,
@@ -118,15 +120,15 @@ class _EditBookState extends State<EditBookScreen> {
                     padding: EdgeInsets.fromLTRB(20.0, 5.0, 15.0, 5.0),
                     alignment: Alignment.topLeft,
                     child: Text(
-                      "Upload Book File",
+                      "Update Book File",
                       style: TextStyle(fontSize: 20.0, color: Colors.cyan[900]),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  con.fileName == null
-                      ? SizedBox(height: 1)
+                  /*con.fileName == null
+                      ? con.fileName = bkBook.bookFile.path.split('/').last;
                       : Container(
                           margin: EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
                           child: Text(con.fileName,
@@ -134,10 +136,9 @@ class _EditBookState extends State<EditBookScreen> {
                                 fontSize: 20.0,
                               )),
                         ),
-                  //Image.file(con.imageFile, fit: BoxFit.fill)),
                   SizedBox(
                     height: 10.0,
-                  ),
+                  ),*/
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -177,6 +178,7 @@ class _EditBookState extends State<EditBookScreen> {
                       ),
                       style: TextStyle(fontSize: 20.0, color: Colors.cyan[900]),
                       autocorrect: true,
+                      initialValue: bkBook.title,
                       validator: con.validatorTitle,
                       onSaved: con.onSavedTitle,
                     ),
@@ -192,6 +194,7 @@ class _EditBookState extends State<EditBookScreen> {
                       ),
                       style: TextStyle(fontSize: 20.0, color: Colors.cyan[900]),
                       autocorrect: true,
+                      initialValue: bkBook.author,
                       validator: con.validatorAuthor,
                       onSaved: con.onSavedAuthor,
                     ),
@@ -207,6 +210,7 @@ class _EditBookState extends State<EditBookScreen> {
                       ),
                       style: TextStyle(fontSize: 20.0, color: Colors.cyan[900]),
                       keyboardType: TextInputType.multiline,
+                      initialValue: bkBook.description,
                       maxLines: 6,
                       autocorrect: true,
                       validator: con.validatorDesc,

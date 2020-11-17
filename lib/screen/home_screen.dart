@@ -3,8 +3,8 @@ import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/librar_screen.dart';
-import 'package:bookkeeperapp/screen/postreview_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
+import 'package:bookkeeperapp/screen/reviewbooksearch_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/userprofile_screen.dart';
 import 'package:bookkeeperapp/screen/usersearch_screen.dart';
@@ -54,7 +54,6 @@ class _HomeState extends State<HomeScreen> {
           title: Text('Home'),
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            Container(),
             Container(
               margin: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
               width: 170.0,
@@ -326,12 +325,14 @@ class _Controller {
             });
         _state.render(() {});
       } else {
-        Navigator.pushNamed(_state.context, PostReviewScreen.routeName,
+        List<BKBook> bkBooks = await FirebaseController.getBKBooks();
+        Navigator.pushNamed(_state.context, ReviewBookSearchScreen.routeName,
             arguments: {
               'user': _state.user,
               'bkUser': _state.bkUser,
               'bkPosts': _state.bkPosts,
               'homeFeed': _state.homeFeed,
+              'bkBooks': bkBooks,
             });
       }
     } catch (e) {}
@@ -357,7 +358,6 @@ class _Controller {
     } else {
       Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
           arguments: {
-            'user': _state.user,
             'bkUser': _state.bkUser,
             'userPosts': userPosts,
             'userProfile': userProfile,

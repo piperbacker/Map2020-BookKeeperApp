@@ -280,4 +280,30 @@ class FirebaseController {
         .doc(bkBook.docId)
         .set(bkBook.serialize());
   }
+
+  static Future<void> deleteBook(BKBook bkBook) async {
+    await FirebaseFirestore.instance
+        .collection(BKBook.COLLECTION)
+        .doc(bkBook.docId)
+        .delete();
+
+    await FirebaseStorage.instance.ref().child(bkBook.photoPath).delete();
+    await FirebaseStorage.instance.ref().child(bkBook.filePath).delete();
+  }
+
+  static Future<List<BKBook>> searchBooks(String title) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKBook.COLLECTION)
+        .where(BKBook.TITLE, isEqualTo: title)
+        .orderBy(BKBook.PUB_DATE, descending: true)
+        .get();
+
+    var result = <BKBook>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        result.add(BKBook.deserialize(doc.data(), doc.id));
+      }
+    }
+    return result;
+  }
 }
