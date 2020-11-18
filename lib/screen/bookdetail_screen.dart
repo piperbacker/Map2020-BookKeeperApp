@@ -44,80 +44,76 @@ class _BookDetailState extends State<BookDetailScreen> {
         title: Text('${bkBook.title}'),
       ),
       body: SingleChildScrollView(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: 150.0,
-                height: 225.0,
-                child: MyImageView.network(
-                    imageURL: bkBook.photoURL, context: context),
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: 150.0,
+              height: 225.0,
+              child: MyImageView.network(
+                  imageURL: bkBook.photoURL, context: context),
+            ),
+            Text(
+              bkBook.title,
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.black,
               ),
-              Text(
-                bkBook.title,
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.black,
-                ),
+            ),
+            Text(
+              bkBook.author,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.cyan[900],
               ),
-              Text(
-                bkBook.author,
+            ),
+            Divider(height: 50.0, color: Colors.orangeAccent),
+            Container(
+              margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+              child: Text(
+                bkBook.description,
                 style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.cyan[900],
                 ),
               ),
-              Divider(height: 50.0, color: Colors.orangeAccent),
-              Container(
-                margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                alignment: Alignment.topCenter,
-                width: 300.0,
-                height: 100.0,
-                child: Text(bkBook.description,
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            reviews.length == 0
+                ? Text(
+                    "This book has not been reviewed yet",
                     style: TextStyle(
                       fontSize: 18.0,
-                      color: Colors.cyan[900],
                     ),
-                    overflow: TextOverflow.visible),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              reviews.length == 0
-                  ? Text(
-                      "This book has not been reviewed yet",
+                  )
+                : FlatButton(
+                    onPressed: () => con.showReviews(),
+                    child: Text(
+                      'Reviews (${reviews.length})',
                       style: TextStyle(
-                        fontSize: 18.0,
+                        fontSize: 20.0,
                       ),
-                    )
-                  : FlatButton(
-                      onPressed: () => con.showReviews(),
-                      child: Text(
-                        'Reviews (${reviews.length})',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                        ),
-                      ),
-                    ),
-              SizedBox(
-                height: 5.0,
-              ),
-              ButtonTheme(
-                height: 50.0,
-                child: RaisedButton(
-                  color: Colors.orangeAccent,
-                  child: Text(
-                    'Download',
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      color: Colors.white,
                     ),
                   ),
-                  onPressed: () => con.download,
+            SizedBox(
+              height: 5.0,
+            ),
+            ButtonTheme(
+              height: 50.0,
+              child: RaisedButton(
+                color: Colors.orangeAccent,
+                child: Text(
+                  'Download',
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    color: Colors.white,
+                  ),
                 ),
+                onPressed: () => con.download,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
