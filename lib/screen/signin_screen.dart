@@ -7,6 +7,7 @@ import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'authorhome_screen.dart';
 import 'home_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -189,7 +190,7 @@ class _Controller {
     }
 
     if (bkUser.userTag == 'author') {
-      Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
+      Navigator.pushReplacementNamed(_state.context, AuthorHomeScreen.routeName,
           arguments: {
             'user': user,
             'bkUser': bkUser,

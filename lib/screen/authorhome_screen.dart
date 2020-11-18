@@ -14,16 +14,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const routeName = '/signInScreen/homeScreen';
+class AuthorHomeScreen extends StatefulWidget {
+  static const routeName = '/signInScreen/authorHomeScreen';
 
   @override
   State<StatefulWidget> createState() {
-    return _HomeState();
+    return _AuthorHomeState();
   }
 }
 
-class _HomeState extends State<HomeScreen> {
+class _AuthorHomeState extends State<AuthorHomeScreen> {
   User user;
   BKUser bkUser;
   List<BKPost> bkPosts;
@@ -52,10 +52,10 @@ class _HomeState extends State<HomeScreen> {
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Home'),
+          title: Text('Author Home'),
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            Container(
+            /*Container(
               margin: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
               width: 170.0,
               child: Form(
@@ -94,6 +94,10 @@ class _HomeState extends State<HomeScreen> {
                   ),
                 ),
               ],
+            ),*/
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: con.postUpdate,
             ),
           ],
         ),
@@ -296,14 +300,14 @@ class _HomeState extends State<HomeScreen> {
               title: Text('Home'),
               icon: Icon(Icons.home),
             ),
-            BottomNavigationBarItem(
+            /*BottomNavigationBarItem(
               title: Text('Library'),
               icon: Icon(Icons.book),
             ),
             BottomNavigationBarItem(
               title: Text('Store'),
               icon: Icon(Icons.shopping_cart),
-            ),
+            ),*/
             BottomNavigationBarItem(
               title: Text('Profile'),
               icon: Icon(Icons.person),
@@ -316,7 +320,7 @@ class _HomeState extends State<HomeScreen> {
 }
 
 class _Controller {
-  _HomeState _state;
+  _AuthorHomeState _state;
   _Controller(this._state);
   String searchKey;
   //List<BKPost> homeFeed;
@@ -335,7 +339,7 @@ class _Controller {
     _state.render(() {});
   }
 
-  void onSavedSearchKey(String value) {
+  /*void onSavedSearchKey(String value) {
     searchKey = value;
   }
 
@@ -359,33 +363,17 @@ class _Controller {
         FocusScope.of(_state.context).requestFocus(FocusNode());
       });
     }
-  }
+  }*/
 
-  void newPost(String src) async {
-    try {
-      if (src == 'Post Update') {
-        await Navigator.pushNamed(_state.context, PostUpdateScreen.routeName,
-            arguments: {
-              'user': _state.user,
-              'bkUser': _state.bkUser,
-              'bkPosts': _state.bkPosts,
-              'homeFeed': _state.homeFeed,
-            });
-        _state.render(() {});
-      } else {
-        List<BKBook> bkBooks = await FirebaseController.getBKBooks();
-        await Navigator.pushNamed(
-            _state.context, ReviewBookSearchScreen.routeName,
-            arguments: {
-              'user': _state.user,
-              'bkUser': _state.bkUser,
-              'bkPosts': _state.bkPosts,
-              'homeFeed': _state.homeFeed,
-              'bkBooks': bkBooks,
-            });
-        _state.render(() {});
-      }
-    } catch (e) {}
+  void postUpdate() async {
+    await Navigator.pushNamed(_state.context, PostUpdateScreen.routeName,
+        arguments: {
+          'user': _state.user,
+          'bkUser': _state.bkUser,
+          'bkPosts': _state.bkPosts,
+          'homeFeed': _state.homeFeed,
+        });
+    _state.render(() {});
   }
 
   void goToProfile(int index) async {
@@ -445,7 +433,17 @@ class _Controller {
     });
 
     if (_state.currentIndex == 1) {
-      Navigator.pushNamed(_state.context, LibraryScreen.routeName, arguments: {
+      await Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkPosts': _state.bkPosts,
+          });
+      _state.render(() {});
+    }
+  }
+
+  /*Navigator.pushNamed(_state.context, LibraryScreen.routeName, arguments: {
         'user': _state.user,
         'bkUser': _state.bkUser,
         //'bkBooks': bkBooks,
@@ -467,5 +465,5 @@ class _Controller {
           });
       _state.render(() {});
     }
-  }
+  }*/
 }

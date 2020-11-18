@@ -1,11 +1,12 @@
 import 'package:bookkeeperapp/screen/addbook_screen.dart';
 import 'package:bookkeeperapp/screen/adminhome_screen.dart';
+import 'package:bookkeeperapp/screen/authorhome_screen.dart';
 import 'package:bookkeeperapp/screen/bookdetail_screen.dart';
 import 'package:bookkeeperapp/screen/changepassword_screen.dart';
 import 'package:bookkeeperapp/screen/createnewaccount_screen.dart';
 import 'package:bookkeeperapp/screen/editbook_screen.dart';
 import 'package:bookkeeperapp/screen/editprofile_screen.dart';
-import 'package:bookkeeperapp/screen/librar_screen.dart';
+import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/managestore_screen.dart';
 import 'package:bookkeeperapp/screen/myfollowers_screen.dart';
 import 'package:bookkeeperapp/screen/myfollowing_screen.dart';
@@ -15,6 +16,7 @@ import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/reviewbooksearch_screen.dart';
 import 'package:bookkeeperapp/screen/settings_screen.dart';
 import 'package:bookkeeperapp/screen/shop_screen.dart';
+import 'package:bookkeeperapp/screen/showreviews_screen.dart';
 import 'package:bookkeeperapp/screen/signin_screen.dart';
 import 'package:bookkeeperapp/screen/signup_screen.dart';
 import 'package:bookkeeperapp/screen/userfollowers_screen.dart';
@@ -70,6 +72,8 @@ class BookKeeperApp extends StatelessWidget {
           ReviewBookSearchScreen.routeName: (context) =>
               ReviewBookSearchScreen(),
           BookDetailScreen.routeName: (context) => BookDetailScreen(),
+          ShowReviewsScreen.routeName: (context) => ShowReviewsScreen(),
+          AuthorHomeScreen.routeName: (context) => AuthorHomeScreen(),
         });
   }
 }
