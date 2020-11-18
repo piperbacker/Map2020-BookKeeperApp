@@ -1,13 +1,8 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
-import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
-import 'package:bookkeeperapp/screen/library_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
-import 'package:bookkeeperapp/screen/reviewbooksearch_screen.dart';
-import 'package:bookkeeperapp/screen/shop_screen.dart';
 import 'package:bookkeeperapp/screen/userprofile_screen.dart';
-import 'package:bookkeeperapp/screen/usersearch_screen.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -55,46 +50,6 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
           title: Text('Author Home'),
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            /*Container(
-              margin: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
-              width: 170.0,
-              child: Form(
-                key: formKey,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Search Users',
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
-                  autocorrect: false,
-                  onSaved: con.onSavedSearchKey,
-                ),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: con.search,
-            ),
-            PopupMenuButton<String>(
-              onSelected: con.newPost,
-              itemBuilder: (context) => <PopupMenuEntry<String>>[
-                PopupMenuItem(
-                  value: 'Post Update',
-                  child: Row(
-                    children: <Widget>[Icon(Icons.edit), Text(' Post Update')],
-                  ),
-                ),
-                PopupMenuItem(
-                  value: 'Post Review',
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.collections_bookmark),
-                      Text(' Post Review')
-                    ],
-                  ),
-                ),
-              ],
-            ),*/
             IconButton(
               icon: Icon(Icons.edit),
               onPressed: con.postUpdate,
@@ -132,15 +87,6 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
                                     EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                                 child: Row(
                                   children: [
-                                    /*Container(
-                                    height: 60,
-                                    width: 60,
-                                    child: ClipOval(
-                                      child: MyImageView.network(
-                                          imageURL: homeFeed[index].postedBy,
-                                          context: context),
-                                    ),
-                                  ),*/
                                     SizedBox(
                                       width: 10.0,
                                     ),
@@ -300,14 +246,6 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
               title: Text('Home'),
               icon: Icon(Icons.home),
             ),
-            /*BottomNavigationBarItem(
-              title: Text('Library'),
-              icon: Icon(Icons.book),
-            ),
-            BottomNavigationBarItem(
-              title: Text('Store'),
-              icon: Icon(Icons.shopping_cart),
-            ),*/
             BottomNavigationBarItem(
               title: Text('Profile'),
               icon: Icon(Icons.person),
@@ -323,7 +261,6 @@ class _Controller {
   _AuthorHomeState _state;
   _Controller(this._state);
   String searchKey;
-  //List<BKPost> homeFeed;
 
   Future<void> refreshHome() async {
     Future.delayed(Duration(seconds: 3));
@@ -338,32 +275,6 @@ class _Controller {
 
     _state.render(() {});
   }
-
-  /*void onSavedSearchKey(String value) {
-    searchKey = value;
-  }
-
-  void search() async {
-    _state.formKey.currentState.save();
-
-    var results;
-    if (searchKey == null || searchKey.trim().isEmpty) {
-      return;
-    } else {
-      results = await FirebaseController.searchUsers(displayName: searchKey);
-      //print(results);
-
-      await Navigator.pushNamed(_state.context, UserSearchScreen.routeName,
-          arguments: {
-            'user': _state.user,
-            'bkUser': _state.bkUser,
-            'results': results,
-          });
-      _state.render(() {
-        FocusScope.of(_state.context).requestFocus(FocusNode());
-      });
-    }
-  }*/
 
   void postUpdate() async {
     await Navigator.pushNamed(_state.context, PostUpdateScreen.routeName,
@@ -442,28 +353,4 @@ class _Controller {
       _state.render(() {});
     }
   }
-
-  /*Navigator.pushNamed(_state.context, LibraryScreen.routeName, arguments: {
-        'user': _state.user,
-        'bkUser': _state.bkUser,
-        //'bkBooks': bkBooks,
-      });
-    } else if (_state.currentIndex == 2) {
-      // get bkBooks
-      List<BKBook> bkBooks = await FirebaseController.getBKBooks();
-      Navigator.pushNamed(_state.context, ShopScreen.routeName, arguments: {
-        'user': _state.user,
-        'bkUser': _state.bkUser,
-        'bkBooks': bkBooks,
-      });
-    } else if (_state.currentIndex == 3) {
-      await Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
-          arguments: {
-            'user': _state.user,
-            'bkUser': _state.bkUser,
-            'bkPosts': _state.bkPosts,
-          });
-      _state.render(() {});
-    }
-  }*/
 }
