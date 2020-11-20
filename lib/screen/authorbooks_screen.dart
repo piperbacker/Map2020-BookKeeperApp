@@ -5,7 +5,6 @@ import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'authorreviews_screen.dart';
 import 'showreviews_screen.dart';
 import 'views/myimageview.dart';
 
@@ -116,6 +115,7 @@ class _Controller {
 
     Navigator.pushNamed(_state.context, ShowReviewsScreen.routeName,
         arguments: {
+          'user': _state.user,
           'bkUser': _state.bkUser,
           'bkBook': _state.bkBooks[index],
           'reviews': reviews,

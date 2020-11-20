@@ -1,9 +1,13 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/userprofile_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'myprofile_screen.dart';
 
 class ShowReviewsScreen extends StatefulWidget {
   static const routeName = '/bookDetailScreen/showReviewsScreen';
@@ -15,6 +19,7 @@ class ShowReviewsScreen extends StatefulWidget {
 }
 
 class _ShowReviewsState extends State<ShowReviewsScreen> {
+  User user;
   BKUser bkUser;
   List<BKPost> reviews;
   _Controller con;
@@ -30,6 +35,7 @@ class _ShowReviewsState extends State<ShowReviewsScreen> {
   @override
   Widget build(BuildContext context) {
     Map args = ModalRoute.of(context).settings.arguments;
+    user ??= args['user'];
     bkUser ??= args['bkUser'];
     reviews ??= args['reviews'];
 
@@ -72,11 +78,14 @@ class _ShowReviewsState extends State<ShowReviewsScreen> {
                                   SizedBox(
                                     width: 10.0,
                                   ),
-                                  Text(
-                                    reviews[index].displayName,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.cyan[900],
+                                  FlatButton(
+                                    onPressed: () => con.goToProfile(index),
+                                    child: Text(
+                                      reviews[index].displayName,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.cyan[900],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -219,6 +228,33 @@ class _Controller {
         title: 'Unlike photo memo error in saving',
         content: e.message ?? e.toString(),
       );
+    }
+  }
+
+  void goToProfile(int index) async {
+    // get user's info
+    List<BKUser> bkUserList =
+        await FirebaseController.getBKUser(_state.reviews[index].postedBy);
+    BKUser userProfile = bkUserList[0];
+
+    // get list of user's posts
+    List<BKPost> userPosts =
+        await FirebaseController.getBKPosts(_state.reviews[index].postedBy);
+
+    if (_state.reviews[index].postedBy == _state.bkUser.email) {
+      Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkPosts': userPosts,
+          });
+    } else {
+      Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
+          arguments: {
+            'bkUser': _state.bkUser,
+            'userPosts': userPosts,
+            'userProfile': userProfile,
+          });
     }
   }
 }

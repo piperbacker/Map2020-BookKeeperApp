@@ -123,26 +123,28 @@ class _MyProfileState extends State<MyProfileScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Column(
-                            children: [
-                              FlatButton(
-                                onPressed: con.following,
-                                child: Text(
-                                  '${bkUser.following.length}',
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.cyan[900],
-                                  ),
+                          bkUser.userTag == 'author'
+                              ? SizedBox(height: 1)
+                              : Column(
+                                  children: [
+                                    FlatButton(
+                                      onPressed: con.following,
+                                      child: Text(
+                                        '${bkUser.following.length}',
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          color: Colors.cyan[900],
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "Following",
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Text(
-                                "Following",
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ],
-                          ),
                           Column(
                             children: [
                               FlatButton(
@@ -360,9 +362,6 @@ class _Controller {
     List<BKUser> following =
         await FirebaseController.getFollowing(_state.bkUser.email);
 
-    //print('FOLLOWING LIST ========');
-    //print(following);
-
     await Navigator.pushNamed(_state.context, MyFollowingScreen.routeName,
         arguments: {
           'user': _state.user,
@@ -375,9 +374,6 @@ class _Controller {
   void followers() async {
     List<BKUser> followers =
         await FirebaseController.getFollowers(_state.bkUser.email);
-
-    //print('FOLLOWERS LIST ========');
-    //print(followers);
 
     await Navigator.pushNamed(_state.context, MyFollowersScreen.routeName,
         arguments: {

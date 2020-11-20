@@ -8,8 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'myprofile_screen.dart';
-
 class EditProfileScreen extends StatefulWidget {
   static const routeName = '/settingsScreen/editProfileScreen';
 
@@ -127,31 +125,37 @@ class _EditProfileState extends State<EditProfileScreen> {
               SizedBox(
                 height: 40.0,
               ),
-              Text(
-                'Change Display Name',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.cyan[900],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
-                child: TextFormField(
-                  style: TextStyle(
-                    fontSize: 20.0,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Display Name',
-                  ),
-                  autocorrect: false,
-                  initialValue: bkUser.displayName ?? 'N/A',
-                  validator: con.validatorDisplayName,
-                  onSaved: con.onSavedDisplayName,
-                ),
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
+              bkUser.userTag == 'author'
+                  ? SizedBox(height: 1)
+                  : Column(
+                      children: [
+                        Text(
+                          'Change Display Name',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.cyan[900],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                          child: TextFormField(
+                            style: TextStyle(
+                              fontSize: 20.0,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: 'Display Name',
+                            ),
+                            autocorrect: false,
+                            initialValue: bkUser.displayName ?? 'N/A',
+                            validator: con.validatorDisplayName,
+                            onSaved: con.onSavedDisplayName,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 40.0,
+                        ),
+                      ],
+                    ),
               Text(
                 'Edit Bio',
                 style: TextStyle(
@@ -253,7 +257,11 @@ class _Controller {
   }
 
   String validatorDisplayName(String value) {
-    if (value == null || value.length < 2 || !validCharacters.hasMatch(value)) {
+    if (_state.bkUser.userTag == 'author') {
+      return null;
+    } else if (value == null ||
+        value.length < 2 ||
+        !validCharacters.hasMatch(value)) {
       return ('Min 2 chars, can only contain alpahabet symbols and spaces');
     } else {
       return null;
@@ -261,8 +269,12 @@ class _Controller {
   }
 
   void onSavedDisplayName(String value) {
-    this.displayName = value;
-    _state.bkUser.displayName = value;
+    if (_state.bkUser.userTag == 'author') {
+      return null;
+    } else {
+      this.displayName = value;
+      _state.bkUser.displayName = value;
+    }
   }
 
   String validatorBio(String value) {

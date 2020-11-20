@@ -129,6 +129,7 @@ class _Controller {
   void showReviews() {
     Navigator.pushNamed(_state.context, ShowReviewsScreen.routeName,
         arguments: {
+          'user': _state.user,
           'bkUser': _state.bkUser,
           'reviews': _state.reviews,
         });
