@@ -62,6 +62,7 @@ class _MyFollowingState extends State<MyFollowingScreen> {
                     child: Card(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Container(
                             margin: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
@@ -89,16 +90,28 @@ class _MyFollowingState extends State<MyFollowingScreen> {
                                     ),
                                   ),
                                 ),
+                                following[index].userTag != 'author'
+                                    ? SizedBox(
+                                        height: 1,
+                                      )
+                                    : Icon(
+                                        Icons.check_circle,
+                                        color: Colors.amber[300],
+                                        size: 24.0,
+                                      ),
+                                SizedBox(width: 5.0),
                                 following[index].email == bkUser.email
                                     ? SizedBox(
                                         height: 1.0,
                                       )
                                     : Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: <Widget>[
                                           !bkUser.following.contains(
                                                   following[index].email)
                                               ? ButtonTheme(
-                                                  minWidth: 120.0,
+                                                  minWidth: 100.0,
                                                   height: 40.0,
                                                   child: RaisedButton(
                                                       color: Colors.teal[400],
@@ -113,7 +126,7 @@ class _MyFollowingState extends State<MyFollowingScreen> {
                                                           con.follow(index)),
                                                 )
                                               : ButtonTheme(
-                                                  minWidth: 120.0,
+                                                  minWidth: 100.0,
                                                   height: 40.0,
                                                   child: RaisedButton(
                                                       color:

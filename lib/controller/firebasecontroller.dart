@@ -338,4 +338,13 @@ class FirebaseController {
     }
     return result;
   }
+
+  static Future<void> updateRecd(BKUser bkUser, BKUser userProfile) async {
+    if (bkUser.email != userProfile.email) {
+      await FirebaseFirestore.instance
+          .collection(BKUser.COLLECTION)
+          .doc(bkUser.docId)
+          .update({"following": bkUser.following});
+    }
+  }
 }

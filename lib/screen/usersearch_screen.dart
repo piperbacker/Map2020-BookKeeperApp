@@ -90,6 +90,16 @@ class _UserSearchState extends State<UserSearchScreen> {
                                     ),
                                   ),
                                 ),
+                                results[index].userTag != 'author'
+                                    ? SizedBox(
+                                        height: 1,
+                                      )
+                                    : Icon(
+                                        Icons.check_circle,
+                                        color: Colors.amber[300],
+                                        size: 24.0,
+                                      ),
+                                SizedBox(width: 5.0),
                                 results[index].email == bkUser.email
                                     ? SizedBox(
                                         height: 1.0,

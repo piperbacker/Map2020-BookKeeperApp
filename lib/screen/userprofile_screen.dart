@@ -161,8 +161,44 @@ class _UserProfileState extends State<UserProfileScreen> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      bkUser.userTag == 'author'
-                          ? SizedBox(height: 1)
+                      bkUser.userTag == 'author' &&
+                              userProfile.userTag == 'author'
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                !bkUser.following.contains(userProfile.email)
+                                    ? ButtonTheme(
+                                        minWidth: 120.0,
+                                        height: 40.0,
+                                        child: RaisedButton(
+                                          color: Colors.teal[400],
+                                          child: Text(
+                                            'Add to Reccommended',
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          onPressed: con.addToRecd,
+                                        ),
+                                      )
+                                    : ButtonTheme(
+                                        minWidth: 120.0,
+                                        height: 40.0,
+                                        child: RaisedButton(
+                                          color: Colors.orangeAccent,
+                                          child: Text(
+                                            'Remove from Reccommended',
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          onPressed: con.removeFromRecd,
+                                        ),
+                                      )
+                              ],
+                            )
                           : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -393,7 +429,6 @@ class _UserProfileState extends State<UserProfileScreen> {
                                             )
                                           : Text(
                                               '${userPosts[index].likedBy.length} likes',
-                                              //overflow: TextOverflow.visible,
                                               style: TextStyle(
                                                 fontSize: 16.0,
                                               ),
@@ -473,6 +508,26 @@ class _Controller {
     _state.render(() {});
   }
 
+  void addToRecd() async {
+    _state.render(() {
+      if (!_state.bkUser.following.contains(_state.userProfile.email)) {
+        _state.bkUser.following.add(_state.userProfile.email);
+      }
+    });
+
+    await FirebaseController.updateRecd(_state.bkUser, _state.userProfile);
+  }
+
+  void removeFromRecd() async {
+    _state.render(() {
+      if (_state.bkUser.following.contains(_state.userProfile.email)) {
+        _state.bkUser.following.remove(_state.userProfile.email);
+      }
+    });
+
+    await FirebaseController.updateRecd(_state.bkUser, _state.userProfile);
+  }
+
   void followers() async {
     List<BKUser> followers =
         await FirebaseController.getFollowers(_state.userProfile.email);
@@ -523,5 +578,5 @@ class _Controller {
     }
   }
 
-  void askAuthorQuestion () {}
+  void askAuthorQuestion() {}
 }

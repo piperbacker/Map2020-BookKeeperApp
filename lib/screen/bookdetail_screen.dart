@@ -62,14 +62,11 @@ class _BookDetailState extends State<BookDetailScreen> {
                 color: Colors.black,
               ),
             ),
-            FlatButton(
-              onPressed: con.goToProfile,
-              child: Text(
-                bkBook.author,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.cyan[900],
-                ),
+            Text(
+              bkBook.author,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.cyan[900],
               ),
             ),
             Divider(height: 50.0, color: Colors.orangeAccent),
@@ -141,7 +138,7 @@ class _Controller {
         });
   }
 
-  void goToProfile() async {
+  /*void goToProfile() async {
     // get user's info
     List<BKUser> bkUserList =
         await FirebaseController.getBKUser(_state.bkBook.author);
@@ -166,5 +163,5 @@ class _Controller {
             'userProfile': userProfile,
           });
     }
-  }
+  }*/
 }

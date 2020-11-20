@@ -91,12 +91,24 @@ class _UserFollowingState extends State<UserFollowingScreen> {
                                     ),
                                   ),
                                 ),
+                                following[index].userTag != 'author'
+                                    ? SizedBox(
+                                        height: 1,
+                                      )
+                                    : Icon(
+                                        Icons.check_circle,
+                                        color: Colors.amber[300],
+                                        size: 24.0,
+                                      ),
+                                SizedBox(width: 5.0),
                                 following[index].email == bkUser.email ||
                                         bkUser.userTag == 'author'
                                     ? SizedBox(
                                         height: 1.0,
                                       )
                                     : Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: <Widget>[
                                           !bkUser.following.contains(
                                                   following[index].email)
