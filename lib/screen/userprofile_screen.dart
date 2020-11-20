@@ -76,12 +76,26 @@ class _UserProfileState extends State<UserProfileScreen> {
                       SizedBox(
                         height: 5.0,
                       ),
-                      Text(
-                        userProfile.displayName,
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          color: Colors.cyan[900],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            userProfile.displayName,
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.cyan[900],
+                            ),
+                          ),
+                          userProfile.userTag != 'author'
+                              ? SizedBox(
+                                  height: 1,
+                                )
+                              : Icon(
+                                  Icons.check_circle,
+                                  color: Colors.amber[300],
+                                  size: 24.0,
+                                ),
+                        ],
                       ),
                       SizedBox(
                         height: 5.0,
@@ -99,94 +113,110 @@ class _UserProfileState extends State<UserProfileScreen> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          !bkUser.following.contains(userProfile.email)
-                              ? ButtonTheme(
-                                  minWidth: 120.0,
-                                  height: 40.0,
-                                  child: RaisedButton(
-                                    color: Colors.teal[400],
-                                    child: Text(
-                                      'Follow',
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.white,
+                        children: [
+                          userProfile.userTag == 'author'
+                              ? SizedBox(height: 1)
+                              : Column(
+                                  children: [
+                                    FlatButton(
+                                      onPressed: con.following,
+                                      child: Text(
+                                        '${userProfile.following.length}',
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          color: Colors.cyan[900],
+                                        ),
                                       ),
                                     ),
-                                    onPressed: con.follow,
-                                  ),
-                                )
-                              : ButtonTheme(
-                                  minWidth: 120.0,
-                                  height: 40.0,
-                                  child: RaisedButton(
-                                    color: Colors.orangeAccent,
-                                    child: Text(
-                                      'Unfollow',
+                                    Text(
+                                      "Following",
                                       style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.white,
+                                        fontSize: 16.0,
                                       ),
                                     ),
-                                    onPressed: con.unfollow,
+                                  ],
+                                ),
+                          Column(
+                            children: [
+                              FlatButton(
+                                onPressed: con.followers,
+                                child: Text(
+                                  '${userProfile.followers.length}',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.cyan[900],
                                   ),
                                 ),
+                              ),
+                              Text(
+                                "Followers",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FlatButton(
-                              onPressed: con.following,
-                              child: Text(
-                                '${userProfile.following.length}',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.cyan[900],
-                                ),
-                              ),
-                            ),
-                            FlatButton(
-                              onPressed: con.followers,
-                              child: Text(
-                                '${userProfile.followers.length}',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.cyan[900],
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                          ],
-                        ),
+                      SizedBox(
+                        height: 10.0,
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Following",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                //color: Colors.cyan[900],
-                              ),
+                      bkUser.userTag == 'author'
+                          ? SizedBox(height: 1)
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                !bkUser.following.contains(userProfile.email)
+                                    ? ButtonTheme(
+                                        minWidth: 120.0,
+                                        height: 40.0,
+                                        child: RaisedButton(
+                                          color: Colors.teal[400],
+                                          child: Text(
+                                            'Follow',
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          onPressed: con.follow,
+                                        ),
+                                      )
+                                    : ButtonTheme(
+                                        minWidth: 120.0,
+                                        height: 40.0,
+                                        child: RaisedButton(
+                                          color: Colors.orangeAccent,
+                                          child: Text(
+                                            'Unfollow',
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          onPressed: con.unfollow,
+                                        ),
+                                      ),
+                                SizedBox(width: 10.0),
+                                userProfile.userTag != 'author'
+                                    ? SizedBox(height: 1)
+                                    : ButtonTheme(
+                                        minWidth: 120.0,
+                                        height: 40.0,
+                                        child: RaisedButton(
+                                          color: Colors.deepOrange,
+                                          child: Text(
+                                            'Ask A Question',
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          onPressed: con.askAuthorQuestion,
+                                        ),
+                                      ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 8.0,
-                            ),
-                            Text(
-                              "Followers",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                //color: Colors.cyan[900],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                       Divider(height: 50.0, color: Colors.orangeAccent),
                     ],
                   ),
@@ -492,4 +522,6 @@ class _Controller {
       );
     }
   }
+
+  void askAuthorQuestion () {}
 }

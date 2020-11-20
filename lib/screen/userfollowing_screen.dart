@@ -91,7 +91,8 @@ class _UserFollowingState extends State<UserFollowingScreen> {
                                     ),
                                   ),
                                 ),
-                                following[index].email == bkUser.email
+                                following[index].email == bkUser.email ||
+                                        bkUser.userTag == 'author'
                                     ? SizedBox(
                                         height: 1.0,
                                       )

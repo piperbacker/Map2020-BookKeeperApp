@@ -91,7 +91,8 @@ class _UserFollowersState extends State<UserFollowersScreen> {
                                     ),
                                   ),
                                 ),
-                                followers[index].email == bkUser.email
+                                followers[index].email == bkUser.email ||
+                                        bkUser.userTag == 'author'
                                     ? SizedBox(
                                         height: 1.0,
                                       )

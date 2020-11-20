@@ -3,9 +3,12 @@ import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/showreviews_screen.dart';
+import 'package:bookkeeperapp/screen/userprofile_screen.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'myprofile_screen.dart';
 
 class BookDetailScreen extends StatefulWidget {
   static const routeName = 'home/bookDetailScreen';
@@ -59,11 +62,14 @@ class _BookDetailState extends State<BookDetailScreen> {
                 color: Colors.black,
               ),
             ),
-            Text(
-              bkBook.author,
-              style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.cyan[900],
+            FlatButton(
+              onPressed: con.goToProfile,
+              child: Text(
+                bkBook.author,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: Colors.cyan[900],
+                ),
               ),
             ),
             Divider(height: 50.0, color: Colors.orangeAccent),
@@ -133,5 +139,32 @@ class _Controller {
           'bkUser': _state.bkUser,
           'reviews': _state.reviews,
         });
+  }
+
+  void goToProfile() async {
+    // get user's info
+    List<BKUser> bkUserList =
+        await FirebaseController.getBKUser(_state.bkBook.author);
+    BKUser userProfile = bkUserList[0];
+
+    // get list of user's posts
+    List<BKPost> userPosts =
+        await FirebaseController.getBKPosts(_state.bkBook.author);
+
+    if (_state.bkBook.author == _state.bkUser.email) {
+      Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkPosts': userPosts,
+          });
+    } else {
+      Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
+          arguments: {
+            'bkUser': _state.bkUser,
+            'userPosts': userPosts,
+            'userProfile': userProfile,
+          });
+    }
   }
 }
