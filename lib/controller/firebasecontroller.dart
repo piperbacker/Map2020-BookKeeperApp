@@ -322,4 +322,20 @@ class FirebaseController {
     }
     return result;
   }
+
+  static Future<List<BKBook>> getAuthorBooks(BKUser user) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKBook.COLLECTION)
+        .where(BKBook.AUTHOR, isEqualTo: user.displayName)
+        .orderBy(BKBook.PUB_DATE, descending: true)
+        .get();
+
+    var result = <BKBook>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        result.add(BKBook.deserialize(doc.data(), doc.id));
+      }
+    }
+    return result;
+  }
 }

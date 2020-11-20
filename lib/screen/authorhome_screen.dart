@@ -1,8 +1,10 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
+import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/userprofile_screen.dart';
+import 'package:bookkeeperapp/screen/authorbooks_screen.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -247,6 +249,10 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
               icon: Icon(Icons.home),
             ),
             BottomNavigationBarItem(
+              title: Text('Reviews'),
+              icon: Icon(Icons.book),
+            ),
+            BottomNavigationBarItem(
               title: Text('Profile'),
               icon: Icon(Icons.person),
             ),
@@ -344,6 +350,19 @@ class _Controller {
     });
 
     if (_state.currentIndex == 1) {
+      // get author's books
+      List<BKBook> authorBooks =
+          await FirebaseController.getAuthorBooks(_state.bkUser);
+      await Navigator.pushNamed(_state.context, AuthorBooksScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+            'bkBooks': authorBooks,
+          });
+      //_state.render(() {});
+    }
+
+    if (_state.currentIndex == 2) {
       await Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
             'user': _state.user,

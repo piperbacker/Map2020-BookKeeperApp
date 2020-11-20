@@ -1,6 +1,7 @@
 import 'package:bookkeeperapp/screen/addbook_screen.dart';
 import 'package:bookkeeperapp/screen/adminhome_screen.dart';
 import 'package:bookkeeperapp/screen/authorhome_screen.dart';
+import 'package:bookkeeperapp/screen/authorreviews_screen.dart';
 import 'package:bookkeeperapp/screen/bookdetail_screen.dart';
 import 'package:bookkeeperapp/screen/changepassword_screen.dart';
 import 'package:bookkeeperapp/screen/createnewaccount_screen.dart';
@@ -24,6 +25,7 @@ import 'package:bookkeeperapp/screen/userfollowing_screen.dart';
 import 'package:bookkeeperapp/screen/userprofile_screen.dart';
 import 'package:bookkeeperapp/screen/usersearch_screen.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
+import 'package:bookkeeperapp/screen/authorbooks_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -74,6 +76,8 @@ class BookKeeperApp extends StatelessWidget {
           BookDetailScreen.routeName: (context) => BookDetailScreen(),
           ShowReviewsScreen.routeName: (context) => ShowReviewsScreen(),
           AuthorHomeScreen.routeName: (context) => AuthorHomeScreen(),
+          AuthorBooksScreen.routeName: (context) => AuthorBooksScreen(),
+          AuthorReviewsScreen.routeName: (context) => AuthorReviewsScreen(),
         });
   }
 }

@@ -82,12 +82,29 @@ class _MyProfileState extends State<MyProfileScreen> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      Text(
-                        bkUser.displayName,
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          color: Colors.cyan[900],
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            bkUser.displayName,
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.cyan[900],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          bkUser.userTag != 'author'
+                              ? SizedBox(
+                                  height: 1,
+                                )
+                              : Icon(
+                                  Icons.check_circle,
+                                  color: Colors.amber[300],
+                                  size: 24.0,
+                                ),
+                        ],
                       ),
                       SizedBox(
                         height: 10.0,
@@ -103,59 +120,50 @@ class _MyProfileState extends State<MyProfileScreen> {
                       SizedBox(
                         height: 5.0,
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FlatButton(
-                              onPressed: con.following,
-                              child: Text(
-                                '${bkUser.following.length}',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.cyan[900],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              FlatButton(
+                                onPressed: con.following,
+                                child: Text(
+                                  '${bkUser.following.length}',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.cyan[900],
+                                  ),
                                 ),
                               ),
-                            ),
-                            FlatButton(
-                              onPressed: con.followers,
-                              child: Text(
-                                '${bkUser.followers.length}',
+                              Text(
+                                "Following",
                                 style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.cyan[900],
+                                  fontSize: 16.0,
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Following",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                //color: Colors.cyan[900],
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              FlatButton(
+                                onPressed: con.followers,
+                                child: Text(
+                                  '${bkUser.followers.length}',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.cyan[900],
+                                  ),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8.0,
-                            ),
-                            Text(
-                              "Followers",
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                //color: Colors.cyan[900],
+                              Text(
+                                "Followers",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                       ),
                       Divider(height: 40.0, color: Colors.orangeAccent),
                     ],

@@ -37,125 +37,147 @@ class _ShowReviewsState extends State<ShowReviewsScreen> {
       appBar: AppBar(
         title: Text('Reviews (${reviews.length})'),
       ),
-      body: ListView.builder(
-        itemCount: reviews.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            color: Colors.orange[50],
-            child: Container(
+      body: reviews.length == 0
+          ? Container(
               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-              child: Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Text(
-                            reviews[index].displayName,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.cyan[900],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Center(
-                            child: Text(
-                              reviews[index].title,
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          Divider(height: 30.0, color: Colors.orangeAccent),
-                          Container(
-                            alignment: Alignment.topCenter,
-                            child: SmoothStarRating(
-                              allowHalfRating: false,
-                              starCount: 5,
-                              rating: reviews[index].stars.toDouble(),
-                              size: 30.0,
-                              isReadOnly: true,
-                              color: Colors.deepOrange[400],
-                              borderColor: Colors.grey,
-                              spacing: 0.0,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          Text(
-                            reviews[index].body,
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        reviews[index].postedBy == bkUser.email
-                            ? SizedBox(
-                                height: 1.0,
-                              )
-                            : Row(
-                                children: <Widget>[
-                                  !reviews[index].likedBy.contains(bkUser.email)
-                                      ? IconButton(
-                                          icon: Icon(Icons.favorite_border),
-                                          onPressed: () => con.like(index),
-                                        )
-                                      : IconButton(
-                                          icon: Icon(Icons.favorite),
-                                          color: Colors.pink,
-                                          onPressed: () => con.unlike(index),
-                                        ),
-                                ],
-                              ),
-                        reviews[index].likedBy.length == 0
-                            ? SizedBox(
-                                height: 1.0,
-                              )
-                            : Flexible(
-                                child: Text(
-                                  '${reviews[index].likedBy.length} likes',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
-                  ],
+              alignment: Alignment.center,
+              child: Text(
+                'This book has not been reviewed yet.',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.cyan[900],
                 ),
               ),
+            )
+          : Container(
+              child: ListView.builder(
+                itemCount: reviews.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    color: Colors.orange[50],
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                      child: Card(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Container(
+                              margin:
+                                  EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Text(
+                                    reviews[index].displayName,
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.cyan[900],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Container(
+                              margin:
+                                  EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Center(
+                                    child: Text(
+                                      reviews[index].title,
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                      height: 30.0, color: Colors.orangeAccent),
+                                  Container(
+                                    alignment: Alignment.topCenter,
+                                    child: SmoothStarRating(
+                                      allowHalfRating: false,
+                                      starCount: 5,
+                                      rating: reviews[index].stars.toDouble(),
+                                      size: 30.0,
+                                      isReadOnly: true,
+                                      color: Colors.deepOrange[400],
+                                      borderColor: Colors.grey,
+                                      spacing: 0.0,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                    reviews[index].body,
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                reviews[index].postedBy == bkUser.email
+                                    ? SizedBox(
+                                        height: 1.0,
+                                      )
+                                    : Row(
+                                        children: <Widget>[
+                                          !reviews[index]
+                                                  .likedBy
+                                                  .contains(bkUser.email)
+                                              ? IconButton(
+                                                  icon: Icon(
+                                                      Icons.favorite_border),
+                                                  onPressed: () =>
+                                                      con.like(index),
+                                                )
+                                              : IconButton(
+                                                  icon: Icon(Icons.favorite),
+                                                  color: Colors.pink,
+                                                  onPressed: () =>
+                                                      con.unlike(index),
+                                                ),
+                                        ],
+                                      ),
+                                reviews[index].likedBy.length == 0
+                                    ? SizedBox(
+                                        height: 1.0,
+                                      )
+                                    : Flexible(
+                                        child: Text(
+                                          '${reviews[index].likedBy.length} likes',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-          );
-        },
-      ),
     );
   }
 }

@@ -166,12 +166,15 @@ class _Controller {
     _state.render(() => _state.bkBooks = results);
   }
 
-  void selectBook(int index) {
-    Navigator.pushNamed(_state.context, PostReviewScreen.routeName, arguments: {
-      'bkUser': _state.bkUser,
-      'bkPosts': _state.bkPosts,
-      'homeFeed': _state.homeFeed,
-      'bkBook': _state.bkBooks[index],
-    });
+  void selectBook(int index) async {
+    await Navigator.pushNamed(_state.context, PostReviewScreen.routeName,
+        arguments: {
+          'bkUser': _state.bkUser,
+          'bkPosts': _state.bkPosts,
+          'homeFeed': _state.homeFeed,
+          'bkBook': _state.bkBooks[index],
+        });
+
+    Navigator.pop(_state.context);
   }
 }
