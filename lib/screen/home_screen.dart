@@ -192,17 +192,41 @@ class _HomeState extends State<HomeScreen> {
                                       ),
                                     ),
                               SizedBox(
-                                height: 10.0,
+                                height: 5.0,
                               ),
-                              Center(
-                                child: Text(
-                                  homeFeed[index].title,
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
+                              homeFeed[index].asking != null
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${homeFeed[index].asking} asks...',
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.cyan[900],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        Text(
+                                          homeFeed[index].question,
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Center(
+                                      child: Text(
+                                        homeFeed[index].title,
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
                               Divider(height: 30.0, color: Colors.orangeAccent),
                               homeFeed[index].stars == null
                                   ? SizedBox(

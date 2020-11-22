@@ -11,6 +11,9 @@ class BKPost {
   static const TITLE = 'title';
   static const BODY = 'body';
   static const STARS = 'stars';
+  static const QUESTION = 'question';
+  static const ASKING = 'asking';
+  static const ANSWERED = 'answered';
   static const LIKED_BY = 'likedBy';
 
   String docId; //Firestore doc ID
@@ -23,6 +26,9 @@ class BKPost {
   String author;
   String title;
   String body;
+  String question;
+  String asking;
+  bool answered;
   int stars;
   List<dynamic> likedBy;
 
@@ -38,8 +44,12 @@ class BKPost {
       this.title,
       this.body,
       this.stars,
+      this.question,
+      this.asking,
+      this.answered,
       this.likedBy}) {
     this.likedBy ??= [];
+    this.answered ??= true;
   }
   // convert Dart object to Firestore document
   Map<String, dynamic> serialize() {
@@ -53,6 +63,9 @@ class BKPost {
       AUTHOR: author,
       TITLE: title,
       BODY: body,
+      QUESTION: question,
+      ASKING: asking,
+      ANSWERED: answered,
       STARS: stars,
       LIKED_BY: likedBy,
     };
@@ -70,6 +83,9 @@ class BKPost {
       author: data[BKPost.AUTHOR],
       title: data[BKPost.TITLE],
       body: data[BKPost.BODY],
+      question: data[BKPost.QUESTION],
+      asking: data[BKPost.ASKING],
+      answered: data[BKPost.ANSWERED],
       stars: data[BKPost.STARS],
       likedBy: data[BKPost.LIKED_BY],
       updatedAt: data[BKPost.UPDATED_AT] != null
@@ -81,6 +97,6 @@ class BKPost {
 
   @override
   String toString() {
-    return '$docId $photoURL $postedBy $displayName $bookTitle $author $title $body';
+    return '$docId $photoURL $postedBy $displayName $bookTitle $author $title $body $question $asking';
   }
 }

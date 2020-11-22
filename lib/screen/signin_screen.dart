@@ -162,16 +162,14 @@ class _Controller {
     // get user's posts
     List<BKPost> bkPosts = await FirebaseController.getBKPosts(bkUser.email);
 
-    List<dynamic> following = bkUser.following;
-    // to ensure own user's posts are shown on home feed
-    following.add(bkUser.email);
-
-    // get user's home feed
-    List<BKPost> homeFeed = await FirebaseController.getHomeFeed(following);
-    following.remove(bkUser.email);
-
-    //print(bkUser.following);
     if (bkUser.userTag == 'reader') {
+      List<dynamic> following = bkUser.following;
+      // to ensure own user's posts are shown on home feed
+      following.add(bkUser.email);
+      // get user's home feed
+      List<BKPost> homeFeed = await FirebaseController.getHomeFeed(following);
+      following.remove(bkUser.email);
+
       Navigator.pushReplacementNamed(_state.context, HomeScreen.routeName,
           arguments: {
             'user': user,
@@ -190,12 +188,14 @@ class _Controller {
     }
 
     if (bkUser.userTag == 'author') {
+      List<BKPost> questions = await FirebaseController.getAuthorQuestions(bkUser.email);
+
       Navigator.pushReplacementNamed(_state.context, AuthorHomeScreen.routeName,
           arguments: {
             'user': user,
             'bkUser': bkUser,
             'bkPosts': bkPosts,
-            'homeFeed': homeFeed,
+            'questions': questions,
           });
     }
   }

@@ -2,14 +2,13 @@ import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/authoranswer_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
-import 'package:bookkeeperapp/screen/userprofile_screen.dart';
 import 'package:bookkeeperapp/screen/authorbooks_screen.dart';
-import 'package:bookkeeperapp/screen/views/myimageview.dart';
+import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class AuthorHomeScreen extends StatefulWidget {
   static const routeName = '/signInScreen/authorHomeScreen';
@@ -24,9 +23,9 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
   User user;
   BKUser bkUser;
   List<BKPost> bkPosts;
-  List<BKPost> homeFeed;
+  List<BKPost> questions;
   _Controller con;
-  var formKey = GlobalKey<FormState>();
+  //var formKey = GlobalKey<FormState>();
   int currentIndex = 0;
 
   @override
@@ -43,13 +42,13 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
     user ??= args['user'];
     bkUser ??= args['bkUser'];
     bkPosts ??= args['bkPosts'];
-    homeFeed ??= args['homeFeed'];
+    questions ??= args['questions'];
 
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Author Home'),
+          title: Text('Author Questions'),
           automaticallyImplyLeading: false,
           actions: <Widget>[
             IconButton(
@@ -60,10 +59,10 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
         ),
         body: RefreshIndicator(
           onRefresh: con.refreshHome,
-          child: homeFeed.length == 0
+          child: questions.length == 0
               ? Center(
                   child: Text(
-                    'Home Feed is Empty',
+                    'There are no questions to answer currently',
                     style: TextStyle(
                       fontSize: 20.0,
                       color: Colors.cyan[900],
@@ -73,7 +72,7 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
               : Container(
                   margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
                   child: ListView.builder(
-                    itemCount: homeFeed.length,
+                    itemCount: questions.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         color: Colors.orange[50],
@@ -92,139 +91,40 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
                                     SizedBox(
                                       width: 10.0,
                                     ),
-                                    FlatButton(
-                                      onPressed: () => con.goToProfile(index),
-                                      child: Text(
-                                        homeFeed[index].displayName,
-                                        style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.cyan[900],
-                                        ),
+                                    Text(
+                                      questions[index].asking,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.cyan[900],
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
                               SizedBox(
-                                height: 10.0,
+                                height: 5.0,
                               ),
-                              homeFeed[index].photoURL == null
-                                  ? SizedBox(height: 1)
-                                  : Container(
-                                      alignment: Alignment.topCenter,
-                                      margin: EdgeInsets.fromLTRB(
-                                          10.0, 5.0, 10.0, 5.0),
-                                      child: MyImageView.network(
-                                          imageURL: homeFeed[index].photoURL,
-                                          context: context),
-                                    ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              homeFeed[index].bookTitle == null
-                                  ? SizedBox(height: 1)
-                                  : Container(
-                                      alignment: Alignment.topCenter,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            homeFeed[index].bookTitle,
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                            ),
-                                          ),
-                                          Text(
-                                            homeFeed[index].author,
-                                            style: TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.cyan[900],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Center(
+                              Container(
+                                margin:
+                                    EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                                 child: Text(
-                                  homeFeed[index].title,
+                                  questions[index].question,
                                   style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.black,
+                                    fontSize: 18.0,
+                                    color: Colors.black87,
                                   ),
                                 ),
                               ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
                               Divider(height: 30.0, color: Colors.orangeAccent),
-                              homeFeed[index].stars == null
-                                  ? SizedBox(
-                                      height: 1,
-                                    )
-                                  : Container(
-                                      alignment: Alignment.topCenter,
-                                      child: SmoothStarRating(
-                                        allowHalfRating: false,
-                                        starCount: 5,
-                                        rating:
-                                            homeFeed[index].stars.toDouble(),
-                                        size: 30.0,
-                                        isReadOnly: true,
-                                        color: Colors.deepOrange[400],
-                                        borderColor: Colors.grey,
-                                        spacing: 0.0,
-                                      ),
-                                    ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                homeFeed[index].body,
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: Colors.black87,
+                              Container(
+                                alignment: Alignment(1.0, 1.0),
+                                child: IconButton(
+                                  icon: Icon(Icons.question_answer),
+                                  onPressed: () => con.respond(index),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Row(
-                                children: [
-                                  homeFeed[index].postedBy == bkUser.email
-                                      ? SizedBox(
-                                          height: 1.0,
-                                        )
-                                      : Row(
-                                          children: <Widget>[
-                                            !homeFeed[index]
-                                                    .likedBy
-                                                    .contains(bkUser.email)
-                                                ? IconButton(
-                                                    icon: Icon(
-                                                        Icons.favorite_border),
-                                                    onPressed: () =>
-                                                        con.like(index),
-                                                  )
-                                                : IconButton(
-                                                    icon: Icon(Icons.favorite),
-                                                    color: Colors.pink,
-                                                    onPressed: () =>
-                                                        con.unlike(index),
-                                                  ),
-                                          ],
-                                        ),
-                                  homeFeed[index].likedBy.length == 0
-                                      ? SizedBox(
-                                          height: 1.0,
-                                        )
-                                      : Flexible(
-                                          child: Text(
-                                            '${homeFeed[index].likedBy.length} likes',
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                            ),
-                                          ),
-                                        ),
-                                ],
                               ),
                             ],
                           ),
@@ -267,17 +167,13 @@ class _Controller {
   _AuthorHomeState _state;
   _Controller(this._state);
   String searchKey;
-
+  String answer;
   Future<void> refreshHome() async {
     Future.delayed(Duration(seconds: 3));
 
-    List<dynamic> following = _state.bkUser.following;
-    // to ensure own user's posts are shown on home feed
-    following.add(_state.bkUser.email);
-
     // get user's home feed
-    _state.homeFeed = await FirebaseController.getHomeFeed(following);
-    following.remove(_state.bkUser.email);
+    _state.questions =
+        await FirebaseController.getAuthorQuestions(_state.bkUser.email);
 
     _state.render(() {});
   }
@@ -288,60 +184,24 @@ class _Controller {
           'user': _state.user,
           'bkUser': _state.bkUser,
           'bkPosts': _state.bkPosts,
-          'homeFeed': _state.homeFeed,
+          'homeFeed': null,
         });
     _state.render(() {});
   }
 
-  void goToProfile(int index) async {
-    // get user's info
-    List<BKUser> bkUserList =
-        await FirebaseController.getBKUser(_state.homeFeed[index].postedBy);
-    BKUser userProfile = bkUserList[0];
+  void respond(int index) async {
+    await Navigator.pushNamed(_state.context, AuthorAnswerScreen.routeName,
+        arguments: {
+          'user': _state.user,
+          'bkUser': _state.bkUser,
+          'bkPosts': _state.bkPosts,
+          'question': _state.questions[index],
+        });
 
-    // get list of user's posts
-    List<BKPost> userPosts =
-        await FirebaseController.getBKPosts(_state.homeFeed[index].postedBy);
+    _state.questions =
+        await FirebaseController.getAuthorQuestions(_state.bkUser.email);
 
-    if (_state.homeFeed[index].postedBy == _state.bkUser.email) {
-      Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
-          arguments: {
-            'user': _state.user,
-            'bkUser': _state.bkUser,
-            'bkPosts': userPosts,
-          });
-    } else {
-      Navigator.pushNamed(_state.context, UserProfileScreen.routeName,
-          arguments: {
-            'bkUser': _state.bkUser,
-            'userPosts': userPosts,
-            'userProfile': userProfile,
-          });
-    }
-  }
-
-  void like(int index) async {
-    _state.render(() {
-      if (!_state.homeFeed[index].likedBy.contains(_state.user.email)) {
-        _state.homeFeed[index].likedBy.add(_state.user.email);
-      }
-    });
-
-    try {
-      await FirebaseController.updateLikedBy(_state.homeFeed[index]);
-    } catch (e) {}
-  }
-
-  void unlike(int index) async {
-    _state.render(() {
-      if (_state.homeFeed[index].likedBy.contains(_state.user.email)) {
-        _state.homeFeed[index].likedBy.remove(_state.user.email);
-      }
-    });
-
-    try {
-      await FirebaseController.updateLikedBy(_state.homeFeed[index]);
-    } catch (e) {}
+    _state.render(() {});
   }
 
   void onItemTapped(int index) async {
@@ -359,7 +219,6 @@ class _Controller {
             'bkUser': _state.bkUser,
             'bkBooks': authorBooks,
           });
-      //_state.render(() {});
     }
 
     if (_state.currentIndex == 2) {

@@ -91,8 +91,8 @@ class _PostUpdateState extends State<PostUpdateScreen> {
                       keyboardType: TextInputType.multiline,
                       maxLines: 6,
                       autocorrect: true,
-                      validator: con.validatorMemo,
-                      onSaved: con.onSavedMemo,
+                      validator: con.validatorBody,
+                      onSaved: con.onSavedBody,
                     ),
                   ),
                   SizedBox(
@@ -239,8 +239,13 @@ class _Controller {
       }
 
       p.docId = await FirebaseController.addPost(p);
-      _state.bkPosts.insert(0, p);
-      _state.homeFeed.insert(0, p);
+
+      if (_state.bkUser.userTag == 'reader') {
+        _state.bkPosts.insert(0, p);
+        _state.homeFeed.insert(0, p);
+      } else {
+        _state.bkPosts.insert(0, p);
+      }
 
       MyDialog.circularProgressEnd(_state.context);
 
@@ -268,7 +273,7 @@ class _Controller {
     title = value;
   }
 
-  String validatorMemo(String value) {
+  String validatorBody(String value) {
     if (value == null || value.trim().length < 3) {
       return 'min 3 chars';
     } else {
@@ -276,7 +281,7 @@ class _Controller {
     }
   }
 
-  void onSavedMemo(String value) {
+  void onSavedBody(String value) {
     body = value;
   }
 }

@@ -247,7 +247,7 @@ class _MyProfileState extends State<MyProfileScreen> {
                                                     context: context),
                                               ),
                                         SizedBox(
-                                          height: 10.0,
+                                          height: 5.0,
                                         ),
                                         bkPosts[index].bookTitle == null
                                             ? SizedBox(height: 1)
@@ -272,17 +272,41 @@ class _MyProfileState extends State<MyProfileScreen> {
                                                 ),
                                               ),
                                         SizedBox(
-                                          height: 10.0,
+                                          height: 5.0,
                                         ),
-                                        Center(
-                                          child: Text(
-                                            bkPosts[index].title,
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
+                                        bkPosts[index].asking != null
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${bkPosts[index].asking} asks...',
+                                                    style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      color: Colors.cyan[900],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10.0,
+                                                  ),
+                                                  Text(
+                                                    bkPosts[index].question,
+                                                    style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : Center(
+                                                child: Text(
+                                                  bkPosts[index].title,
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
                                         Divider(
                                             height: 30.0,
                                             color: Colors.orangeAccent),

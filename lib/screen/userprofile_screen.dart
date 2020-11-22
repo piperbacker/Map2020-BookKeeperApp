@@ -1,6 +1,7 @@
 import 'package:bookkeeperapp/controller/firebasecontroller.dart';
 import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/askauthor_screen.dart';
 import 'package:bookkeeperapp/screen/userfollowers_screen.dart';
 import 'package:bookkeeperapp/screen/userfollowing_screen.dart';
 import 'package:bookkeeperapp/screen/views/mydialog.dart';
@@ -359,17 +360,41 @@ class _UserProfileState extends State<UserProfileScreen> {
                                                 ),
                                               ),
                                         SizedBox(
-                                          height: 10.0,
+                                          height: 5.0,
                                         ),
-                                        Center(
-                                          child: Text(
-                                            userPosts[index].title,
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
+                                        userPosts[index].asking != null
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${userPosts[index].asking} asks...',
+                                                    style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      color: Colors.cyan[900],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10.0,
+                                                  ),
+                                                  Text(
+                                                    userPosts[index].question,
+                                                    style: TextStyle(
+                                                      fontSize: 20.0,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : Center(
+                                                child: Text(
+                                                  userPosts[index].title,
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                              ),
                                         Divider(
                                             height: 30.0,
                                             color: Colors.orangeAccent),
@@ -578,5 +603,11 @@ class _Controller {
     }
   }
 
-  void askAuthorQuestion() {}
+  void askAuthorQuestion() {
+    Navigator.pushNamed(_state.context, AskAuthorScreen.routeName, arguments: {
+      'user': _state.user,
+      'bkUser': _state.bkUser,
+      'authorProfile': _state.userProfile,
+    });
+  }
 }

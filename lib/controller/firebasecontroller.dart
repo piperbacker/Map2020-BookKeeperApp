@@ -81,6 +81,7 @@ class FirebaseController {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection(BKPost.COLLECTION)
         .where(BKPost.POSTED_BY, isEqualTo: email)
+        .where(BKPost.ANSWERED, isEqualTo: true)
         .orderBy(BKPost.UPDATED_AT, descending: true)
         .get();
     var result = <BKPost>[];
@@ -99,6 +100,7 @@ class FirebaseController {
       querySnapshot = await FirebaseFirestore.instance
           .collection(BKPost.COLLECTION)
           .where(BKPost.POSTED_BY, isEqualTo: follower)
+          .where(BKPost.ANSWERED, isEqualTo: true)
           .get();
       if (querySnapshot != null && querySnapshot.docs.length != 0) {
         for (var doc in querySnapshot.docs) {
@@ -346,5 +348,31 @@ class FirebaseController {
           .doc(bkUser.docId)
           .update({"following": bkUser.following});
     }
+  }
+
+  static Future<List<BKPost>> getAuthorQuestions(String email) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(BKPost.COLLECTION)
+        .where(BKPost.POSTED_BY, isEqualTo: email)
+        .where(BKPost.ANSWERED, isEqualTo: false)
+        .orderBy(BKPost.UPDATED_AT, descending: true)
+        .get();
+
+    var result = <BKPost>[];
+    if (querySnapshot != null && querySnapshot.docs.length != 0) {
+      for (var doc in querySnapshot.docs) {
+        result.add(BKPost.deserialize(doc.data(), doc.id));
+      }
+    }
+    return result;
+  }
+
+  static Future<void> updateAuthorQuestion(
+    bkPost,
+  ) async {
+    await FirebaseFirestore.instance
+        .collection(BKPost.COLLECTION)
+        .doc(bkPost.docId)
+        .set(bkPost.serialize());
   }
 }
