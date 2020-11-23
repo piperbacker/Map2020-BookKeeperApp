@@ -1,5 +1,6 @@
 class BKUser {
   static const COLLECTION = 'users';
+  static const LIBRARY = 'library';
   static const PROFILE_FOLDER = 'profilePictures';
   static const PHOTO_URL = 'photoURL';
   static const PHOTO_PATH = 'photoPath';
@@ -17,6 +18,7 @@ class BKUser {
   String email;
   String userBio;
   String userTag;
+  List<dynamic> library;
   List<dynamic> following;
   List<dynamic> followers;
 
@@ -30,7 +32,9 @@ class BKUser {
     this.userTag,
     this.following,
     this.followers,
+    this.library,
   }) {
+    this.library ??= [];
     this.following ??= [];
     this.followers ??= [];
   }
@@ -38,6 +42,7 @@ class BKUser {
   // convert Dart object to Firestore document
   Map<String, dynamic> serialize() {
     return <String, dynamic>{
+      LIBRARY: library,
       PHOTO_PATH: photoPath,
       PHOTO_URL: photoURL,
       EMAIL: email,
@@ -53,6 +58,7 @@ class BKUser {
   static BKUser deserialize(Map<String, dynamic> data, String docId) {
     return BKUser(
       docId: docId,
+      library: data[BKUser.LIBRARY],
       photoPath: data[BKUser.PHOTO_PATH],
       photoURL: data[BKUser.PHOTO_URL],
       email: data[BKUser.EMAIL],

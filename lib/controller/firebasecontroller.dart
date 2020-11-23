@@ -375,4 +375,29 @@ class FirebaseController {
         .doc(bkPost.docId)
         .set(bkPost.serialize());
   }
+
+  static Future<void> downloadBook(BKUser user) async {
+    await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .doc(user.docId)
+        .update({"library": user.library});
+  }
+
+  static Future<List<BKBook>> getLibrary(library) async {
+    QuerySnapshot querySnapshot;
+    var result = <BKBook>[];
+    for (var book in library) {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection(BKBook.COLLECTION)
+          .where(BKBook.TITLE, isEqualTo: book)
+          .get();
+      if (querySnapshot != null && querySnapshot.docs.length != 0) {
+        for (var doc in querySnapshot.docs) {
+          result.add(BKBook.deserialize(doc.data(), doc.id));
+        }
+      }
+    }
+    result.sort((a, b) => b.pubDate.compareTo(a.pubDate));
+    return result;
+  }
 }

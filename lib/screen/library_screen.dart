@@ -1,5 +1,6 @@
 import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
+import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -15,7 +16,7 @@ class LibraryScreen extends StatefulWidget {
 class _LibraryState extends State<LibraryScreen> {
   User user;
   BKUser bkUser;
-  List<BKBook> bkBooks;
+  List<BKBook> library;
   _Controller con;
 
   @override
@@ -31,13 +32,66 @@ class _LibraryState extends State<LibraryScreen> {
     Map args = ModalRoute.of(context).settings.arguments;
     user ??= args['user'];
     bkUser ??= args['bkUser'];
-    bkBooks ??= args['bkBooks'];
+    library ??= args['library'];
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Library'),
       ),
-      body: Text("library"),
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.orange[50],
+            ),
+          ),
+          GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: (2 / 3),
+              ),
+              itemCount: library.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () => con.open(index),
+                  child: Card(
+                    margin: EdgeInsets.all(10.0),
+                    color: Colors.white,
+                    child: Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            width: 150.0,
+                            height: 225.0,
+                            child: MyImageView.network(
+                                imageURL: library[index].photoURL,
+                                context: context),
+                          ),
+                          Container(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              library[index].title,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.cyan[900],
+                              ),
+                            ),
+                          ),
+                          Text(
+                            library[index].author,
+                            style: TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        ],
+      ),
     );
   }
 }
@@ -45,4 +99,6 @@ class _LibraryState extends State<LibraryScreen> {
 class _Controller {
   _LibraryState _state;
   _Controller(this._state);
+
+  void open(int index) {}
 }

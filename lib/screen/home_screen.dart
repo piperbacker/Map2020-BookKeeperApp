@@ -469,10 +469,12 @@ class _Controller {
     });
 
     if (_state.currentIndex == 1) {
+      List<BKBook> library =
+          await FirebaseController.getLibrary(_state.bkUser.library);
       Navigator.pushNamed(_state.context, LibraryScreen.routeName, arguments: {
         'user': _state.user,
         'bkUser': _state.bkUser,
-        //'bkBooks': bkBooks,
+        'library': library,
       });
     } else if (_state.currentIndex == 2) {
       // get bkBooks

@@ -92,6 +92,9 @@ class _ShopState extends State<ShopScreen> {
                         SizedBox(
                           height: 5.0,
                         ),
+                        /*bkBooks[index].downloaded == true
+                            ? Text('This book is already in your library')
+                            : */
                         ButtonTheme(
                           height: 40.0,
                           child: RaisedButton(
@@ -121,7 +124,12 @@ class _Controller {
   _ShopState _state;
   _Controller(this._state);
 
-  void download(int index) {}
+  void download(int index) async {
+    // _state.bkBooks[index].downloaded = true;
+    _state.bkUser.library.add((_state.bkBooks[index].title));
+    await FirebaseController.downloadBook(_state.bkUser);
+    _state.render(() {});
+  }
 
   void bookDetails(int index) async {
     // get book reviews

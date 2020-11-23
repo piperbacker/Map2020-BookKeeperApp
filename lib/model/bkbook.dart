@@ -12,7 +12,6 @@ class BKBook {
   static const PUB_DATE = 'pubDate';
   static const DOWNLOADED = 'downloaded';
   static const DOWNLOADS = 'downloads';
-  //static const REVIEWS = 'reviews';
 
   String docId; //Firestore doc ID
   String photoPath; // Firebase storage; image file name
@@ -25,7 +24,6 @@ class BKBook {
   DateTime pubDate;
   bool downloaded;
   int downloads;
-  //List<dynamic> reviews;
 
   BKBook({
     this.docId,
@@ -39,10 +37,8 @@ class BKBook {
     this.pubDate,
     this.downloaded,
     this.downloads,
-    //this.reviews,
   }) {
     this.downloaded = false;
-    //this.reviews ??= [];
   }
 
   // convert Dart object to Firestore document
@@ -58,7 +54,6 @@ class BKBook {
       PUB_DATE: pubDate,
       DOWNLOADED: downloaded,
       DOWNLOADS: downloads,
-      //REVIEWS: reviews,
     };
   }
 
@@ -79,7 +74,6 @@ class BKBook {
           : null,
       downloaded: data[BKBook.DOWNLOADED],
       downloads: data[BKBook.DOWNLOADS],
-      //reviews: data[BKBook.REVIEWS],
     );
   }
 

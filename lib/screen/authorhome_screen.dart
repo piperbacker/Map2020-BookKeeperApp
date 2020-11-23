@@ -5,7 +5,6 @@ import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/authoranswer_screen.dart';
 import 'package:bookkeeperapp/screen/postupdate_screen.dart';
 import 'package:bookkeeperapp/screen/authorbooks_screen.dart';
-import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,6 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
   List<BKPost> bkPosts;
   List<BKPost> questions;
   _Controller con;
-  //var formKey = GlobalKey<FormState>();
   int currentIndex = 0;
 
   @override
