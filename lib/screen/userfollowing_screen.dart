@@ -39,20 +39,35 @@ class _UserFollowingState extends State<UserFollowingScreen> {
     bkUser ??= args['bkUser'];
     userProfile ??= args['userProfile'];
     following ??= args['following'];
+    String title;
+
+    if (userProfile.userTag == 'author') {
+      title = "${userProfile.displayName}'s recommended";
+    } else {
+      title = "${userProfile.displayName} is following";
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${userProfile.displayName} is following"),
+        title: Text(title),
       ),
       body: userProfile.following.length == 0
           ? Center(
-              child: Text(
-                '${userProfile.displayName} is not following anyone',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.cyan[900],
-                ),
-              ),
+              child: userProfile.userTag == 'author'
+                  ? Text(
+                      '${userProfile.displayName} has no recommended authors',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.cyan[900],
+                      ),
+                    )
+                  : Text(
+                      '${userProfile.displayName} is not following anyone',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.cyan[900],
+                      ),
+                    ),
             )
           : Container(
               margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),

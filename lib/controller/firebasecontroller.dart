@@ -400,4 +400,21 @@ class FirebaseController {
     result.sort((a, b) => b.pubDate.compareTo(a.pubDate));
     return result;
   }
+
+  static Future<List<BKUser>> getAuthorRecd(List<dynamic> following) async {
+    QuerySnapshot querySnapshot;
+    var result = <BKUser>[];
+    for (var follower in following) {
+      querySnapshot = await FirebaseFirestore.instance
+          .collection(BKUser.COLLECTION)
+          .where(BKUser.EMAIL, isEqualTo: follower)
+          .get();
+      if (querySnapshot != null && querySnapshot.docs.length != 0) {
+        for (var doc in querySnapshot.docs) {
+          result.add(BKUser.deserialize(doc.data(), doc.id));
+        }
+      }
+    }
+    return result;
+  }
 }

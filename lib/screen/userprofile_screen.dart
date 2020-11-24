@@ -52,7 +52,7 @@ class _UserProfileState extends State<UserProfileScreen> {
               : IconButton(
                   iconSize: 30.0,
                   icon: Icon(Icons.star),
-                  onPressed: con.following,
+                  onPressed: con.getRecd,
                 ),
         ],
       ),
@@ -570,18 +570,26 @@ class _Controller {
     await FirebaseController.updateRecd(_state.bkUser, _state.userProfile);
   }
 
-  void following() async {
+  void getRecd() async {
     List<BKUser> following =
-        await FirebaseController.getFollowing(_state.userProfile.email);
-
-    print(following);
-
+        await FirebaseController.getAuthorRecd(_state.userProfile.following);
     await Navigator.pushNamed(_state.context, UserFollowingScreen.routeName,
         arguments: {
           'user': _state.user,
           'bkUser': _state.bkUser,
           'userProfile': _state.userProfile,
           'following': following
+        });
+    _state.render(() {});
+  }
+
+  void following() async {
+    await Navigator.pushNamed(_state.context, UserFollowingScreen.routeName,
+        arguments: {
+          'user': _state.user,
+          'bkUser': _state.bkUser,
+          'userProfile': _state.userProfile,
+          'following': _state.userProfile.following
         });
     _state.render(() {});
   }
