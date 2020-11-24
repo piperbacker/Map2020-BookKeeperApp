@@ -92,23 +92,29 @@ class _ShopState extends State<ShopScreen> {
                         SizedBox(
                           height: 5.0,
                         ),
-                        /*bkBooks[index].downloaded == true
-                            ? Text('This book is already in your library')
-                            : */
-                        ButtonTheme(
-                          height: 40.0,
-                          child: RaisedButton(
-                            color: Colors.orangeAccent,
-                            child: Text(
-                              'Download',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                            onPressed: () => con.download(index),
-                          ),
-                        )
+                        bkUser.library.contains(bkBooks[index].title)
+                            ? Container(
+                                margin:
+                                    EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                                child: Text('Downloaded',
+                                    style: TextStyle(
+                                        fontSize: 22.0,
+                                        color: Colors.teal[400])),
+                              )
+                            : ButtonTheme(
+                                height: 40.0,
+                                child: RaisedButton(
+                                  color: Colors.orangeAccent,
+                                  child: Text(
+                                    'Download',
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () => con.download(index),
+                                ),
+                              )
                       ],
                     ),
                   ),

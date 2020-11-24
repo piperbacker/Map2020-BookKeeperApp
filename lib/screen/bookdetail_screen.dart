@@ -86,20 +86,27 @@ class _BookDetailState extends State<BookDetailScreen> {
             SizedBox(
               height: 10.0,
             ),
-            ButtonTheme(
-              height: 50.0,
-              child: RaisedButton(
-                color: Colors.orangeAccent,
-                child: Text(
-                  'Download',
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    color: Colors.white,
+            bkUser.library.contains(bkBook.title)
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+                    child: Text('This book is currently in your library',
+                        style:
+                            TextStyle(fontSize: 22.0, color: Colors.teal[400])),
+                  )
+                : ButtonTheme(
+                    height: 50.0,
+                    child: RaisedButton(
+                      color: Colors.orangeAccent,
+                      child: Text(
+                        'Download',
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () => con.download,
+                    ),
                   ),
-                ),
-                onPressed: () => con.download,
-              ),
-            ),
             Divider(height: 30.0, color: Colors.orangeAccent),
             Container(
               margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
@@ -276,15 +283,11 @@ class _Controller {
   _BookDetailState _state;
   _Controller(this._state);
 
-  void download() {}
-
-  void showReviews() {
-    Navigator.pushNamed(_state.context, ShowReviewsScreen.routeName,
-        arguments: {
-          'user': _state.user,
-          'bkUser': _state.bkUser,
-          'reviews': _state.reviews,
-        });
+  void download(int index) async {
+    // _state.bkBooks[index].downloaded = true;
+    _state.bkUser.library.add((_state.bkBook.title));
+    await FirebaseController.downloadBook(_state.bkUser);
+    _state.render(() {});
   }
 
   void like(int index) async {
