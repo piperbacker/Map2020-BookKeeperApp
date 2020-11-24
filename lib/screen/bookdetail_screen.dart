@@ -4,9 +4,11 @@ import 'package:bookkeeperapp/model/bkpost.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
 import 'package:bookkeeperapp/screen/showreviews_screen.dart';
 import 'package:bookkeeperapp/screen/userprofile_screen.dart';
+import 'package:bookkeeperapp/screen/views/mydialog.dart';
 import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import 'myprofile_screen.dart';
 
@@ -48,6 +50,7 @@ class _BookDetailState extends State<BookDetailScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
               width: 150.0,
@@ -83,25 +86,6 @@ class _BookDetailState extends State<BookDetailScreen> {
             SizedBox(
               height: 10.0,
             ),
-            reviews.length == 0
-                ? Text(
-                    "This book has not been reviewed yet",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  )
-                : FlatButton(
-                    onPressed: () => con.showReviews(),
-                    child: Text(
-                      'Reviews (${reviews.length})',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ),
-            SizedBox(
-              height: 5.0,
-            ),
             ButtonTheme(
               height: 50.0,
               child: RaisedButton(
@@ -116,6 +100,171 @@ class _BookDetailState extends State<BookDetailScreen> {
                 onPressed: () => con.download,
               ),
             ),
+            Divider(height: 30.0, color: Colors.orangeAccent),
+            Container(
+              margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
+              alignment: Alignment(-1.0, -1.0),
+              child: Text(
+                'Reviews (${reviews.length})',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            reviews.length == 0
+                ? Container(
+                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                    alignment: Alignment.center,
+                    child: Text(
+                      'This book has not been reviewed yet.',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.cyan[900],
+                      ),
+                    ),
+                  )
+                : Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: reviews.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          color: Colors.orange[50],
+                          child: Container(
+                            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+                            child: Card(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        10.0, 10.0, 10.0, 10.0),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        FlatButton(
+                                          onPressed: () =>
+                                              con.goToProfile(index),
+                                          child: Text(
+                                            reviews[index].displayName,
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.cyan[900],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.fromLTRB(
+                                        10.0, 10.0, 10.0, 10.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Center(
+                                          child: Text(
+                                            reviews[index].title,
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        Divider(
+                                            height: 30.0,
+                                            color: Colors.orangeAccent),
+                                        Container(
+                                          alignment: Alignment.topCenter,
+                                          child: SmoothStarRating(
+                                            allowHalfRating: false,
+                                            starCount: 5,
+                                            rating:
+                                                reviews[index].stars.toDouble(),
+                                            size: 30.0,
+                                            isReadOnly: true,
+                                            color: Colors.deepOrange[400],
+                                            borderColor: Colors.grey,
+                                            spacing: 0.0,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        Text(
+                                          reviews[index].body,
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      reviews[index].postedBy == bkUser.email
+                                          ? SizedBox(
+                                              height: 1.0,
+                                            )
+                                          : Row(
+                                              children: <Widget>[
+                                                !reviews[index]
+                                                        .likedBy
+                                                        .contains(bkUser.email)
+                                                    ? IconButton(
+                                                        icon: Icon(Icons
+                                                            .favorite_border),
+                                                        onPressed: () =>
+                                                            con.like(index),
+                                                      )
+                                                    : IconButton(
+                                                        icon: Icon(
+                                                            Icons.favorite),
+                                                        color: Colors.pink,
+                                                        onPressed: () =>
+                                                            con.unlike(index),
+                                                      ),
+                                              ],
+                                            ),
+                                      reviews[index].likedBy.length == 0
+                                          ? SizedBox(
+                                              height: 1.0,
+                                            )
+                                          : Flexible(
+                                              child: Text(
+                                                '${reviews[index].likedBy.length} likes',
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                ),
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
@@ -138,17 +287,53 @@ class _Controller {
         });
   }
 
-  /*void goToProfile() async {
+  void like(int index) async {
+    _state.render(() {
+      if (!_state.reviews[index].likedBy.contains(_state.bkUser.email)) {
+        _state.reviews[index].likedBy.add(_state.bkUser.email);
+      }
+    });
+
+    try {
+      await FirebaseController.updateLikedBy(_state.reviews[index]);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Like photo memo error in saving',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void unlike(int index) async {
+    _state.render(() {
+      if (_state.reviews[index].likedBy.contains(_state.bkUser.email)) {
+        _state.reviews[index].likedBy.remove(_state.bkUser.email);
+      }
+    });
+
+    try {
+      await FirebaseController.updateLikedBy(_state.reviews[index]);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Unlike photo memo error in saving',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void goToProfile(int index) async {
     // get user's info
     List<BKUser> bkUserList =
-        await FirebaseController.getBKUser(_state.bkBook.author);
+        await FirebaseController.getBKUser(_state.reviews[index].postedBy);
     BKUser userProfile = bkUserList[0];
 
     // get list of user's posts
     List<BKPost> userPosts =
-        await FirebaseController.getBKPosts(_state.bkBook.author);
+        await FirebaseController.getBKPosts(_state.reviews[index].postedBy);
 
-    if (_state.bkBook.author == _state.bkUser.email) {
+    if (_state.reviews[index].postedBy == _state.bkUser.email) {
       Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
             'user': _state.user,
@@ -163,5 +348,5 @@ class _Controller {
             'userProfile': userProfile,
           });
     }
-  }*/
+  }
 }
