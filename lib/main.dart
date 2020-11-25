@@ -3,6 +3,7 @@ import 'package:bookkeeperapp/screen/adminhome_screen.dart';
 import 'package:bookkeeperapp/screen/askauthor_screen.dart';
 import 'package:bookkeeperapp/screen/authoranswer_screen.dart';
 import 'package:bookkeeperapp/screen/authorhome_screen.dart';
+import 'package:bookkeeperapp/screen/book_screen.dart';
 import 'package:bookkeeperapp/screen/bookdetail_screen.dart';
 import 'package:bookkeeperapp/screen/changepassword_screen.dart';
 import 'package:bookkeeperapp/screen/createnewaccount_screen.dart';
@@ -80,6 +81,7 @@ class BookKeeperApp extends StatelessWidget {
           AuthorBooksScreen.routeName: (context) => AuthorBooksScreen(),
           AskAuthorScreen.routeName: (context) => AskAuthorScreen(),
           AuthorAnswerScreen.routeName: (context) => AuthorAnswerScreen(),
+          BookScreen.routeName: (context) => BookScreen(),
         });
   }
 }

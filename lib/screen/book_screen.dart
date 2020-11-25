@@ -1,13 +1,8 @@
-import 'dart:async';
-import 'dart:js';
-
 import 'package:bookkeeperapp/model/bkbook.dart';
 import 'package:bookkeeperapp/model/bkuser.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'dart:io';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 class BookScreen extends StatefulWidget {
   static const routeName = '/library/bookScreen';
@@ -22,6 +17,7 @@ class _BookState extends State<BookScreen> {
   User user;
   BKUser bkUser;
   BKBook book;
+  //PDFDocument document;
   _Controller con;
 
   @override
@@ -38,38 +34,25 @@ class _BookState extends State<BookScreen> {
     user ??= args['user'];
     bkUser ??= args['bkUser'];
     book ??= args['book'];
+    //document ??= args['document'];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(book.title),
-      ),
-      body: null, //con.book,
-    );
+        appBar: AppBar(
+          title: Text(book.title),
+        ),
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: PDF().cachedFromUrl(
+            book.fileURL,
+            placeholder: (progress) => Center(child: Text('$progress %')),
+            errorWidget: (error) => Center(child: Text(error.toString())),
+          ),
+        ));
   }
 }
 
 class _Controller {
   _BookState _state;
   _Controller(this._state);
-  String file;
-
-  /*void book() {
-
-     file = _state.book.filePath;
-
-    LaunchFile.loadFromFirebase(context, file)
-        //Creating PDF file at disk for ios and android & assigning pdfUrl for web
-        .then((url) => LaunchFile.createFileFromPdfUrl(url).then(
-              (f) => _state.render(
-                () {
-                  if (f is File) {
-                    pathPDF = f.path;
-                  } else if (url is Uri) {
-                    //Open PDF in tab (Web)
-                    pdfUrl = url.toString();
-                  }
-                },
-              ),
-            ));
-}*/
 }

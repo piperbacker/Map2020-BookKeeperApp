@@ -4,6 +4,8 @@ import 'package:bookkeeperapp/screen/views/myimageview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'book_screen.dart';
+
 class LibraryScreen extends StatefulWidget {
   static const routeName = 'home/libraryScreen';
 
@@ -107,5 +109,11 @@ class _Controller {
   _LibraryState _state;
   _Controller(this._state);
 
-  void open(int index) {}
+  void open(int index) async {
+    await Navigator.pushNamed(_state.context, BookScreen.routeName, arguments: {
+      'user': _state.user,
+      'bkUser': _state.bkUser,
+      'book': _state.library[index],
+    });
+  }
 }
