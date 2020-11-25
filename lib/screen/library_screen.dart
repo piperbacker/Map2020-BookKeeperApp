@@ -37,6 +37,13 @@ class _LibraryState extends State<LibraryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Library'),
+        actions: <Widget>[
+          IconButton(
+              iconSize: 30.0,
+              icon: Icon(Icons.delete),
+              onPressed: null //con.trash,
+              ),
+        ],
       ),
       body: Stack(
         children: <Widget>[

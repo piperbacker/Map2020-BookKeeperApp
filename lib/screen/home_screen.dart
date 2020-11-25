@@ -26,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeState extends State<HomeScreen> {
   User user;
   BKUser bkUser;
+  //BKUser userInfo;
   List<BKPost> bkPosts;
   List<BKPost> homeFeed;
   _Controller con;
@@ -114,193 +115,233 @@ class _HomeState extends State<HomeScreen> {
                   child: ListView.builder(
                     itemCount: homeFeed.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        color: Colors.orange[50],
-                        child: Card(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Container(
-                                margin:
-                                    EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                                child: Row(
-                                  children: [
-                                    /*Container(
-                                    height: 60,
-                                    width: 60,
-                                    child: ClipOval(
-                                      child: MyImageView.network(
-                                          imageURL: homeFeed[index].postedBy,
-                                          context: context),
-                                    ),
-                                  ),*/
+                      var u = con.getUserInfo(index);
+                      return FutureBuilder<BKUser>(
+                        future: u,
+                        builder: (context, snapshot) {
+                          BKUser userInfo = snapshot.data;
+                          if (snapshot.hasData) {
+                            return Container(
+                              color: Colors.orange[50],
+                              child: Card(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
                                     SizedBox(
-                                      width: 10.0,
+                                      height: 10.0,
                                     ),
-                                    FlatButton(
-                                      onPressed: () => con.goToProfile(index),
-                                      child: Text(
-                                        homeFeed[index].displayName,
-                                        style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.cyan[900],
-                                        ),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          10.0, 5.0, 10.0, 5.0),
+                                      child: Row(
+                                        children: [
+                                          homeFeed[index].postedBy ==
+                                                  bkUser.email
+                                              ? Container(
+                                                  height: 60,
+                                                  width: 60,
+                                                  child: ClipOval(
+                                                    child: MyImageView.network(
+                                                        imageURL:
+                                                            bkUser.photoURL,
+                                                        context: context),
+                                                  ),
+                                                )
+                                              : Container(
+                                                  height: 60,
+                                                  width: 60,
+                                                  child: ClipOval(
+                                                    child: MyImageView.network(
+                                                        imageURL:
+                                                            userInfo.photoURL,
+                                                        context: context),
+                                                  ),
+                                                ),
+                                          SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          FlatButton(
+                                            onPressed: () =>
+                                                con.goToProfile(index),
+                                            child: Text(
+                                              homeFeed[index].displayName,
+                                              style: TextStyle(
+                                                fontSize: 18.0,
+                                                color: Colors.cyan[900],
+                                              ),
+                                            ),
+                                          ),
+                                          userInfo.userTag != 'author'
+                                              ? SizedBox(
+                                                  height: 1,
+                                                )
+                                              : Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.amber[300],
+                                                  size: 24.0,
+                                                ),
+                                        ],
                                       ),
+                                    ),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    homeFeed[index].photoURL == null
+                                        ? SizedBox(height: 1)
+                                        : Container(
+                                            alignment: Alignment.topCenter,
+                                            margin: EdgeInsets.fromLTRB(
+                                                10.0, 5.0, 10.0, 5.0),
+                                            child: MyImageView.network(
+                                                imageURL:
+                                                    homeFeed[index].photoURL,
+                                                context: context),
+                                          ),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    homeFeed[index].bookTitle == null
+                                        ? SizedBox(height: 1)
+                                        : Container(
+                                            alignment: Alignment.topCenter,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  homeFeed[index].bookTitle,
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  homeFeed[index].author,
+                                                  style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: Colors.cyan[900],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    homeFeed[index].asking != null
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '${homeFeed[index].asking} asks...',
+                                                style: TextStyle(
+                                                  fontSize: 18.0,
+                                                  color: Colors.cyan[900],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: 10.0,
+                                              ),
+                                              Text(
+                                                homeFeed[index].question,
+                                                style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Center(
+                                            child: Text(
+                                              homeFeed[index].title,
+                                              style: TextStyle(
+                                                fontSize: 20.0,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                    Divider(
+                                        height: 30.0,
+                                        color: Colors.orangeAccent),
+                                    homeFeed[index].stars == null
+                                        ? SizedBox(
+                                            height: 1,
+                                          )
+                                        : Container(
+                                            alignment: Alignment.topCenter,
+                                            child: SmoothStarRating(
+                                              allowHalfRating: false,
+                                              starCount: 5,
+                                              rating: homeFeed[index]
+                                                  .stars
+                                                  .toDouble(),
+                                              size: 30.0,
+                                              isReadOnly: true,
+                                              color: Colors.deepOrange[400],
+                                              borderColor: Colors.grey,
+                                              spacing: 0.0,
+                                            ),
+                                          ),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Text(
+                                      homeFeed[index].body,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10.0,
+                                    ),
+                                    Row(
+                                      children: [
+                                        homeFeed[index].postedBy == bkUser.email
+                                            ? SizedBox(
+                                                height: 1.0,
+                                              )
+                                            : Row(
+                                                children: <Widget>[
+                                                  !homeFeed[index]
+                                                          .likedBy
+                                                          .contains(
+                                                              bkUser.email)
+                                                      ? IconButton(
+                                                          icon: Icon(Icons
+                                                              .favorite_border),
+                                                          onPressed: () =>
+                                                              con.like(index),
+                                                        )
+                                                      : IconButton(
+                                                          icon: Icon(
+                                                              Icons.favorite),
+                                                          color: Colors.pink,
+                                                          onPressed: () =>
+                                                              con.unlike(index),
+                                                        ),
+                                                ],
+                                              ),
+                                        homeFeed[index].likedBy.length == 0
+                                            ? SizedBox(
+                                                height: 1.0,
+                                              )
+                                            : Flexible(
+                                                child: Text(
+                                                  '${homeFeed[index].likedBy.length} likes',
+                                                  style: TextStyle(
+                                                    fontSize: 16.0,
+                                                  ),
+                                                ),
+                                              ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              homeFeed[index].photoURL == null
-                                  ? SizedBox(height: 1)
-                                  : Container(
-                                      alignment: Alignment.topCenter,
-                                      margin: EdgeInsets.fromLTRB(
-                                          10.0, 5.0, 10.0, 5.0),
-                                      child: MyImageView.network(
-                                          imageURL: homeFeed[index].photoURL,
-                                          context: context),
-                                    ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              homeFeed[index].bookTitle == null
-                                  ? SizedBox(height: 1)
-                                  : Container(
-                                      alignment: Alignment.topCenter,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            homeFeed[index].bookTitle,
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                            ),
-                                          ),
-                                          Text(
-                                            homeFeed[index].author,
-                                            style: TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.cyan[900],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              homeFeed[index].asking != null
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '${homeFeed[index].asking} asks...',
-                                          style: TextStyle(
-                                            fontSize: 18.0,
-                                            color: Colors.cyan[900],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10.0,
-                                        ),
-                                        Text(
-                                          homeFeed[index].question,
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : Center(
-                                      child: Text(
-                                        homeFeed[index].title,
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                              Divider(height: 30.0, color: Colors.orangeAccent),
-                              homeFeed[index].stars == null
-                                  ? SizedBox(
-                                      height: 1,
-                                    )
-                                  : Container(
-                                      alignment: Alignment.topCenter,
-                                      child: SmoothStarRating(
-                                        allowHalfRating: false,
-                                        starCount: 5,
-                                        rating:
-                                            homeFeed[index].stars.toDouble(),
-                                        size: 30.0,
-                                        isReadOnly: true,
-                                        color: Colors.deepOrange[400],
-                                        borderColor: Colors.grey,
-                                        spacing: 0.0,
-                                      ),
-                                    ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Text(
-                                homeFeed[index].body,
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                              Row(
-                                children: [
-                                  homeFeed[index].postedBy == bkUser.email
-                                      ? SizedBox(
-                                          height: 1.0,
-                                        )
-                                      : Row(
-                                          children: <Widget>[
-                                            !homeFeed[index]
-                                                    .likedBy
-                                                    .contains(bkUser.email)
-                                                ? IconButton(
-                                                    icon: Icon(
-                                                        Icons.favorite_border),
-                                                    onPressed: () =>
-                                                        con.like(index),
-                                                  )
-                                                : IconButton(
-                                                    icon: Icon(Icons.favorite),
-                                                    color: Colors.pink,
-                                                    onPressed: () =>
-                                                        con.unlike(index),
-                                                  ),
-                                          ],
-                                        ),
-                                  homeFeed[index].likedBy.length == 0
-                                      ? SizedBox(
-                                          height: 1.0,
-                                        )
-                                      : Flexible(
-                                          child: Text(
-                                            '${homeFeed[index].likedBy.length} likes',
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                            ),
-                                          ),
-                                        ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                            );
+                          } else {
+                            return Text("loading placeholder");
+                          }
+                        },
                       );
                     },
                   ),
@@ -410,6 +451,13 @@ class _Controller {
         _state.render(() {});
       }
     } catch (e) {}
+  }
+
+  Future<BKUser> getUserInfo(int index) async {
+    List<BKUser> bkUserList =
+        await FirebaseController.getBKUser(_state.homeFeed[index].postedBy);
+    BKUser userInfo = bkUserList[0];
+    return userInfo;
   }
 
   void goToProfile(int index) async {
