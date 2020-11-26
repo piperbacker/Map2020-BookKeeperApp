@@ -104,7 +104,7 @@ class _BookDetailState extends State<BookDetailScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      onPressed: () => con.download,
+                      onPressed: con.download,
                     ),
                   ),
             Divider(height: 30.0, color: Colors.orangeAccent),
@@ -283,8 +283,7 @@ class _Controller {
   _BookDetailState _state;
   _Controller(this._state);
 
-  void download(int index) async {
-    // _state.bkBooks[index].downloaded = true;
+  void download() async {
     _state.bkUser.library.add((_state.bkBook.title));
     await FirebaseController.downloadBook(_state.bkUser);
     _state.render(() {});
