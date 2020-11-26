@@ -49,64 +49,74 @@ class _LibraryState extends State<LibraryScreen> {
               color: Colors.orange[50],
             ),
           ),
-          GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: (2 / 3),
-              ),
-              itemCount: library.length,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () => con.open(index),
-                  child: Card(
-                    margin: EdgeInsets.all(10.0),
-                    color: Colors.white,
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: 150.0,
-                            height: 225.0,
-                            child: MyImageView.network(
-                                imageURL: library[index].photoURL,
-                                context: context),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
+          library.length == 0
+              ? Center(
+                  child: Text(
+                    'Library is Empty',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.cyan[900],
+                    ),
+                  ),
+                )
+              : GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: (2 / 3),
+                  ),
+                  itemCount: library.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () => con.open(index),
+                      child: Card(
+                        margin: EdgeInsets.all(10.0),
+                        color: Colors.white,
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                width: 150.0,
+                                height: 225.0,
+                                child: MyImageView.network(
+                                    imageURL: library[index].photoURL,
+                                    context: context),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      library[index].title,
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.cyan[900],
+                                  Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.topCenter,
+                                        child: Text(
+                                          library[index].title,
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.cyan[900],
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      Text(
+                                        library[index].author,
+                                        style: TextStyle(
+                                          fontSize: 18.0,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    library[index].author,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                    ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () => con.delete(index),
                                   ),
                                 ],
                               ),
-                              IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () => con.delete(index),
-                              ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }),
+                    );
+                  }),
         ],
       ),
     );
