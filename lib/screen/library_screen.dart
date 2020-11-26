@@ -62,7 +62,7 @@ class _LibraryState extends State<LibraryScreen> {
               : GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: (2 / 3),
+                    childAspectRatio: (9 / 15),
                   ),
                   itemCount: library.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -82,34 +82,28 @@ class _LibraryState extends State<LibraryScreen> {
                                     imageURL: library[index].photoURL,
                                     context: context),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        alignment: Alignment.topCenter,
-                                        child: Text(
-                                          library[index].title,
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.cyan[900],
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        library[index].author,
-                                        style: TextStyle(
-                                          fontSize: 18.0,
-                                        ),
-                                      ),
-                                    ],
+                              Container(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  library[index].title,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.cyan[900],
                                   ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () => con.delete(index),
-                                  ),
-                                ],
+                                ),
+                              ),
+                              Text(
+                                library[index].author,
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.bottomRight,
+                                child: IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () => con.delete(index),
+                                ),
                               ),
                             ],
                           ),
