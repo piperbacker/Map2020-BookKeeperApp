@@ -17,7 +17,6 @@ class _BookState extends State<BookScreen> {
   User user;
   BKUser bkUser;
   BKBook book;
-  //PDFDocument document;
   _Controller con;
 
   @override
@@ -34,7 +33,6 @@ class _BookState extends State<BookScreen> {
     user ??= args['user'];
     bkUser ??= args['bkUser'];
     book ??= args['book'];
-    //document ??= args['document'];
 
     return Scaffold(
         appBar: AppBar(

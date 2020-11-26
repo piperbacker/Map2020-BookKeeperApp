@@ -417,4 +417,11 @@ class FirebaseController {
     }
     return result;
   }
+
+  static Future<void> deleteLibraryBook(BKUser bkUser) async {
+    await FirebaseFirestore.instance
+        .collection(BKUser.COLLECTION)
+        .doc(bkUser.docId)
+        .update({"library": bkUser.library});
+  }
 }

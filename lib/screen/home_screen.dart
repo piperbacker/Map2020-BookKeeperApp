@@ -339,7 +339,7 @@ class _HomeState extends State<HomeScreen> {
                               ),
                             );
                           } else {
-                            return Text("loading placeholder");
+                            return Container();
                           }
                         },
                       );

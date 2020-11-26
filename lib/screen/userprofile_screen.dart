@@ -25,7 +25,7 @@ class _UserProfileState extends State<UserProfileScreen> {
   BKUser userProfile;
   List<BKPost> userPosts;
   _Controller con;
-  int currentIndex = 0;
+  //int currentIndex = 0;
 
   @override
   void initState() {
@@ -596,12 +596,15 @@ class _Controller {
   }
 
   void following() async {
+    List<BKUser> following =
+        await FirebaseController.getFollowing(_state.userProfile.email);
+
     await Navigator.pushNamed(_state.context, UserFollowingScreen.routeName,
         arguments: {
           'user': _state.user,
           'bkUser': _state.bkUser,
           'userProfile': _state.userProfile,
-          'following': _state.userProfile.following
+          'following': following
         });
     _state.render(() {});
   }
