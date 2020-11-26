@@ -227,6 +227,18 @@ class _MyProfileState extends State<MyProfileScreen> {
                                               color: Colors.cyan[900],
                                             ),
                                           ),
+                                          SizedBox(
+                                            width: 5.0,
+                                          ),
+                                          bkUser.userTag != 'author'
+                                              ? SizedBox(
+                                                  height: 1,
+                                                )
+                                              : Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.amber[300],
+                                                  size: 24.0,
+                                                ),
                                         ],
                                       ),
                                     ),
