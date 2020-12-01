@@ -144,7 +144,6 @@ class _Controller {
     User user;
     try {
       user = await FirebaseController.signIn(email, password);
-      //print('USER: $user');
     } catch (e) {
       MyDialog.circularProgressEnd(_state.context);
       MyDialog.info(
@@ -188,7 +187,8 @@ class _Controller {
     }
 
     if (bkUser.userTag == 'author') {
-      List<BKPost> questions = await FirebaseController.getAuthorQuestions(bkUser.email);
+      List<BKPost> questions =
+          await FirebaseController.getAuthorQuestions(bkUser.email);
 
       Navigator.pushReplacementNamed(_state.context, AuthorHomeScreen.routeName,
           arguments: {

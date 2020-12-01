@@ -26,7 +26,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeState extends State<HomeScreen> {
   User user;
   BKUser bkUser;
-  //BKUser userInfo;
   List<BKPost> bkPosts;
   List<BKPost> homeFeed;
   _Controller con;
