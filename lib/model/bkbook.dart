@@ -10,7 +10,6 @@ class BKBook {
   static const AUTHOR = 'author';
   static const DESC = 'description';
   static const PUB_DATE = 'pubDate';
-  static const DOWNLOADED = 'downloaded';
   static const DOWNLOADS = 'downloads';
 
   String docId; //Firestore doc ID
@@ -22,7 +21,6 @@ class BKBook {
   String author;
   String description;
   DateTime pubDate;
-  bool downloaded;
   int downloads;
 
   BKBook({
@@ -35,10 +33,9 @@ class BKBook {
     this.author,
     this.description,
     this.pubDate,
-    this.downloaded,
     this.downloads,
   }) {
-    this.downloaded = false;
+    this.downloads = 0;
   }
 
   // convert Dart object to Firestore document
@@ -52,7 +49,6 @@ class BKBook {
       AUTHOR: author,
       DESC: description,
       PUB_DATE: pubDate,
-      DOWNLOADED: downloaded,
       DOWNLOADS: downloads,
     };
   }
@@ -72,7 +68,6 @@ class BKBook {
           ? DateTime.fromMillisecondsSinceEpoch(
               data[BKBook.PUB_DATE].millisecondsSinceEpoch)
           : null,
-      downloaded: data[BKBook.DOWNLOADED],
       downloads: data[BKBook.DOWNLOADS],
     );
   }

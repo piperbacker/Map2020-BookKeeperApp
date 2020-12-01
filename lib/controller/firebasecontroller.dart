@@ -376,11 +376,15 @@ class FirebaseController {
         .set(bkPost.serialize());
   }
 
-  static Future<void> downloadBook(BKUser user) async {
+  static Future<void> downloadBook(BKUser user, BKBook book) async {
     await FirebaseFirestore.instance
         .collection(BKUser.COLLECTION)
         .doc(user.docId)
         .update({"library": user.library});
+    await FirebaseFirestore.instance
+        .collection(BKBook.COLLECTION)
+        .doc(book.docId)
+        .update({"downloads": book.downloads});
   }
 
   static Future<List<BKBook>> getLibrary(library) async {

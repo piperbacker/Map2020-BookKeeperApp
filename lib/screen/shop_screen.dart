@@ -132,7 +132,8 @@ class _Controller {
 
   void download(int index) async {
     _state.bkUser.library.add((_state.bkBooks[index].title));
-    await FirebaseController.downloadBook(_state.bkUser);
+    _state.bkBooks[index].downloads++;
+    await FirebaseController.downloadBook(_state.bkUser, _state.bkBooks[index]);
     _state.render(() {});
   }
 
