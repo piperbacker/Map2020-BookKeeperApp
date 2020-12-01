@@ -9,6 +9,8 @@ import 'package:bookkeeperapp/screen/myprofile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'authormetrics_screen.dart';
+
 class AuthorHomeScreen extends StatefulWidget {
   static const routeName = '/signInScreen/authorHomeScreen';
 
@@ -151,6 +153,10 @@ class _AuthorHomeState extends State<AuthorHomeScreen> {
               icon: Icon(Icons.book),
             ),
             BottomNavigationBarItem(
+              title: Text('Stats'),
+              icon: Icon(Icons.data_usage),
+            ),
+            BottomNavigationBarItem(
               title: Text('Profile'),
               icon: Icon(Icons.person),
             ),
@@ -220,6 +226,15 @@ class _Controller {
     }
 
     if (_state.currentIndex == 2) {
+      await Navigator.pushNamed(_state.context, AuthorMetricsScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'bkUser': _state.bkUser,
+          });
+      _state.render(() {});
+    }
+
+    if (_state.currentIndex == 3) {
       await Navigator.pushNamed(_state.context, MyProfileScreen.routeName,
           arguments: {
             'user': _state.user,
