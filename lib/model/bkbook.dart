@@ -35,7 +35,7 @@ class BKBook {
     this.pubDate,
     this.downloads,
   }) {
-    this.downloads = 0;
+    this.downloads ??= 0;
   }
 
   // convert Dart object to Firestore document

@@ -226,10 +226,13 @@ class _Controller {
     }
 
     if (_state.currentIndex == 2) {
+      List<BKBook> authorBooks =
+          await FirebaseController.getAuthorBooks(_state.bkUser);
       await Navigator.pushNamed(_state.context, AuthorMetricsScreen.routeName,
           arguments: {
             'user': _state.user,
             'bkUser': _state.bkUser,
+            'bkBooks': authorBooks,
           });
       _state.render(() {});
     }
