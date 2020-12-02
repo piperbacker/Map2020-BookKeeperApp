@@ -211,7 +211,9 @@ class _UserProfileState extends State<UserProfileScreen> {
                                         )
                                 ],
                               )
-                            : Row(
+                            : SizedBox(height: 1),
+                        bkUser.userTag != 'author'
+                            ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   !bkUser.following.contains(userProfile.email)
@@ -246,25 +248,24 @@ class _UserProfileState extends State<UserProfileScreen> {
                                           ),
                                         ),
                                   SizedBox(width: 10.0),
-                                  userProfile.userTag != 'author'
-                                      ? SizedBox(height: 1)
-                                      : ButtonTheme(
-                                          minWidth: 120.0,
-                                          height: 40.0,
-                                          child: RaisedButton(
-                                            color: Colors.deepOrange,
-                                            child: Text(
-                                              'Ask A Question',
-                                              style: TextStyle(
-                                                fontSize: 20.0,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            onPressed: con.askAuthorQuestion,
-                                          ),
+                                  ButtonTheme(
+                                    minWidth: 120.0,
+                                    height: 40.0,
+                                    child: RaisedButton(
+                                      color: Colors.deepOrange,
+                                      child: Text(
+                                        'Ask A Question',
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                          color: Colors.white,
                                         ),
+                                      ),
+                                      onPressed: con.askAuthorQuestion,
+                                    ),
+                                  ),
                                 ],
-                              ),
+                              )
+                            : SizedBox(height: 1),
                         Divider(height: 30.0, color: Colors.orangeAccent),
                       ],
                     ),
