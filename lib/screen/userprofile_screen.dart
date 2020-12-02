@@ -216,53 +216,60 @@ class _UserProfileState extends State<UserProfileScreen> {
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  !bkUser.following.contains(userProfile.email)
+                                  Column(
+                                    children: [
+                                      !bkUser.following
+                                              .contains(userProfile.email)
+                                          ? ButtonTheme(
+                                              minWidth: 120.0,
+                                              height: 40.0,
+                                              child: RaisedButton(
+                                                color: Colors.teal[400],
+                                                child: Text(
+                                                  'Follow',
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                onPressed: con.follow,
+                                              ),
+                                            )
+                                          : ButtonTheme(
+                                              minWidth: 120.0,
+                                              height: 40.0,
+                                              child: RaisedButton(
+                                                color: Colors.orangeAccent,
+                                                child: Text(
+                                                  'Unfollow',
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                onPressed: con.unfollow,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                  SizedBox(width: 10.0),
+                                  userProfile.userTag == 'author'
                                       ? ButtonTheme(
                                           minWidth: 120.0,
                                           height: 40.0,
                                           child: RaisedButton(
-                                            color: Colors.teal[400],
+                                            color: Colors.deepOrange,
                                             child: Text(
-                                              'Follow',
+                                              'Ask A Question',
                                               style: TextStyle(
                                                 fontSize: 20.0,
                                                 color: Colors.white,
                                               ),
                                             ),
-                                            onPressed: con.follow,
+                                            onPressed: con.askAuthorQuestion,
                                           ),
                                         )
-                                      : ButtonTheme(
-                                          minWidth: 120.0,
-                                          height: 40.0,
-                                          child: RaisedButton(
-                                            color: Colors.orangeAccent,
-                                            child: Text(
-                                              'Unfollow',
-                                              style: TextStyle(
-                                                fontSize: 20.0,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            onPressed: con.unfollow,
-                                          ),
-                                        ),
-                                  SizedBox(width: 10.0),
-                                  ButtonTheme(
-                                    minWidth: 120.0,
-                                    height: 40.0,
-                                    child: RaisedButton(
-                                      color: Colors.deepOrange,
-                                      child: Text(
-                                        'Ask A Question',
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      onPressed: con.askAuthorQuestion,
-                                    ),
-                                  ),
+                                      : SizedBox(height: 1),
                                 ],
                               )
                             : SizedBox(height: 1),
